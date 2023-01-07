@@ -21,9 +21,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
-
-
-        buildConfigField "boolean", "USE_FOREGROUND_SERVICE", "true"
     }
 
     testOptions {
@@ -49,8 +46,6 @@ android {
             minifyEnabled true
             crunchPngs false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-            buildConfigField "boolean", "USE_FOREGROUND_SERVICE", "false"
         }
     }
 
