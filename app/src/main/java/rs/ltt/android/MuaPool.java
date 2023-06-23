@@ -1,14 +1,14 @@
 package rs.ltt.android;
 
 import android.content.Context;
+
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.cache.AutocryptDatabaseStorage;
 import rs.ltt.android.cache.DatabaseCache;
 import rs.ltt.android.database.AppDatabase;
@@ -18,6 +18,10 @@ import rs.ltt.autocrypt.client.storage.Storage;
 import rs.ltt.autocrypt.jmap.AutocryptPlugin;
 import rs.ltt.jmap.client.session.FileSessionCache;
 import rs.ltt.jmap.mua.Mua;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public final class MuaPool {
 

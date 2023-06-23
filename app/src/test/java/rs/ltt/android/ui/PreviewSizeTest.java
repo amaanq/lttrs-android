@@ -2,6 +2,7 @@ package rs.ltt.android.ui;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import rs.ltt.android.ui.preview.Size;
 
 public class PreviewSizeTest {

@@ -18,10 +18,13 @@ package rs.ltt.android.entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+
 import com.google.common.collect.ImmutableList;
+
+import rs.ltt.jmap.common.entity.Email;
+
 import java.util.Collections;
 import java.util.List;
-import rs.ltt.jmap.common.entity.Email;
 
 @Entity(
         tableName = "email_message_id",

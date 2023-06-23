@@ -16,11 +16,13 @@
 package rs.ltt.android.ui.model;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
 import rs.ltt.android.entity.MailboxOverviewItem;
 import rs.ltt.android.entity.QueryInfo;
 import rs.ltt.android.ui.EmptyMailboxAction;

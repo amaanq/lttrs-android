@@ -2,6 +2,7 @@ package rs.ltt.android.ui;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 public class ExtendedFabSizeChanger extends RecyclerView.OnScrollListener {

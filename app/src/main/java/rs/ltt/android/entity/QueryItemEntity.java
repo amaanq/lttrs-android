@@ -20,9 +20,12 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
 import com.google.common.collect.ImmutableList;
-import java.util.List;
+
 import rs.ltt.jmap.mua.util.QueryResultItem;
+
+import java.util.List;
 
 @Entity(
         tableName = "query_item",

@@ -18,7 +18,9 @@ package rs.ltt.android.ui.widget;
 import android.content.Context;
 import android.text.Editable;
 import android.util.AttributeSet;
+
 import androidx.appcompat.widget.AppCompatEditText;
+
 import rs.ltt.android.ui.ChipDrawableSpan;
 
 public class EmailAddressEditText extends AppCompatEditText {

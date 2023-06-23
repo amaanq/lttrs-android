@@ -18,6 +18,7 @@ package rs.ltt.android.util;
 import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+
 import java.util.Collections;
 import java.util.List;
 

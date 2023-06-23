@@ -17,10 +17,16 @@ package rs.ltt.android.entity;
 
 import androidx.room.Ignore;
 import androidx.room.Relation;
+
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+
+import rs.ltt.android.util.CharSequences;
+import rs.ltt.jmap.common.entity.Keyword;
+import rs.ltt.jmap.mua.util.KeywordUtil;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,9 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-import rs.ltt.android.util.CharSequences;
-import rs.ltt.jmap.common.entity.Keyword;
-import rs.ltt.jmap.mua.util.KeywordUtil;
 
 public class ThreadOverviewItem {
 

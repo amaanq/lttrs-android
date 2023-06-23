@@ -20,10 +20,13 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
 import com.google.common.collect.ImmutableList;
-import java.util.List;
+
 import rs.ltt.jmap.common.entity.EmailAddress;
 import rs.ltt.jmap.common.entity.Identity;
+
+import java.util.List;
 
 @Entity(
         tableName = "identity_email_address",

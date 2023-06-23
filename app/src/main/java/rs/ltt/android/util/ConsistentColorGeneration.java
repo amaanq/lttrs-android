@@ -17,8 +17,10 @@ package rs.ltt.android.util;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.IntRange;
+
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
+
 import org.hsluv.HUSLColorConverter;
 
 public final class ConsistentColorGeneration {

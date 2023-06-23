@@ -2,6 +2,7 @@ package rs.ltt.android.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.google.common.base.MoreObjects;
 
 public class QueryInfo implements Parcelable {

@@ -17,6 +17,7 @@ package rs.ltt.android.util;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+
 import rs.ltt.android.R;
 
 public class UserAgent {

@@ -16,6 +16,7 @@
 package rs.ltt.android.repository;
 
 import android.app.Application;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -26,15 +27,15 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 import androidx.work.WorkQuery;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.entity.EmailWithBodies;
 import rs.ltt.android.entity.EmailWithEncryptionStatus;
 import rs.ltt.android.entity.EncryptionStatus;
@@ -45,6 +46,10 @@ import rs.ltt.android.entity.MailboxWithRoleAndName;
 import rs.ltt.android.entity.Seen;
 import rs.ltt.android.entity.ThreadHeader;
 import rs.ltt.android.worker.DecryptionWorker;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 
 public class ThreadViewRepository extends AbstractRepository {
 

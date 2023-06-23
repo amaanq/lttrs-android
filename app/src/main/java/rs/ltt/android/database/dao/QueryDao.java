@@ -22,9 +22,10 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
-import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.entity.QueryEntity;
 import rs.ltt.android.entity.QueryItem;
 import rs.ltt.android.entity.QueryItemEntity;
@@ -37,6 +38,8 @@ import rs.ltt.jmap.mua.cache.exception.CacheConflictException;
 import rs.ltt.jmap.mua.cache.exception.CorruptCacheException;
 import rs.ltt.jmap.mua.util.QueryResult;
 import rs.ltt.jmap.mua.util.QueryResultItem;
+
+import java.util.List;
 
 @Dao
 public abstract class QueryDao extends AbstractEntityDao {

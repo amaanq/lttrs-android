@@ -2,25 +2,22 @@ package rs.ltt.android.worker;
 
 import android.app.NotificationManager;
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.ForegroundInfo;
 import androidx.work.WorkerParameters;
+
 import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
 import com.google.common.net.MediaType;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.RateLimiter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.cache.BlobStorage;
 import rs.ltt.android.cache.LocalAttachment;
 import rs.ltt.android.ui.notification.AttachmentNotification;
@@ -30,6 +27,14 @@ import rs.ltt.jmap.common.entity.Attachment;
 import rs.ltt.jmap.common.entity.EmailBodyPart;
 import rs.ltt.jmap.common.entity.Upload;
 import rs.ltt.jmap.mua.Mua;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 public class BlobUploadWorker extends AbstractMuaWorker implements Progress {
 

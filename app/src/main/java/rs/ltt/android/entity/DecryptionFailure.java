@@ -2,13 +2,17 @@ package rs.ltt.android.entity;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
+
+import org.pgpainless.exception.MissingDecryptionMethodException;
+
+import rs.ltt.android.worker.Failure;
+
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Collection;
 import java.util.List;
+
 import javax.net.ssl.SSLException;
-import org.pgpainless.exception.MissingDecryptionMethodException;
-import rs.ltt.android.worker.Failure;
 
 public class DecryptionFailure {
 

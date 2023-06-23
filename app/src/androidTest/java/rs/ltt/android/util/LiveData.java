@@ -1,19 +1,19 @@
-package rs.ltt.android;
+package rs.ltt.android.util;
 
 import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import rs.ltt.android.util.MainThreadExecutor;
 
 /* Copyright 2019 Google LLC.
 SPDX-License-Identifier: Apache-2.0 */
-public class LiveDataUtils {
+public class LiveData {
 
-    private LiveDataUtils() {}
+    private LiveData() {}
 
-    public static <T> T getOrAwaitValue(final LiveData<T> liveData) throws InterruptedException {
+    public static <T> T getOrAwaitValue(final androidx.lifecycle.LiveData<T> liveData)
+            throws InterruptedException {
         final Object[] data = new Object[1];
         final CountDownLatch latch = new CountDownLatch(1);
         final Observer<T> observer =

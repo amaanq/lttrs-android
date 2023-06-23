@@ -16,8 +16,10 @@
 package rs.ltt.android.ui.fragment;
 
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
 import rs.ltt.android.ui.model.SetupViewModel;
 
 public class AbstractSetupFragment extends Fragment {

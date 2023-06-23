@@ -1,12 +1,13 @@
 package rs.ltt.android.cache;
 
-import java.time.Instant;
 import rs.ltt.android.database.LttrsDatabase;
 import rs.ltt.android.entity.AccountStateEntity;
 import rs.ltt.autocrypt.client.header.EncryptionPreference;
 import rs.ltt.autocrypt.client.storage.AccountState;
 import rs.ltt.autocrypt.client.storage.PeerState;
 import rs.ltt.autocrypt.client.storage.Storage;
+
+import java.time.Instant;
 
 public class AutocryptDatabaseStorage implements Storage {
 

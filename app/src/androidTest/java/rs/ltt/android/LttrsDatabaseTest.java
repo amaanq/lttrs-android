@@ -5,26 +5,31 @@ import androidx.room.Room;
 import androidx.room.paging.LimitOffsetDataSource;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
+
 import okhttp3.mockwebserver.MockWebServer;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import rs.ltt.android.cache.DatabaseCache;
 import rs.ltt.android.database.LttrsDatabase;
 import rs.ltt.android.entity.EmailWithBodies;
 import rs.ltt.android.entity.MailboxOverviewItem;
 import rs.ltt.android.entity.MailboxWithRoleAndName;
 import rs.ltt.android.entity.ThreadOverviewItem;
+import rs.ltt.android.util.LiveData;
 import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.mock.server.JmapDispatcher;
 import rs.ltt.jmap.mock.server.MockMailServer;
 import rs.ltt.jmap.mua.Mua;
 import rs.ltt.jmap.mua.util.StandardQueries;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RunWith(AndroidJUnit4.class)
 public class LttrsDatabaseTest {
@@ -110,13 +115,13 @@ public class LttrsDatabaseTest {
     public void unmodifiedMailboxesEquals() throws ExecutionException, InterruptedException {
         mua.refreshMailboxes().get();
         final List<MailboxOverviewItem> mailboxes =
-                LiveDataUtils.getOrAwaitValue(lttrsDatabase.mailboxDao().getMailboxes());
+                LiveData.getOrAwaitValue(lttrsDatabase.mailboxDao().getMailboxes());
 
         Assert.assertNotNull(mailboxes);
         Assert.assertEquals(1, mailboxes.size());
 
         final List<MailboxOverviewItem> mailboxesReload =
-                LiveDataUtils.getOrAwaitValue(lttrsDatabase.mailboxDao().getMailboxes());
+                LiveData.getOrAwaitValue(lttrsDatabase.mailboxDao().getMailboxes());
         Assert.assertNotSame(mailboxes, mailboxesReload);
     }
 

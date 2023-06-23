@@ -1,6 +1,7 @@
 package rs.ltt.android.util;
 
 import android.content.Context;
+
 import rs.ltt.android.entity.CredentialsEntity;
 import rs.ltt.jmap.client.JmapClient;
 import rs.ltt.jmap.client.session.FileSessionCache;

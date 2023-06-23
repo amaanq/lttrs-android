@@ -3,14 +3,19 @@ package rs.ltt.android.ui.preview;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+
 import androidx.annotation.NonNull;
 import androidx.exifinterface.media.ExifInterface;
+
 import com.google.common.net.MediaType;
-import java.io.File;
-import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.ui.PreviewMeasurements;
+
+import java.io.File;
+import java.io.IOException;
 
 public class ImagePreview {
 

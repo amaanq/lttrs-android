@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.helper.widget.Flow;
@@ -31,11 +32,7 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+
 import rs.ltt.android.R;
 import rs.ltt.android.databinding.ItemAttachmentBinding;
 import rs.ltt.android.databinding.ItemEmailBinding;
@@ -52,6 +49,12 @@ import rs.ltt.android.ui.preview.AttachmentPreview;
 import rs.ltt.android.util.ToolTips;
 import rs.ltt.android.util.Touch;
 import rs.ltt.jmap.mua.util.Label;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class ThreadAdapter
         extends RecyclerView.Adapter<ThreadAdapter.AbstractThreadItemViewHolder> {

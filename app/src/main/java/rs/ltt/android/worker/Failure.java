@@ -3,16 +3,19 @@ package rs.ltt.android.worker;
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.WorkInfo;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
-import java.util.Collection;
+
 import rs.ltt.jmap.client.blob.BlobTransferException;
 import rs.ltt.jmap.client.blob.MaxUploadSizeExceededException;
 import rs.ltt.jmap.common.entity.IdentifiableMailboxWithRoleAndName;
 import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.mua.service.exception.PreexistingMailboxException;
+
+import java.util.Collection;
 
 public class Failure {
 

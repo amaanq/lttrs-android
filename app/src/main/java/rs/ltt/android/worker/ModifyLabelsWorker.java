@@ -1,12 +1,24 @@
 package rs.ltt.android.worker;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.WorkerParameters;
+
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ListenableFuture;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import rs.ltt.android.entity.EmailWithMailboxes;
+import rs.ltt.android.entity.MailboxWithRoleAndName;
+import rs.ltt.android.util.CharSequences;
+import rs.ltt.jmap.common.entity.IdentifiableMailboxWithRoleAndName;
+import rs.ltt.jmap.common.entity.Role;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -17,13 +29,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import rs.ltt.android.entity.EmailWithMailboxes;
-import rs.ltt.android.entity.MailboxWithRoleAndName;
-import rs.ltt.android.util.CharSequences;
-import rs.ltt.jmap.common.entity.IdentifiableMailboxWithRoleAndName;
-import rs.ltt.jmap.common.entity.Role;
 
 public class ModifyLabelsWorker extends AbstractMailboxModificationWorker {
 

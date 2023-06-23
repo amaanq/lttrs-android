@@ -10,18 +10,18 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.R;
 import rs.ltt.android.database.LttrsDatabase;
 import rs.ltt.android.entity.AccountName;
@@ -32,6 +32,11 @@ import rs.ltt.android.entity.Preview;
 import rs.ltt.android.ui.AvatarDrawable;
 import rs.ltt.android.ui.activity.LttrsActivity;
 import rs.ltt.jmap.mua.util.KeywordUtil;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class EmailNotification extends AbstractNotification {
 

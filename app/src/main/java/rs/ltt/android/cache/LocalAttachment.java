@@ -5,11 +5,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.net.MediaType;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import rs.ltt.jmap.client.io.ByteStreams;
+import rs.ltt.jmap.common.entity.Attachment;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,10 +25,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import rs.ltt.jmap.client.io.ByteStreams;
-import rs.ltt.jmap.common.entity.Attachment;
 
 public class LocalAttachment implements Attachment {
 

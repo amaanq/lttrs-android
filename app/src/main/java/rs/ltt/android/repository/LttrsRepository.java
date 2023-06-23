@@ -1,7 +1,9 @@
 package rs.ltt.android.repository;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.work.Data;
@@ -9,18 +11,17 @@ import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Collections2;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.database.AppDatabase;
 import rs.ltt.android.entity.KeywordOverwriteEntity;
 import rs.ltt.android.entity.MailboxOverviewItem;
@@ -29,7 +30,6 @@ import rs.ltt.android.entity.MailboxWithRoleAndName;
 import rs.ltt.android.ui.EmptyMailboxAction;
 import rs.ltt.android.ui.notification.EmailNotification;
 import rs.ltt.android.util.Event;
-import rs.ltt.android.util.MainThreadExecutor;
 import rs.ltt.android.worker.AbstractMuaWorker;
 import rs.ltt.android.worker.ArchiveWorker;
 import rs.ltt.android.worker.CopyToMailboxWorker;
@@ -44,6 +44,11 @@ import rs.ltt.jmap.common.entity.IdentifiableMailboxWithRole;
 import rs.ltt.jmap.common.entity.Keyword;
 import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.mua.util.KeywordUtil;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class LttrsRepository extends AbstractRepository {
 
@@ -357,7 +362,7 @@ public class LttrsRepository extends AbstractRepository {
     public LiveData<WorkInfo> observeForFailure(final UUID id) {
         final WorkManager workManager = WorkManager.getInstance(application);
         final LiveData<WorkInfo> workInfoLiveData = workManager.getWorkInfoByIdLiveData(id);
-        MainThreadExecutor.getInstance()
+        ContextCompat.getMainExecutor(application)
                 .execute(
                         () ->
                                 failureEventMediator.addSource(

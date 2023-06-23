@@ -19,10 +19,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.common.base.Strings;
+
 import rs.ltt.android.R;
 import rs.ltt.android.databinding.FragmentImportPrivateKeyBinding;
 import rs.ltt.android.entity.AutocryptSetupMessage;

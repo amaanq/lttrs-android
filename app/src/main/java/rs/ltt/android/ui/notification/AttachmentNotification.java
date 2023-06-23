@@ -5,12 +5,15 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
+
 import androidx.core.app.NotificationCompat;
 import androidx.work.WorkManager;
-import java.util.Locale;
-import java.util.UUID;
+
 import rs.ltt.android.R;
 import rs.ltt.jmap.common.entity.Downloadable;
+
+import java.util.Locale;
+import java.util.UUID;
 
 public class AttachmentNotification {
 

@@ -3,12 +3,14 @@ package rs.ltt.android.util;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.primitives.Longs;
-import java.util.Map;
+
 import rs.ltt.jmap.common.entity.AbstractIdentifiableEntity;
 import rs.ltt.jmap.common.entity.PushMessage;
 import rs.ltt.jmap.common.entity.PushVerification;
 import rs.ltt.jmap.common.entity.StateChange;
 import rs.ltt.jmap.common.util.Mapper;
+
+import java.util.Map;
 
 public final class PushMessages {
 

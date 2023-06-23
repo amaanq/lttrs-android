@@ -27,17 +27,21 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.widget.EditText;
+
 import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
+
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.color.MaterialColors;
-import java.util.HashSet;
-import java.util.Set;
+
 import rs.ltt.android.R;
 import rs.ltt.jmap.common.entity.EmailAddress;
 import rs.ltt.jmap.mua.util.EmailAddressToken;
 import rs.ltt.jmap.mua.util.EmailAddressTokenizer;
 import rs.ltt.jmap.mua.util.EmailAddressUtil;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class ChipDrawableSpan extends ImageSpan implements NoCopySpan {
 

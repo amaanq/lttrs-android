@@ -15,8 +15,9 @@
 
 package rs.ltt.android.ui.fragment;
 
-import java.util.Collection;
 import rs.ltt.android.entity.ThreadOverviewItem;
+
+import java.util.Collection;
 
 public class MainMailboxQueryFragment extends AbstractMailboxQueryFragment {
 

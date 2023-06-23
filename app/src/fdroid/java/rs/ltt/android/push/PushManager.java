@@ -1,8 +1,10 @@
 package rs.ltt.android.push;
 
 import android.app.Application;
-import java.util.List;
+
 import rs.ltt.android.entity.AccountWithCredentials;
+
+import java.util.List;
 
 public final class PushManager {
 

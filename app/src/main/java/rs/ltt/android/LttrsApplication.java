@@ -17,8 +17,10 @@ package rs.ltt.android;
 
 import android.app.Activity;
 import android.app.Application;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.database.AppDatabase;
 import rs.ltt.android.ui.notification.AttachmentNotification;
 

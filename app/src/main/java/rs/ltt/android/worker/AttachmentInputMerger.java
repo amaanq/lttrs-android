@@ -3,12 +3,16 @@ package rs.ltt.android.worker;
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.InputMerger;
+
 import com.google.common.collect.ImmutableList;
-import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.util.AttachmentSerializer;
 import rs.ltt.jmap.common.entity.Attachment;
+
+import java.util.List;
 
 public class AttachmentInputMerger extends InputMerger {
 

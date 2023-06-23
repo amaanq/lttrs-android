@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+
 import rs.ltt.android.R;
 import rs.ltt.android.databinding.FragmentAutocryptExportExplainedBinding;
 

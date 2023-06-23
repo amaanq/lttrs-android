@@ -1,11 +1,14 @@
 package rs.ltt.android.entity;
 
 import androidx.room.Relation;
+
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
+
+import rs.ltt.jmap.common.entity.IdentifiableEmailWithMailboxIds;
+
 import java.util.Map;
 import java.util.Set;
-import rs.ltt.jmap.common.entity.IdentifiableEmailWithMailboxIds;
 
 public class EmailPreviewWithMailboxes extends EmailPreview
         implements IdentifiableEmailWithMailboxIds {

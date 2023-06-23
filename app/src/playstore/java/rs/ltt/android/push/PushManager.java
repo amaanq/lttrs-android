@@ -2,6 +2,7 @@ package rs.ltt.android.push;
 
 import android.content.Context;
 import android.os.Looper;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
@@ -9,6 +10,7 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+
 import com.damnhandy.uri.template.UriTemplate;
 import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import com.google.android.gms.tasks.Task;
@@ -19,10 +21,10 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.messaging.FirebaseMessaging;
-import java.util.List;
-import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.R;
 import rs.ltt.android.database.AppDatabase;
 import rs.ltt.android.entity.AccountWithCredentials;
@@ -38,6 +40,9 @@ import rs.ltt.jmap.common.entity.PushVerification;
 import rs.ltt.jmap.common.entity.StateChange;
 import rs.ltt.jmap.common.method.call.core.SetPushSubscriptionMethodCall;
 import rs.ltt.jmap.common.method.response.core.SetPushSubscriptionMethodResponse;
+
+import java.util.List;
+import java.util.Map;
 
 public class PushManager {
 

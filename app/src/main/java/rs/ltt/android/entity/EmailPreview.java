@@ -1,14 +1,17 @@
 package rs.ltt.android.entity;
 
 import androidx.room.Relation;
+
 import com.google.common.base.Objects;
 import com.google.common.collect.Collections2;
+
+import rs.ltt.jmap.common.entity.IdentifiableEmailWithAddressesAndTime;
+import rs.ltt.jmap.mua.util.EmailUtil;
+
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
-import rs.ltt.jmap.common.entity.IdentifiableEmailWithAddressesAndTime;
-import rs.ltt.jmap.mua.util.EmailUtil;
 
 /**
  * This e-mail model has keywords and addresses. It acts as a common base class for EmailWithBodies

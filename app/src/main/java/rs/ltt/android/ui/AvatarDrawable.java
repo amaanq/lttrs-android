@@ -23,13 +23,16 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+
 import com.google.common.base.Strings;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 import rs.ltt.android.R;
 import rs.ltt.android.entity.From;
 import rs.ltt.android.util.ConsistentColorGeneration;
+
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AvatarDrawable extends ColorDrawable {
 

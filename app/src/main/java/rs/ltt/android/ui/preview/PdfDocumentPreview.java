@@ -3,11 +3,14 @@ package rs.ltt.android.ui.preview;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
 import android.os.ParcelFileDescriptor;
-import java.io.File;
-import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.ui.PreviewMeasurements;
+
+import java.io.File;
+import java.io.IOException;
 
 public class PdfDocumentPreview extends ImagePreview {
 

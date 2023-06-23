@@ -4,16 +4,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
-import java.util.List;
+
 import rs.ltt.android.R;
 import rs.ltt.android.databinding.FragmentAccountListBinding;
 import rs.ltt.android.entity.AccountName;
 import rs.ltt.android.ui.activity.SetupActivity;
 import rs.ltt.android.ui.adapter.AccountAdapter;
 import rs.ltt.android.ui.model.AccountListViewModel;
+
+import java.util.List;
 
 public class AccountListFragment extends AbstractAccountManagerFragment {
 

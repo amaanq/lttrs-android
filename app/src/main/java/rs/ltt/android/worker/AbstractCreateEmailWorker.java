@@ -16,23 +16,17 @@
 package rs.ltt.android.worker;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.WorkerParameters;
+
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.cache.BlobStorage;
 import rs.ltt.android.cache.LocalAttachment;
 import rs.ltt.android.entity.IdentityWithNameAndEmail;
@@ -50,6 +44,17 @@ import rs.ltt.jmap.common.entity.Upload;
 import rs.ltt.jmap.mua.Status;
 import rs.ltt.jmap.mua.util.AttachmentUtil;
 import rs.ltt.jmap.mua.util.EmailAddressUtil;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public abstract class AbstractCreateEmailWorker extends AbstractMuaWorker {
 

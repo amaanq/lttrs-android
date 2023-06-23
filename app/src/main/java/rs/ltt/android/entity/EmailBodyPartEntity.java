@@ -18,14 +18,17 @@ package rs.ltt.android.entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+
 import rs.ltt.jmap.common.entity.Attachment;
 import rs.ltt.jmap.common.entity.Email;
 import rs.ltt.jmap.common.entity.EmailBodyPart;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity(
         tableName = "email_body_part",

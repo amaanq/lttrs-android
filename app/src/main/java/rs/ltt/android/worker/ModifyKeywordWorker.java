@@ -16,17 +16,21 @@
 package rs.ltt.android.worker;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.WorkerParameters;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.database.LttrsDatabase;
 import rs.ltt.android.entity.EmailWithKeywords;
 import rs.ltt.jmap.mua.Mua;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ModifyKeywordWorker extends AbstractMuaWorker {
 

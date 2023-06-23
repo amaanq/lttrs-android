@@ -3,12 +3,14 @@ package rs.ltt.android.util;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 import rs.ltt.android.entity.EmailBodyPartEntity;
 import rs.ltt.android.entity.EmailBodyPartType;
 import rs.ltt.android.entity.EmailBodyValueEntity;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TextBodies {
 

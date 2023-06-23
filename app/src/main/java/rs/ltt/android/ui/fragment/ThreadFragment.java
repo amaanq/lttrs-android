@@ -22,22 +22,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.paging.PagedList;
+
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.LttrsNavigationDirections;
 import rs.ltt.android.R;
 import rs.ltt.android.databinding.FragmentThreadBinding;
@@ -62,6 +63,10 @@ import rs.ltt.android.util.Event;
 import rs.ltt.android.util.MediaTypes;
 import rs.ltt.android.worker.Failure;
 import rs.ltt.jmap.common.entity.Attachment;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 public class ThreadFragment extends AbstractLttrsFragment
         implements OnFlaggedToggled,

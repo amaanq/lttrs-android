@@ -1,16 +1,20 @@
 package rs.ltt.android.worker;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.WorkerParameters;
-import java.util.concurrent.ExecutionException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.entity.MailboxWithRoleAndName;
 import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.mua.Mua;
 import rs.ltt.jmap.mua.util.StandardQueries;
+
+import java.util.concurrent.ExecutionException;
 
 public class EmptyTrashWorker extends AbstractMuaWorker {
 

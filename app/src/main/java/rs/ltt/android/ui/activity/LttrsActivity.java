@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +34,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -43,17 +45,16 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.work.WorkInfo;
+
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ListenableFuture;
-import java.lang.ref.WeakReference;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.LttrsApplication;
 import rs.ltt.android.LttrsNavigationDirections;
 import rs.ltt.android.R;
@@ -70,12 +71,16 @@ import rs.ltt.android.ui.adapter.NavigationAdapter;
 import rs.ltt.android.ui.model.LttrsViewModel;
 import rs.ltt.android.ui.notification.EmailNotification;
 import rs.ltt.android.util.Event;
-import rs.ltt.android.util.MainThreadExecutor;
 import rs.ltt.android.util.NavControllers;
 import rs.ltt.android.worker.Failure;
 import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.mua.util.KeywordLabel;
 import rs.ltt.jmap.mua.util.Label;
+
+import java.lang.ref.WeakReference;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 public class LttrsActivity extends AppCompatActivity
         implements ThreadModifier,
@@ -501,7 +506,7 @@ public class LttrsActivity extends AppCompatActivity
                         LOGGER.warn("Unable to observe moveToTrash operation", e);
                     }
                 },
-                MainThreadExecutor.getInstance());
+                ContextCompat.getMainExecutor(this));
     }
 
     @Override

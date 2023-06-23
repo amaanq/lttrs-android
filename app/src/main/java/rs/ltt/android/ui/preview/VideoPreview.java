@@ -1,10 +1,19 @@
 package rs.ltt.android.ui.preview;
 
 import android.graphics.Bitmap;
-import java.io.File;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.ui.PreviewMeasurements;
 
+import java.io.File;
+import java.io.IOException;
+
 public class VideoPreview extends ImagePreview {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(VideoPreview.class);
+
     public static Bitmap getVideoPreview(final File file, final Size size) {
         try (final MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever()) {
             metadataRetriever.setDataSource(file.getAbsolutePath());
@@ -22,7 +31,11 @@ public class VideoPreview extends ImagePreview {
 
         @Override
         public void close() {
-            this.release();
+            try {
+                this.release();
+            } catch (final IOException e) {
+                LOGGER.error("Could not close MediaDataRetriever", e);
+            }
         }
     }
 }

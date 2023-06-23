@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import rs.ltt.android.ui.activity.ComposeActivity;
 
 public class ComposeContract extends ActivityResultContract<Bundle, Bundle> {

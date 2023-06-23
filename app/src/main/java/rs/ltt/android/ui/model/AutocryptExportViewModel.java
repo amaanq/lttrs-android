@@ -1,30 +1,35 @@
 package rs.ltt.android.ui.model;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.MuaPool;
 import rs.ltt.android.R;
 import rs.ltt.android.database.LttrsDatabase;
 import rs.ltt.android.ui.notification.EmailNotification;
 import rs.ltt.android.util.Event;
-import rs.ltt.android.util.MainThreadExecutor;
 import rs.ltt.autocrypt.jmap.AutocryptPlugin;
 import rs.ltt.autocrypt.jmap.SetupMessage;
 import rs.ltt.jmap.mua.Mua;
 import rs.ltt.jmap.mua.service.exception.SetEmailException;
+
+import java.util.Objects;
 
 public class AutocryptExportViewModel extends AndroidViewModel {
 
@@ -90,7 +95,7 @@ public class AutocryptExportViewModel extends AndroidViewModel {
                         postErrorMessage(throwable);
                     }
                 },
-                MainThreadExecutor.getInstance());
+                ContextCompat.getMainExecutor(getApplication()));
     }
 
     private void refreshEmails() {

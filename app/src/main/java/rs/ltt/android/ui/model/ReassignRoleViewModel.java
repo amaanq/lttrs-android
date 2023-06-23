@@ -1,6 +1,7 @@
 package rs.ltt.android.ui.model;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -8,13 +9,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import java.util.Objects;
-import java.util.UUID;
+
 import rs.ltt.android.entity.MailboxWithRoleAndName;
 import rs.ltt.android.repository.MailboxRepository;
 import rs.ltt.android.util.Event;
 import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.mua.util.MailboxUtil;
+
+import java.util.Objects;
+import java.util.UUID;
 
 public class ReassignRoleViewModel extends AndroidViewModel {
 

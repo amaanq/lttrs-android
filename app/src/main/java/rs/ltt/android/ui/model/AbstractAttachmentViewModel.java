@@ -2,8 +2,10 @@ package rs.ltt.android.ui.model;
 
 import android.app.Application;
 import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -13,19 +15,21 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.OutOfQuotaPolicy;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
+
 import com.google.common.base.Preconditions;
 import com.google.common.net.MediaType;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.R;
 import rs.ltt.android.cache.BlobStorage;
 import rs.ltt.android.cache.LocalAttachment;
 import rs.ltt.android.ui.ViewIntent;
 import rs.ltt.android.util.Event;
-import rs.ltt.android.util.MainThreadExecutor;
 import rs.ltt.android.worker.BlobDownloadWorker;
 import rs.ltt.android.worker.Failure;
 import rs.ltt.jmap.common.entity.Attachment;
@@ -62,7 +66,7 @@ public abstract class AbstractAttachmentViewModel extends AndroidViewModel {
                         }
                     }
                 },
-                MainThreadExecutor.getInstance());
+                ContextCompat.getMainExecutor(getApplication()));
     }
 
     protected void queueDownload(final String emailId, final Attachment attachment) {

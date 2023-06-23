@@ -2,14 +2,17 @@ package rs.ltt.android.entity;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.net.MediaType;
-import java.util.List;
-import java.util.UUID;
+
 import org.junit.Assert;
 import org.junit.Test;
+
 import rs.ltt.android.cache.LocalAttachment;
 import rs.ltt.android.util.AttachmentSerializer;
 import rs.ltt.jmap.common.entity.Attachment;
 import rs.ltt.jmap.common.entity.EmailBodyPart;
+
+import java.util.List;
+import java.util.UUID;
 
 public class AttachmentSerializationTest {
 

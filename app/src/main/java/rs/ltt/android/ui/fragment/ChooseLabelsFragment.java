@@ -4,14 +4,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import java.util.List;
-import java.util.UUID;
+
 import rs.ltt.android.R;
 import rs.ltt.android.databinding.DialogViewNewLabelBinding;
 import rs.ltt.android.databinding.FragmentLabelAsBinding;
@@ -19,6 +20,9 @@ import rs.ltt.android.entity.SelectableMailbox;
 import rs.ltt.android.ui.adapter.ChooseLabelsAdapter;
 import rs.ltt.android.ui.model.ChooseLabelsViewModel;
 import rs.ltt.android.util.CharSequences;
+
+import java.util.List;
+import java.util.UUID;
 
 public class ChooseLabelsFragment extends AbstractLttrsFragment
         implements ChooseLabelsAdapter.OnSelectableMailboxClickListener {

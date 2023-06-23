@@ -2,15 +2,18 @@ package rs.ltt.android.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.List;
+
 import rs.ltt.android.R;
 import rs.ltt.android.databinding.ItemMailboxSelectableBinding;
 import rs.ltt.android.entity.SelectableMailbox;
+
+import java.util.List;
 
 public class ChooseLabelsAdapter extends RecyclerView.Adapter<ChooseLabelsAdapter.LabelViewHolder> {
 

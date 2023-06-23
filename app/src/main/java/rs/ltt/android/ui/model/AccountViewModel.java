@@ -1,6 +1,7 @@
 package rs.ltt.android.ui.model;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
@@ -8,14 +9,17 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.util.Objects;
+
 import rs.ltt.android.entity.AccountName;
 import rs.ltt.android.repository.MainRepository;
 import rs.ltt.android.util.Event;
+
+import java.util.Objects;
 
 public class AccountViewModel extends AndroidViewModel {
 

@@ -19,9 +19,12 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.common.base.CharMatcher;
+
 import rs.ltt.android.database.AppDatabase;
 
 public class EmailSearchSuggestionsProvider extends ContentProvider {

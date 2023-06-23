@@ -20,6 +20,7 @@ import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -28,12 +29,10 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Future;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.R;
 import rs.ltt.android.databinding.ItemThreadOverviewBinding;
 import rs.ltt.android.databinding.ItemThreadOverviewEmptyActionBinding;
@@ -44,6 +43,11 @@ import rs.ltt.android.ui.BindingAdapters;
 import rs.ltt.android.ui.EmptyMailboxAction;
 import rs.ltt.android.ui.MaterialBackgrounds;
 import rs.ltt.android.util.Touch;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Future;
 
 public class ThreadOverviewAdapter
         extends RecyclerView.Adapter<ThreadOverviewAdapter.AbstractThreadOverviewViewHolder> {

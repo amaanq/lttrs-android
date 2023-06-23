@@ -1,8 +1,10 @@
 package rs.ltt.android.entity;
 
 import androidx.annotation.NonNull;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+
 import rs.ltt.jmap.common.entity.Identifiable;
 
 public class EmailWithEncryptionStatus implements Identifiable {

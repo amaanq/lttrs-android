@@ -16,10 +16,12 @@
 package rs.ltt.android.entity;
 
 import androidx.room.Relation;
-import java.util.List;
-import java.util.Set;
+
 import rs.ltt.jmap.common.entity.Keyword;
 import rs.ltt.jmap.mua.util.KeywordUtil;
+
+import java.util.List;
+import java.util.Set;
 
 public class ThreadHeader {
 

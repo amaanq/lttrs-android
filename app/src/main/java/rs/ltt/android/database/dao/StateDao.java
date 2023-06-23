@@ -18,9 +18,9 @@ package rs.ltt.android.database.dao;
 import androidx.room.Dao;
 import androidx.room.Query;
 import androidx.room.Transaction;
+
 import com.google.common.collect.ImmutableList;
-import java.util.Arrays;
-import java.util.List;
+
 import rs.ltt.android.entity.EntityStateEntity;
 import rs.ltt.jmap.common.entity.AbstractIdentifiableEntity;
 import rs.ltt.jmap.common.entity.Email;
@@ -28,6 +28,9 @@ import rs.ltt.jmap.common.entity.Mailbox;
 import rs.ltt.jmap.common.entity.Thread;
 import rs.ltt.jmap.mua.cache.ObjectsState;
 import rs.ltt.jmap.mua.cache.QueryStateWrapper;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Dao
 public abstract class StateDao {

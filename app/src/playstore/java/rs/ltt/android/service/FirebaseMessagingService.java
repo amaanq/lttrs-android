@@ -1,13 +1,17 @@
 package rs.ltt.android.service;
 
 import androidx.annotation.NonNull;
+
 import com.google.firebase.messaging.RemoteMessage;
-import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.push.PushManager;
 import rs.ltt.android.util.PushMessages;
 import rs.ltt.jmap.common.entity.PushMessage;
+
+import java.util.Map;
 
 public class FirebaseMessagingService
         extends com.google.firebase.messaging.FirebaseMessagingService {

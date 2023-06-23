@@ -1,12 +1,15 @@
 package rs.ltt.android.ui.model;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import java.util.List;
+
 import rs.ltt.android.entity.AccountName;
 import rs.ltt.android.repository.MainRepository;
+
+import java.util.List;
 
 public class AccountListViewModel extends AndroidViewModel {
 

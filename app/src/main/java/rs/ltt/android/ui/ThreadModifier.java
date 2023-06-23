@@ -15,8 +15,9 @@
 
 package rs.ltt.android.ui;
 
-import java.util.Collection;
 import rs.ltt.android.entity.MailboxWithRoleAndName;
+
+import java.util.Collection;
 
 public interface ThreadModifier {
 

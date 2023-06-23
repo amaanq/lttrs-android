@@ -16,6 +16,7 @@
 package rs.ltt.android.entity;
 
 import com.google.common.base.Objects;
+
 import okhttp3.HttpUrl;
 
 public class AccountWithCredentials {
@@ -42,12 +43,16 @@ public class AccountWithCredentials {
         this.sessionResource = sessionResource;
     }
 
-    /** @return The internal database ID */
+    /**
+     * @return The internal database ID
+     */
     public Long getId() {
         return id;
     }
 
-    /** @return The JMAP account ID as found in the session resource */
+    /**
+     * @return The JMAP account ID as found in the session resource
+     */
     public String getAccountId() {
         return accountId;
     }
@@ -60,12 +65,16 @@ public class AccountWithCredentials {
         return name;
     }
 
-    /** @return The login username (credentials) used to authenticate */
+    /**
+     * @return The login username (credentials) used to authenticate
+     */
     public String getUsername() {
         return username;
     }
 
-    /** @return The login password (credentials) used to authenticate */
+    /**
+     * @return The login password (credentials) used to authenticate
+     */
     public String getPassword() {
         return password;
     }
