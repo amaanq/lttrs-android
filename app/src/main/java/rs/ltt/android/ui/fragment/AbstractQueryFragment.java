@@ -122,9 +122,11 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                         });
 
         binding.swipeToRefresh.setColorSchemeColors(
-                MaterialColors.getColor(binding.swipeToRefresh, R.attr.colorAccent));
+                MaterialColors.getColor(
+                        binding.swipeToRefresh, androidx.appcompat.R.attr.colorAccent));
         binding.swipeToRefresh.setProgressBackgroundColorSchemeColor(
-                MaterialColors.getColor(binding.swipeToRefresh, R.attr.colorSurface));
+                MaterialColors.getColor(
+                        binding.swipeToRefresh, com.google.android.material.R.attr.colorSurface));
 
         ItemAnimators.disableChangeAnimation(binding.threadList.getItemAnimator());
 

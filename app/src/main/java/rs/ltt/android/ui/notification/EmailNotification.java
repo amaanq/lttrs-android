@@ -257,7 +257,7 @@ public class EmailNotification extends AbstractNotification {
                 .setLargeIcon(avatar.toBitmap())
                 .setWhen(email.getEffectiveDate().toEpochMilli())
                 .setStyle(bigTextStyle)
-                .setColor(getColor(context, R.attr.colorPrimary))
+                .setColor(getColor(context, androidx.appcompat.R.attr.colorPrimary))
                 .setGroup(getGroupKey(account))
                 .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)
                 .setContentIntent(getPendingIntent(email))
@@ -286,7 +286,7 @@ public class EmailNotification extends AbstractNotification {
                                 .getQuantityString(
                                         R.plurals.x_new_emails, emails.size(), emails.size()))
                 .setStyle(inboxStyle)
-                .setColor(getColor(context, R.attr.colorPrimary))
+                .setColor(getColor(context, androidx.appcompat.R.attr.colorPrimary))
                 .setGroup(getGroupKey(account))
                 .setGroupSummary(true)
                 .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)

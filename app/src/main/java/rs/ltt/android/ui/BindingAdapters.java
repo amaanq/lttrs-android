@@ -183,7 +183,9 @@ public class BindingAdapters {
             final SpannableString spannable =
                     new SpannableString(context.getString(R.string.draft));
             spannable.setSpan(
-                    new ForegroundColorSpan(MaterialColors.getColor(textView, R.attr.colorPrimary)),
+                    new ForegroundColorSpan(
+                            MaterialColors.getColor(
+                                    textView, androidx.appcompat.R.attr.colorPrimary)),
                     0,
                     spannable.length(),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -207,7 +209,8 @@ public class BindingAdapters {
                     builder.append(context.getString(R.string.draft));
                     builder.setSpan(
                             new ForegroundColorSpan(
-                                    MaterialColors.getColor(textView, R.attr.colorPrimary)),
+                                    MaterialColors.getColor(
+                                            textView, androidx.appcompat.R.attr.colorPrimary)),
                             start,
                             builder.length(),
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -267,7 +270,8 @@ public class BindingAdapters {
             ImageViewCompat.setImageTintList(
                     imageView,
                     ColorStateList.valueOf(
-                            MaterialColors.getColor(imageView, R.attr.colorControlNormal)));
+                            MaterialColors.getColor(
+                                    imageView, androidx.appcompat.R.attr.colorControlNormal)));
         }
     }
 
@@ -297,7 +301,7 @@ public class BindingAdapters {
             text.setTextColor(
                     MaterialColors.getColor(
                             text.getContext(),
-                            R.attr.colorControlNormal,
+                            androidx.appcompat.R.attr.colorControlNormal,
                             BindingAdapters.class.getCanonicalName()));
             text.setText(R.string.no_subject);
             return;
@@ -305,7 +309,7 @@ public class BindingAdapters {
         text.setTextColor(
                 MaterialColors.getColor(
                         text.getContext(),
-                        R.attr.colorOnSurface,
+                        com.google.android.material.R.attr.colorOnSurface,
                         BindingAdapters.class.getCanonicalName()));
         if (subjectWithImportance.important) {
             final SpannableStringBuilder header =
@@ -450,7 +454,7 @@ public class BindingAdapters {
             textView.setTextColor(
                     MaterialColors.getColor(
                             textView.getContext(),
-                            R.attr.colorControlNormal,
+                            androidx.appcompat.R.attr.colorControlNormal,
                             BindingAdapters.class.getCanonicalName()));
             textView.setText(R.string.no_subject);
         } else {
@@ -458,7 +462,7 @@ public class BindingAdapters {
             textView.setTextColor(
                     MaterialColors.getColor(
                             textView.getContext(),
-                            R.attr.colorOnSurface,
+                            com.google.android.material.R.attr.colorOnSurface,
                             BindingAdapters.class.getCanonicalName()));
         }
     }
@@ -469,7 +473,7 @@ public class BindingAdapters {
             textView.setTextColor(
                     MaterialColors.getColor(
                             textView.getContext(),
-                            R.attr.colorControlNormal,
+                            androidx.appcompat.R.attr.colorControlNormal,
                             BindingAdapters.class.getCanonicalName()));
             if (preview != null && preview.isEncrypted) {
                 textView.setText(R.string.encrypted_email);
@@ -481,7 +485,7 @@ public class BindingAdapters {
             textView.setTextColor(
                     MaterialColors.getColor(
                             textView.getContext(),
-                            R.attr.colorOnSurface,
+                            com.google.android.material.R.attr.colorOnSurface,
                             BindingAdapters.class.getCanonicalName()));
         }
     }

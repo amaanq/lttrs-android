@@ -667,15 +667,17 @@ public class LttrsActivity extends AppCompatActivity
     private void resetToolbar() {
         setDisplayShowTitleEnable(true);
         binding.toolbar.setBackgroundColor(
-                MaterialColors.getColor(binding.toolbar, R.attr.colorPrimary));
+                MaterialColors.getColor(binding.toolbar, androidx.appcompat.R.attr.colorPrimary));
         binding.drawerLayout.setStatusBarBackgroundColor(
-                MaterialColors.getColor(binding.drawerLayout, R.attr.colorPrimaryDark));
+                MaterialColors.getColor(
+                        binding.drawerLayout, androidx.appcompat.R.attr.colorPrimaryDark));
     }
 
     private void prepareToolbarForSearch() {
         setDisplayShowTitleEnable(false);
         binding.toolbar.setBackgroundColor(
-                MaterialColors.getColor(binding.toolbar, R.attr.colorSurface));
+                MaterialColors.getColor(
+                        binding.toolbar, com.google.android.material.R.attr.colorSurface));
         binding.drawerLayout.setStatusBarBackgroundColor(
                 MaterialColors.getColor(binding.toolbar, R.attr.colorStatusBarSearch));
     }

@@ -69,7 +69,9 @@ public class ChipDrawableSpan extends ImageSpan implements NoCopySpan {
         for (final EmailAddressToken token : tokens) {
             final ChipDrawable chip = ChipDrawable.createFromResource(context, R.xml.address);
             if (EmailAddressUtil.isValid(token.getEmailAddress())) {
-                chip.setChipBackgroundColor(getBackgroundColor(context, R.attr.colorSurface));
+                chip.setChipBackgroundColor(
+                        getBackgroundColor(
+                                context, com.google.android.material.R.attr.colorSurface));
             } else {
                 chip.setChipBackgroundColor(
                         getBackgroundColor(context, R.attr.colorSurfaceWarning));

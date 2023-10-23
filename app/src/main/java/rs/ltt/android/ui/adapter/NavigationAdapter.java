@@ -259,7 +259,9 @@ public class NavigationAdapter
             ImageViewCompat.setImageTintList(
                     viewHolder.binding.icon,
                     ColorStateList.valueOf(
-                            MaterialColors.getColor(viewHolder.binding.item, R.attr.colorPrimary)));
+                            MaterialColors.getColor(
+                                    viewHolder.binding.item,
+                                    androidx.appcompat.R.attr.colorPrimary)));
         } else {
             viewHolder.binding.item.setBackgroundResource(
                     MaterialBackgrounds.getBackgroundResource(
@@ -268,7 +270,8 @@ public class NavigationAdapter
                     viewHolder.binding.icon,
                     ColorStateList.valueOf(
                             MaterialColors.getColor(
-                                    viewHolder.binding.item, R.attr.colorControlNormal)));
+                                    viewHolder.binding.item,
+                                    androidx.appcompat.R.attr.colorControlNormal)));
         }
     }
 
