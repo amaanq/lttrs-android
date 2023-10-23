@@ -171,6 +171,8 @@ public class SetupTest {
         onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar))))
                 .check(matches(withText("Inbox")));
 
+        Thread.sleep(3000);
+
         // click on first email
         onView(withId(R.id.thread_list)).perform(actionOnItemAtPosition(0, click()));
 
