@@ -16,7 +16,6 @@
 package rs.ltt.android.ui.model;
 
 import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
@@ -26,14 +25,15 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.work.WorkInfo;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.ListenableFuture;
-
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.android.LttrsApplication;
 import rs.ltt.android.entity.AccountName;
 import rs.ltt.android.repository.LttrsRepository;
@@ -47,11 +47,6 @@ import rs.ltt.jmap.common.entity.Keyword;
 import rs.ltt.jmap.mua.util.LabelUtil;
 import rs.ltt.jmap.mua.util.LabelWithCount;
 import rs.ltt.jmap.mua.util.Navigable;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 public class LttrsViewModel extends AndroidViewModel {
 

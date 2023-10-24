@@ -16,17 +16,13 @@
 package rs.ltt.android.worker;
 
 import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.WorkerParameters;
-
+import java.util.concurrent.ExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.android.entity.IdentityWithNameAndEmail;
-
-import java.util.concurrent.ExecutionException;
 
 public class SubmitEmailWorker extends AbstractMuaWorker {
 

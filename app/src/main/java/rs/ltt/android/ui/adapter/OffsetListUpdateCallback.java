@@ -19,7 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.AdapterListUpdateCallback;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.common.base.Preconditions;
 
 public class OffsetListUpdateCallback<VH extends RecyclerView.ViewHolder>

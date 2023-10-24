@@ -2,10 +2,8 @@ package rs.ltt.android.ui.notification;
 
 import android.content.Context;
 import android.util.TypedValue;
-
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
-
 import rs.ltt.android.R;
 
 public abstract class AbstractNotification {

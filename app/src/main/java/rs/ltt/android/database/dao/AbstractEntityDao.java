@@ -18,7 +18,6 @@ package rs.ltt.android.database.dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
 import rs.ltt.android.entity.EntityStateEntity;
 import rs.ltt.jmap.common.entity.AbstractIdentifiableEntity;
 import rs.ltt.jmap.common.entity.TypedState;

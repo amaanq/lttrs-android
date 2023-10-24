@@ -1,10 +1,8 @@
 package rs.ltt.android.util;
 
 import androidx.work.WorkInfo;
-
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
-
 import java.util.Collection;
 
 public class WorkInfoUtils {

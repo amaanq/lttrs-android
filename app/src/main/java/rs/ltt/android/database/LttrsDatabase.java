@@ -17,15 +17,18 @@ package rs.ltt.android.database;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
-
+import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.android.database.dao.AutocryptDao;
 import rs.ltt.android.database.dao.IdentityDao;
 import rs.ltt.android.database.dao.MailboxDao;
@@ -54,13 +57,6 @@ import rs.ltt.android.entity.QueryItemEntity;
 import rs.ltt.android.entity.QueryItemOverwriteEntity;
 import rs.ltt.android.entity.ThreadEntity;
 import rs.ltt.android.entity.ThreadItemEntity;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 @Database(
         entities = {

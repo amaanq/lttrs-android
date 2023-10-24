@@ -1,20 +1,15 @@
 package rs.ltt.android.worker;
 
 import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.WorkerParameters;
-
 import com.google.common.base.Preconditions;
-
+import java.util.concurrent.ExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.jmap.common.entity.IdentifiableMailboxWithRole;
 import rs.ltt.jmap.common.entity.Role;
-
-import java.util.concurrent.ExecutionException;
 
 public class SetMailboxRoleWorker extends AbstractMuaWorker {
 

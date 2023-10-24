@@ -16,14 +16,11 @@
 package rs.ltt.android.entity;
 
 import androidx.room.Relation;
-
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
-
-import rs.ltt.jmap.common.entity.IdentifiableEmailWithKeywords;
-
 import java.util.Map;
 import java.util.Set;
+import rs.ltt.jmap.common.entity.IdentifiableEmailWithKeywords;
 
 /**
  * This e-mail model is used for workers that modify keywords. It is also the base class for a lot

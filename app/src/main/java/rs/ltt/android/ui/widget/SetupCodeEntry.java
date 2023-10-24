@@ -6,10 +6,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.GridLayout;
-
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
-
 import java.util.List;
 
 public class SetupCodeEntry {

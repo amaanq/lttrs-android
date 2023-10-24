@@ -1,15 +1,9 @@
 package rs.ltt.android.util;
 
 import androidx.annotation.NonNull;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.net.MediaType;
-
-import rs.ltt.android.cache.LocalAttachment;
-import rs.ltt.jmap.common.entity.Attachment;
-import rs.ltt.jmap.common.entity.EmailBodyPart;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -20,6 +14,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import rs.ltt.android.cache.LocalAttachment;
+import rs.ltt.jmap.common.entity.Attachment;
+import rs.ltt.jmap.common.entity.EmailBodyPart;
 
 public class AttachmentSerializer {
 

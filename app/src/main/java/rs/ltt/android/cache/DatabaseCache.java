@@ -17,10 +17,11 @@ package rs.ltt.android.cache;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.android.database.LttrsDatabase;
 import rs.ltt.android.entity.MailboxEntity;
 import rs.ltt.jmap.common.entity.Email;
@@ -42,10 +43,6 @@ import rs.ltt.jmap.mua.cache.exception.CacheWriteException;
 import rs.ltt.jmap.mua.cache.exception.NotSynchronizedException;
 import rs.ltt.jmap.mua.util.QueryResult;
 import rs.ltt.jmap.mua.util.QueryResultItem;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class DatabaseCache implements Cache {
 

@@ -1,10 +1,8 @@
 package rs.ltt.android.ui;
 
 import androidx.annotation.NonNull;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-
 import rs.ltt.android.ui.preview.Size;
 
 public class PreviewMeasurements {

@@ -16,15 +16,12 @@
 package rs.ltt.android.entity;
 
 import androidx.room.Ignore;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-
+import java.util.Collection;
 import rs.ltt.jmap.common.entity.IdentifiableMailboxWithRoleAndName;
 import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.mua.util.Label;
-
-import java.util.Collection;
 
 public class MailboxWithRoleAndName implements IdentifiableMailboxWithRoleAndName, Label {
 

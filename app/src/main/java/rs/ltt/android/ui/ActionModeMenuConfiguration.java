@@ -16,12 +16,10 @@
 package rs.ltt.android.ui;
 
 import androidx.paging.PagedList;
-
-import rs.ltt.android.entity.ThreadOverviewItem;
-import rs.ltt.android.ui.adapter.ThreadOverviewAdapter;
-
 import java.util.List;
 import java.util.Set;
+import rs.ltt.android.entity.ThreadOverviewItem;
+import rs.ltt.android.ui.adapter.ThreadOverviewAdapter;
 
 public class ActionModeMenuConfiguration {
 

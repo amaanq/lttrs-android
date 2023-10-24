@@ -19,19 +19,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.google.common.base.Preconditions;
-
+import java.util.Collection;
 import rs.ltt.android.entity.ThreadOverviewItem;
 import rs.ltt.android.ui.ActionModeMenuConfiguration;
 import rs.ltt.android.ui.QueryItemTouchHelper;
 import rs.ltt.android.ui.model.AbstractQueryViewModel;
 import rs.ltt.android.ui.model.SearchQueryViewModel;
-
-import java.util.Collection;
 
 public class SearchQueryFragment extends AbstractQueryFragment {
 

@@ -4,11 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.Weigher;
@@ -16,22 +14,19 @@ import com.google.common.net.MediaType;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-
+import java.io.File;
+import java.lang.ref.WeakReference;
+import java.util.Locale;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.android.R;
 import rs.ltt.android.cache.BlobStorage;
 import rs.ltt.android.cache.CachedAttachment;
 import rs.ltt.android.cache.LocalAttachment;
 import rs.ltt.android.entity.EmailBodyPartEntity;
 import rs.ltt.jmap.common.entity.Attachment;
-
-import java.io.File;
-import java.lang.ref.WeakReference;
-import java.util.Locale;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class AttachmentPreview {
 

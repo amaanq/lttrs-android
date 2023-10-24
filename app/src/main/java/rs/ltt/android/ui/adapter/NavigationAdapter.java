@@ -20,7 +20,6 @@ import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -31,12 +30,10 @@ import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.color.MaterialColors;
-
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.android.R;
 import rs.ltt.android.databinding.ItemNavigationAccountBinding;
 import rs.ltt.android.databinding.ItemNavigationAdditionalBinding;
@@ -53,8 +50,6 @@ import rs.ltt.jmap.mua.util.KeywordLabel;
 import rs.ltt.jmap.mua.util.Label;
 import rs.ltt.jmap.mua.util.LabelWithCount;
 import rs.ltt.jmap.mua.util.Navigable;
-
-import java.util.List;
 
 public class NavigationAdapter
         extends RecyclerView.Adapter<NavigationAdapter.AbstractNavigationItemViewHolder> {

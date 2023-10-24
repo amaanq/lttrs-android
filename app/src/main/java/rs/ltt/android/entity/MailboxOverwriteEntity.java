@@ -20,16 +20,13 @@ import static androidx.room.ForeignKey.CASCADE;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-
 import com.google.common.base.Objects;
 import com.google.common.collect.Collections2;
-
+import java.util.Collection;
+import java.util.List;
 import rs.ltt.android.util.CharSequences;
 import rs.ltt.jmap.common.entity.IdentifiableMailboxWithRoleAndName;
 import rs.ltt.jmap.common.entity.Role;
-
-import java.util.Collection;
-import java.util.List;
 
 @Entity(
         tableName = "mailbox_overwrite",

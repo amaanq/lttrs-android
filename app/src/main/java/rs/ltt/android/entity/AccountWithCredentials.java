@@ -16,7 +16,6 @@
 package rs.ltt.android.entity;
 
 import com.google.common.base.Objects;
-
 import okhttp3.HttpUrl;
 
 public class AccountWithCredentials {

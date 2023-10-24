@@ -16,19 +16,16 @@
 package rs.ltt.android.database;
 
 import androidx.room.TypeConverter;
-
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import okhttp3.HttpUrl;
-
 import rs.ltt.android.entity.EmailAddressType;
 import rs.ltt.android.entity.EmailBodyPartType;
 import rs.ltt.android.entity.QueryItemOverwriteEntity;
 import rs.ltt.jmap.common.entity.AbstractIdentifiableEntity;
 import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.common.util.Mapper;
-
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Converters {
 

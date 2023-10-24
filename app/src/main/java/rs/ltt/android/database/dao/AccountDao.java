@@ -20,20 +20,16 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ListenableFuture;
-
+import java.util.List;
+import java.util.Map;
 import okhttp3.HttpUrl;
-
 import rs.ltt.android.entity.AccountEntity;
 import rs.ltt.android.entity.AccountName;
 import rs.ltt.android.entity.AccountWithCredentials;
 import rs.ltt.android.entity.CredentialsEntity;
 import rs.ltt.jmap.common.entity.Account;
-
-import java.util.List;
-import java.util.Map;
 
 @Dao
 public abstract class AccountDao {

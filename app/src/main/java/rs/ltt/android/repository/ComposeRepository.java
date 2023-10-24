@@ -18,7 +18,6 @@ package rs.ltt.android.repository;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.net.Uri;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.work.ExistingWorkPolicy;
@@ -26,17 +25,19 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.OutOfQuotaPolicy;
 import androidx.work.WorkContinuation;
 import androidx.work.WorkManager;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
-
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.android.MuaPool;
 import rs.ltt.android.cache.LocalAttachment;
 import rs.ltt.android.entity.EmailWithReferences;
@@ -64,12 +65,6 @@ import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.common.entity.capability.CoreCapability;
 import rs.ltt.jmap.mua.Mua;
 import rs.ltt.jmap.mua.Status;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.Executors;
 
 public class ComposeRepository extends AbstractRepository {
 

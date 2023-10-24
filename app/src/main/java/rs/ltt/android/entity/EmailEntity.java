@@ -18,15 +18,12 @@ package rs.ltt.android.entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import com.google.common.base.Optional;
-
+import java.time.Instant;
+import java.time.OffsetDateTime;
 import rs.ltt.autocrypt.jmap.EncryptedBodyPart;
 import rs.ltt.jmap.common.entity.Downloadable;
 import rs.ltt.jmap.common.entity.Email;
-
-import java.time.Instant;
-import java.time.OffsetDateTime;
 
 @Entity(tableName = "email")
 public class EmailEntity {

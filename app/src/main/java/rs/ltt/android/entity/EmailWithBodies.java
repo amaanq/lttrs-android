@@ -16,15 +16,12 @@
 package rs.ltt.android.entity;
 
 import androidx.room.Relation;
-
 import com.google.common.base.Objects;
-
-import rs.ltt.android.util.TextBodies;
-import rs.ltt.jmap.mua.util.KeywordUtil;
-
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
+import rs.ltt.android.util.TextBodies;
+import rs.ltt.jmap.mua.util.KeywordUtil;
 
 /**
  * This e-mail model represents and individual e-mail in the thread view. It does not have a subject

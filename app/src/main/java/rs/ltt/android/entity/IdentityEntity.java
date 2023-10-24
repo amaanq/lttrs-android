@@ -18,7 +18,6 @@ package rs.ltt.android.entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import rs.ltt.jmap.common.entity.Identity;
 
 @Entity(tableName = "identity")

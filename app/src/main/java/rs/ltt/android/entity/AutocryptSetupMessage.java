@@ -1,7 +1,6 @@
 package rs.ltt.android.entity;
 
 import com.google.common.base.Objects;
-
 import rs.ltt.autocrypt.client.header.PassphraseHint;
 
 public class AutocryptSetupMessage {

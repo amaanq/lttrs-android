@@ -4,22 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.WindowManager;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-
+import java.util.Objects;
 import rs.ltt.android.R;
 import rs.ltt.android.databinding.ActivityAutocryptExportBinding;
 import rs.ltt.android.ui.MaterialAlertDialogs;
 import rs.ltt.android.ui.model.AutocryptExportViewModel;
 import rs.ltt.android.util.Event;
 import rs.ltt.android.util.NavControllers;
-
-import java.util.Objects;
 
 public class AutocryptExportActivity extends AppCompatActivity {
 

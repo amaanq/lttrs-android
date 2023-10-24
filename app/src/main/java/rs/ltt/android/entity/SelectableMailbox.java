@@ -2,7 +2,6 @@ package rs.ltt.android.entity;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
-
 import rs.ltt.jmap.common.entity.IdentifiableMailboxWithRoleAndName;
 import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.mua.util.Label;

@@ -20,12 +20,12 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
-
 import com.google.common.util.concurrent.ListenableFuture;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.android.entity.EntityStateEntity;
 import rs.ltt.android.entity.MailboxEntity;
 import rs.ltt.android.entity.MailboxOverviewItem;
@@ -33,10 +33,6 @@ import rs.ltt.android.entity.MailboxWithRoleAndName;
 import rs.ltt.jmap.common.entity.Mailbox;
 import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.mua.cache.Update;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 @Dao
 public abstract class MailboxDao extends AbstractEntityDao {

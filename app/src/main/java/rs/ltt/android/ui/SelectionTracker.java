@@ -1,9 +1,8 @@
 package rs.ltt.android.ui;
 
-import rs.ltt.android.ui.adapter.ThreadOverviewAdapter;
-
 import java.util.Iterator;
 import java.util.Set;
+import rs.ltt.android.ui.adapter.ThreadOverviewAdapter;
 
 public class SelectionTracker {
 

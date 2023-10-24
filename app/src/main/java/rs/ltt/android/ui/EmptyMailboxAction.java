@@ -1,11 +1,9 @@
 package rs.ltt.android.ui;
 
 import com.google.common.collect.ImmutableList;
-
+import java.util.List;
 import rs.ltt.android.entity.MailboxOverviewItem;
 import rs.ltt.jmap.common.entity.Role;
-
-import java.util.List;
 
 public class EmptyMailboxAction {
 

@@ -1,11 +1,8 @@
 package rs.ltt.android.ui;
 
 import android.app.Activity;
-
 import androidx.annotation.PluralsRes;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import rs.ltt.android.R;
 import rs.ltt.android.util.Event;
 

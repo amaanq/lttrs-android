@@ -26,7 +26,6 @@ import android.text.style.CharacterStyle;
 import android.text.style.LeadingMarginSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-
 import org.hsluv.HUSLColorConverter;
 
 public class QuoteSpan extends CharacterStyle implements LeadingMarginSpan {

@@ -2,7 +2,6 @@ package rs.ltt.android.ui;
 
 import android.content.Context;
 import android.util.TypedValue;
-
 import androidx.annotation.AnyRes;
 import androidx.annotation.AttrRes;
 

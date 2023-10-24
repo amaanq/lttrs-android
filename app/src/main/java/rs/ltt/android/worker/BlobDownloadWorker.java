@@ -4,24 +4,27 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.net.Uri;
-
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.ForegroundInfo;
 import androidx.work.WorkInfo;
 import androidx.work.WorkerParameters;
-
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.RateLimiter;
-
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import okhttp3.Call;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.android.cache.BlobStorage;
 import rs.ltt.android.entity.DownloadableBlob;
 import rs.ltt.android.entity.EmailWithEncryptionStatus;
@@ -35,15 +38,6 @@ import rs.ltt.jmap.client.io.ByteStreams;
 import rs.ltt.jmap.common.entity.Downloadable;
 import rs.ltt.jmap.common.entity.Email;
 import rs.ltt.jmap.mua.Mua;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 public class BlobDownloadWorker extends AbstractMuaWorker {
 

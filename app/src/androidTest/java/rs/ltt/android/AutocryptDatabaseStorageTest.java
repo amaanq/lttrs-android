@@ -3,16 +3,19 @@ package rs.ltt.android;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
 import com.google.common.collect.ImmutableList;
-
+import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.bouncycastle.openpgp.PGPPublicKeyRing;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import rs.ltt.android.cache.AutocryptDatabaseStorage;
 import rs.ltt.android.database.LttrsDatabase;
 import rs.ltt.autocrypt.client.Decision;
@@ -22,13 +25,6 @@ import rs.ltt.autocrypt.client.state.PeerStateManager;
 import rs.ltt.autocrypt.client.state.PreRecommendation;
 import rs.ltt.autocrypt.client.storage.PeerState;
 import rs.ltt.autocrypt.client.storage.Storage;
-
-import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class AutocryptDatabaseStorageTest {

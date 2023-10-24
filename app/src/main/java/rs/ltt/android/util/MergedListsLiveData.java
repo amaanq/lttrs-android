@@ -3,7 +3,6 @@ package rs.ltt.android.util;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;

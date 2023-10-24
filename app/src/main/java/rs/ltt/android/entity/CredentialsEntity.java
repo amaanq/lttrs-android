@@ -17,9 +17,7 @@ package rs.ltt.android.entity;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import com.google.common.base.Objects;
-
 import okhttp3.HttpUrl;
 
 @Entity(tableName = "credentials")

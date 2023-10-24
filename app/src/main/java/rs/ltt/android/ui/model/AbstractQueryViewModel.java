@@ -16,26 +16,22 @@
 package rs.ltt.android.ui.model;
 
 import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.paging.PagedList;
-
 import com.google.common.util.concurrent.ListenableFuture;
-
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.Future;
 import rs.ltt.android.entity.MailboxWithRoleAndName;
 import rs.ltt.android.entity.QueryInfo;
 import rs.ltt.android.entity.ThreadOverviewItem;
 import rs.ltt.android.repository.QueryRepository;
 import rs.ltt.android.ui.EmptyMailboxAction;
 import rs.ltt.jmap.common.entity.query.EmailQuery;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.Future;
 
 public abstract class AbstractQueryViewModel extends AndroidViewModel {
 

@@ -5,12 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
-
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
-
 import rs.ltt.android.R;
 import rs.ltt.android.databinding.FragmentEncryptionSettingsBinding;
 import rs.ltt.android.ui.BindingAdapters;

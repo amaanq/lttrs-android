@@ -23,13 +23,12 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
-
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ListenableFuture;
-
+import java.util.Collection;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.android.entity.DownloadableBlob;
 import rs.ltt.android.entity.EmailBodyPartEntity;
 import rs.ltt.android.entity.EmailBodyValueEntity;
@@ -58,9 +57,6 @@ import rs.ltt.jmap.common.entity.Thread;
 import rs.ltt.jmap.common.entity.TypedState;
 import rs.ltt.jmap.mua.cache.Missing;
 import rs.ltt.jmap.mua.cache.Update;
-
-import java.util.Collection;
-import java.util.List;
 
 @Dao
 public abstract class ThreadAndEmailDao extends AbstractEntityDao {

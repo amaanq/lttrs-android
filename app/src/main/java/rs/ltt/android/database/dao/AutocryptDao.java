@@ -6,12 +6,10 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
-
+import java.time.Instant;
 import rs.ltt.android.entity.AccountStateEntity;
 import rs.ltt.android.entity.PeerStateEntity;
 import rs.ltt.autocrypt.client.header.EncryptionPreference;
-
-import java.time.Instant;
 
 @Dao
 public abstract class AutocryptDao {

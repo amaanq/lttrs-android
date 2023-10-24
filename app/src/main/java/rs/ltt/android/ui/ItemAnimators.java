@@ -3,7 +3,6 @@ package rs.ltt.android.ui;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

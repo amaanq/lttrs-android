@@ -1,14 +1,11 @@
 package rs.ltt.android;
 
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.matcher.BoundedMatcher;
-
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.common.base.Preconditions;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;

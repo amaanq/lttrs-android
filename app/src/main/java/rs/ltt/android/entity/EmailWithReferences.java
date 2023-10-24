@@ -17,7 +17,6 @@ package rs.ltt.android.entity;
 
 import androidx.room.Ignore;
 import androidx.room.Relation;
-
 import java.util.List;
 
 /**

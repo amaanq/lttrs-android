@@ -16,13 +16,11 @@
 package rs.ltt.android.ui;
 
 import android.graphics.Canvas;
-
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
 import rs.ltt.android.R;
 import rs.ltt.android.ui.adapter.ThreadOverviewAdapter;
 

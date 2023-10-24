@@ -1,7 +1,6 @@
 package rs.ltt.android.cache;
 
 import com.google.common.base.CharMatcher;
-
 import java.io.File;
 
 public abstract class CachedAttachment {

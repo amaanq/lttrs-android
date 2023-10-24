@@ -1,18 +1,19 @@
 package rs.ltt.android.worker;
 
 import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.WorkerParameters;
-
 import com.google.common.io.ByteStreams;
 import com.google.common.util.concurrent.ListenableFuture;
-
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 import org.pgpainless.exception.MissingDecryptionMethodException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.android.cache.BlobStorage;
 import rs.ltt.android.entity.EncryptedEmail;
 import rs.ltt.android.entity.EncryptionStatus;
@@ -21,12 +22,6 @@ import rs.ltt.autocrypt.jmap.EncryptedBodyPart;
 import rs.ltt.jmap.common.entity.Attachment;
 import rs.ltt.jmap.common.entity.Downloadable;
 import rs.ltt.jmap.common.entity.Email;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 public class DecryptionWorker extends AbstractMuaWorker {
 

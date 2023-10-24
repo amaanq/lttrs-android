@@ -17,9 +17,7 @@ package rs.ltt.android;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.IdlingResource;
-
 import com.google.common.base.Preconditions;
-
 import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
 

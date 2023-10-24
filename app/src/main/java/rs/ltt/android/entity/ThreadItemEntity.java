@@ -20,11 +20,9 @@ import static androidx.room.ForeignKey.CASCADE;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-
-import rs.ltt.jmap.common.entity.Thread;
-
 import java.util.ArrayList;
 import java.util.List;
+import rs.ltt.jmap.common.entity.Thread;
 
 @Entity(
         tableName = "thread_item",
