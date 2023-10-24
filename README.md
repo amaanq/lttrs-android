@@ -1,8 +1,8 @@
 # Ltt.rs for Android
 [![Apache 2.0 License](https://img.shields.io/github/license/inputmice/lttrs-android?color=informational)](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))
-![Build Status](https://github.com/inputmice/lttrs-android/actions/workflows/android.yml/badge.svg)
+[![Build Status](https://ci.codeberg.org/api/badges/12401/status.svg)](https://ci.codeberg.org/repos/12401)
 [![Codacy Badge](https://img.shields.io/codacy/grade/5eac6b045963462abc5ea7ee12998353?logo=codacy)](https://www.codacy.com/gh/iNPUTmice/lttrs-android/dashboard)
-[![Weblate project translated](https://img.shields.io/weblate/progress/ltt-rs)](https://hosted.weblate.org/engage/ltt-rs/)
+[![Weblate project translated](https://translate.codeberg.org/widget/ltt-rs/svg-badge.svg)](https://translate.codeberg.org/engage/ltt-rs/)
 [![Liberapay patrons](https://img.shields.io/liberapay/patrons/inputmice?logo=liberapay&style=flat&color=informational)](https://liberapay.com/iNPUTmice)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/inputmice?label=GitHub%20Sponsors)](https://github.com/sponsors/iNPUTmice/)
 
@@ -47,5 +47,5 @@ As of October 2022, the main options are:
 *See also: [jmap.io/software.html](https://jmap.io/software.html)*
 
 ### Translations
-Translations are managed on [Weblate](https://hosted.weblate.org/projects/ltt-rs/).
+Translations are managed via [Weblate on Codeberg](https://translate.codeberg.org/projects/ltt-rs/).
 Register an account there to start translating.
