@@ -15,7 +15,7 @@
     <string name="discard">Odrzuć</string>
     <string name="send">Wyślij</string>
     <string name="attach_file">Załącz plik</string>
-    <string name="compose">Utwórz</string>
+    <string name="compose">Zmień układ</string>
     <string name="unable_to_fetch_session">Nie można pobrać sesji: %s</string>
     <string name="no_network_connection">Połącz z internetem</string>
     <string name="unknown_host">Nie można rozwiązać %s</string>
@@ -48,24 +48,26 @@
     </plurals>
     <string name="undo">Cofnij</string>
     <plurals name="n_archived">
-        <item quantity="one">%d zarchiwizowano</item>
-        <item quantity="few">%d zarchiwizowano</item>
-        <item quantity="many">%d zarchiwizowano</item>
+        <item quantity="one">zarchiwizowano %d</item>
+        <item quantity="few">zarchiwizowano %d</item>
+        <item quantity="many">zarchiwizowano %d</item>
+        <item quantity="other">zarchiwizowano %d</item>
     </plurals>
     <plurals name="n_removed_from_x">
-        <item quantity="one">Usunięto %s z %s</item>
-        <item quantity="few">Usunięto %s z %s</item>
-        <item quantity="many">Usunięto %s z %s</item>
+        <item quantity="one">Usunięto %d z %s</item>
+        <item quantity="few">Usunięto %d z %s</item>
+        <item quantity="many">Usunięto %d z %s</item>
+        <item quantity="other">Usunięto %d z %s</item>
     </plurals>
     <string name="mark_not_important">Oznacz jako nieważne</string>
     <string name="search_hint">Szukaj w e-mailu</string>
     <string name="remove_label">Usuń etykietę</string>
     <string name="remove_label_x">Usuń etykietę %s</string>
     <plurals name="n_moved_to_inbox">
-        <item quantity="one">przeniesiono do skrzynki</item>
-        <item quantity="few">przeniesiono %s do skrzynki</item>
-        <item quantity="many">przeniesiono %s do skrzynki</item>
-        <item quantity="other">przeniesiono %s do skrzynki</item>
+        <item quantity="one">przeniesiono %d do skrzynki</item>
+        <item quantity="few">przeniesiono %d do skrzynki</item>
+        <item quantity="many">przeniesiono %d do skrzynki</item>
+        <item quantity="other">przeniesiono %d do skrzynki</item>
     </plurals>
     <string name="move_to_inbox">Przenieś do skrzynki odbiorczej</string>
     <string name="to_x">do %s</string>
@@ -218,4 +220,5 @@
         <item quantity="many">%d e-maili zostanie trwale usuniętych.</item>
         <item quantity="other">%d e-maili zostanie trwale usuniętych.</item>
     </plurals>
+    <string name="attachment_is_not_cached">Załącznik nie znajduje się w pamięci podręcznej</string>
 </resources>
