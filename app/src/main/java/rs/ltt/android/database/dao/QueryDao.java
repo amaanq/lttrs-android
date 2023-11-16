@@ -142,6 +142,13 @@ public abstract class QueryDao extends AbstractEntityDao {
                             lastQueryItem.emailId, afterEmailId));
         }
 
+        // queryResult.position seems unreliable when retrieving the empty page after the last
+        // available item (at least when testing with Stalwart). Instead of doing our sanity check
+        // here we just return early and do nothing
+        if (queryResult.items.length == 0) {
+            return;
+        }
+
         if (lastQueryItem.position != queryResult.position - 1) {
             throw new CorruptCacheException(
                     String.format(
@@ -150,9 +157,7 @@ public abstract class QueryDao extends AbstractEntityDao {
                             lastQueryItem.position, queryResult.position));
         }
 
-        if (queryResult.items.length > 0) {
-            insert(QueryItemEntity.of(queryEntity.id, queryResult.items, queryResult.position));
-        }
+        insert(QueryItemEntity.of(queryEntity.id, queryResult.items, queryResult.position));
     }
 
     @Query("select * from `query` where queryString=:queryString")
