@@ -3,7 +3,7 @@ apply plugin: "androidx.navigation.safeargs"
 apply plugin: "com.diffplug.spotless"
 
 android {
-    compileSdkVersion 34
+    compileSdk 34
     defaultConfig {
         applicationId "rs.ltt.android"
         minSdkVersion 23
@@ -21,6 +21,13 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+
     }
 
     testOptions {

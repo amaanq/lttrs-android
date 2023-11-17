@@ -82,8 +82,7 @@ import rs.ltt.android.entity.ThreadItemEntity;
             AccountStateEntity.class,
             PeerStateEntity.class
         },
-        version = 3,
-        exportSchema = false)
+        version = 3)
 @TypeConverters(Converters.class)
 public abstract class LttrsDatabase extends RoomDatabase {
 
