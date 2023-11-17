@@ -3,4 +3,4 @@ steps:
         image: codeberg.org/freeyourgadget/android-fdroid-tools:latest
         commands:
             - ./gradlew clean
-            - ./gradlew assembleFdroidDebug
+            - ./gradlew assembleDebug
