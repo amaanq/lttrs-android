@@ -14,7 +14,6 @@ import rs.ltt.android.cache.DatabaseCache;
 import rs.ltt.android.database.AppDatabase;
 import rs.ltt.android.database.LttrsDatabase;
 import rs.ltt.android.entity.AccountWithCredentials;
-import rs.ltt.autocrypt.client.storage.Storage;
 import rs.ltt.autocrypt.jmap.AutocryptPlugin;
 import rs.ltt.jmap.client.session.FileSessionCache;
 import rs.ltt.jmap.mua.Mua;
@@ -46,15 +45,16 @@ public final class MuaPool {
             }
             LOGGER.info("Building Mua for account id {}", account.getId());
             final Context application = context.getApplicationContext();
-            final LttrsDatabase database = LttrsDatabase.getInstance(context, account.getId());
-            final Storage storage = new AutocryptDatabaseStorage(database);
-            final AutocryptPlugin autocryptPlugin = new AutocryptPlugin(account.getName(), storage);
+            final var database = LttrsDatabase.getInstance(context, account.getId());
+            final var storage = new AutocryptDatabaseStorage(database);
+            final var autocryptPlugin = new AutocryptPlugin(account.getName(), storage);
+            final var credentials = account.getCredentials();
             final Mua mua =
                     Mua.builder()
-                            .username(account.getUsername())
-                            .password(account.getPassword())
+                            .username(credentials.getUsername())
+                            .password(credentials.getPassword())
                             .accountId(account.getAccountId())
-                            .sessionResource(account.getSessionResource())
+                            .sessionResource(credentials.getSessionResource())
                             .useWebSocket(true)
                             .cache(new DatabaseCache(database))
                             .sessionCache(new FileSessionCache(application.getCacheDir()))

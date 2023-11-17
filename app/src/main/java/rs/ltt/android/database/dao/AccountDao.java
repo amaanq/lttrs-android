@@ -24,6 +24,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import okhttp3.HttpUrl;
 import rs.ltt.android.entity.AccountEntity;
 import rs.ltt.android.entity.AccountName;
@@ -35,27 +36,38 @@ import rs.ltt.jmap.common.entity.Account;
 public abstract class AccountDao {
 
     @Query(
-            "select account.id as id, username,password,sessionResource,accountId,name from"
-                    + " credentials join account on credentialsId = credentials.id where"
-                    + " account.id=:id limit 1")
+            "select account.id as"
+                + " id,credentialsId,username,password,sessionResource,accountId,name,deviceClientId"
+                + " from credentials join account on credentialsId = credentials.id where"
+                + " account.id=:id limit 1")
     public abstract ListenableFuture<AccountWithCredentials> getAccountFuture(Long id);
 
     @Query(
-            "select account.id as id, username,password,sessionResource,accountId,name from"
-                    + " credentials join account on credentialsId = credentials.id")
+            "select account.id as"
+                + " id,credentialsId,username,password,sessionResource,accountId,name,deviceClientId"
+                + " from credentials join account on credentialsId = credentials.id")
     public abstract ListenableFuture<List<AccountWithCredentials>> getAccounts();
 
     @Query(
-            "select account.id as id, username,password,sessionResource,accountId,name from"
-                    + " credentials join account on credentialsId = credentials.id where"
-                    + " account.id=:id limit 1")
+            "select account.id as"
+                + " id,credentialsId,username,password,sessionResource,accountId,name,deviceClientId"
+                + " from credentials join account on credentialsId = credentials.id where"
+                + " account.id=:id limit 1")
     public abstract AccountWithCredentials getAccount(Long id);
 
     @Query(
-            "select account.id as id, username,password,sessionResource,accountId,name from"
-                    + " credentials join account on credentialsId = credentials.id where"
-                    + " account.accountId=:accountId  and credentialsId=:cid limit 1")
-    public abstract AccountWithCredentials getAccount(Long cid, String accountId);
+            "select account.id as"
+                + " id,credentialsId,username,password,sessionResource,accountId,name,deviceClientId"
+                + " from credentials join account on credentialsId = credentials.id where"
+                + " account.accountId=:accountId and deviceClientId=:deviceClientId limit 1")
+    public abstract AccountWithCredentials getAccount(UUID deviceClientId, String accountId);
+
+    @Query(
+            "select account.id as"
+                + " id,credentialsId,username,password,sessionResource,accountId,name,deviceClientId"
+                + " from credentials join account on credentialsId = credentials.id where"
+                + " deviceClientId=:deviceClientId limit 1")
+    public abstract AccountWithCredentials getAnyAccount(final UUID deviceClientId);
 
     @Query("select id,name from account where id=:id limit 1")
     public abstract LiveData<AccountName> getAccountNameLiveData(Long id);
@@ -68,6 +80,9 @@ public abstract class AccountDao {
 
     @Query("select id from account")
     public abstract LiveData<List<Long>> getAccountIds();
+
+    @Query("select id from account WHERE credentialsId=:credentialsId")
+    public abstract ListenableFuture<List<Long>> getAccountIds(final long credentialsId);
 
     @Query("select id from account order by selected desc limit 1")
     public abstract Long getMostRecentlySelectedAccountId();
@@ -90,14 +105,6 @@ public abstract class AccountDao {
     @Insert
     abstract Long insert(CredentialsEntity entity);
 
-    @Query(
-            "select * from credentials where id=(select credentialsId from account where"
-                    + " id=:accountId) limit 1")
-    public abstract CredentialsEntity getCredentialsForAccount(Long accountId);
-
-    @Query("select * from credentials where id=:id")
-    public abstract CredentialsEntity getCredentials(Long id);
-
     @Insert
     abstract Long insert(AccountEntity entity);
 
@@ -108,15 +115,23 @@ public abstract class AccountDao {
             HttpUrl sessionResource,
             Map<String, Account> accounts) {
         final ImmutableList.Builder<AccountWithCredentials> builder = ImmutableList.builder();
+        final var clientDeviceId = UUID.randomUUID();
         final Long credentialId =
-                insert(new CredentialsEntity(username, password, sessionResource));
+                insert(new CredentialsEntity(username, password, sessionResource, clientDeviceId));
         for (final Map.Entry<String, Account> entry : accounts.entrySet()) {
             final String accountId = entry.getKey();
             final String name = entry.getValue().getName();
             final Long id = insert(new AccountEntity(credentialId, accountId, name));
             builder.add(
                     new AccountWithCredentials(
-                            id, accountId, name, username, password, sessionResource));
+                            credentialId,
+                            id,
+                            accountId,
+                            name,
+                            username,
+                            password,
+                            sessionResource,
+                            clientDeviceId));
         }
         return builder.build();
     }

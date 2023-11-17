@@ -19,6 +19,17 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <queries>
+        <package android:name="com.google.android.gms" />
+
+        <intent>
+            <action android:name="com.google.android.c2dm.intent.REGISTER" />
+        </intent>
+        <intent>
+            <action android:name="org.unifiedpush.android.distributor.REGISTER" />
+        </intent>
+    </queries>
+
     <application
         android:name=".LttrsApplication"
         android:allowBackup="false"
@@ -32,6 +43,36 @@
         tools:targetApi="n">
 
         <service android:name=".service.EventMonitorService" />
+
+        <receiver
+            android:name=".push.FirebasePushMessageReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".push.FirebaseRegistrationReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".push.UnifiedPushMessageReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.unifiedpush.android.connector.MESSAGE" />
+                <action android:name="org.unifiedpush.android.connector.UNREGISTERED" />
+                <action android:name="org.unifiedpush.android.connector.NEW_ENDPOINT" />
+                <action android:name="org.unifiedpush.android.connector.REGISTRATION_FAILED" />
+            </intent-filter>
+        </receiver>
 
         <provider
             android:name="androidx.core.content.FileProvider"

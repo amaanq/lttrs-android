@@ -18,10 +18,6 @@ package rs.ltt.android.repository;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import androidx.lifecycle.LiveData;
-import androidx.work.Constraints;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.NetworkType;
-import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
@@ -34,12 +30,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import okhttp3.HttpUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rs.ltt.android.BuildConfig;
 import rs.ltt.android.LttrsApplication;
 import rs.ltt.android.MuaPool;
 import rs.ltt.android.database.AppDatabase;
@@ -98,15 +92,7 @@ public class MainRepository {
                                                     AccountWithCredentials::getId));
 
                     EventMonitorService.startMonitoring(application, accountIdMap.values());
-
-                    if (PushManager.register(application, credentials)) {
-                        LOGGER.info("Attempting to register for Firebase Messaging");
-                    } else {
-                        LOGGER.info(
-                                "Firebase Messaging (Push) is not available in flavor {}",
-                                BuildConfig.FLAVOR);
-                        scheduleRecurringMainQueryWorkers(accountIdMap.values());
-                    }
+                    PushManager.register(application, credentials);
 
                     final Long internalIdForPrimary =
                             accountIdMap.getOrDefault(
@@ -154,29 +140,6 @@ public class MainRepository {
 
         public Collection<AutocryptSetupMessage> getSetupMessages() {
             return this.setupMessages;
-        }
-    }
-
-    private void scheduleRecurringMainQueryWorkers(final Collection<Long> accountIds) {
-        final WorkManager workManager = WorkManager.getInstance(application);
-        for (final Long accountId : accountIds) {
-            final PeriodicWorkRequest periodicWorkRequest =
-                    new PeriodicWorkRequest.Builder(
-                                    MainMailboxQueryRefreshWorker.class,
-                                    15,
-                                    TimeUnit.MINUTES,
-                                    20,
-                                    TimeUnit.MINUTES)
-                            .setInputData(MainMailboxQueryRefreshWorker.data(accountId, true))
-                            .setConstraints(
-                                    new Constraints.Builder()
-                                            .setRequiredNetworkType(NetworkType.CONNECTED)
-                                            .build())
-                            .build();
-            workManager.enqueueUniquePeriodicWork(
-                    MainMailboxQueryRefreshWorker.uniquePeriodicName(accountId),
-                    ExistingPeriodicWorkPolicy.REPLACE,
-                    periodicWorkRequest);
         }
     }
 

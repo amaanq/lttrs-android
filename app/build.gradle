@@ -34,20 +34,6 @@ android {
         execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
-    flavorDimensions "distribution"
-
-    productFlavors {
-
-        fdroid {
-            dimension "distribution"
-        }
-
-        playstore {
-            dimension "distribution"
-        }
-
-    }
-
     buildTypes {
         release {
             minifyEnabled true
@@ -112,13 +98,6 @@ dependencies {
     //Google
     implementation "com.google.android.material:material:$rootProject.ext.material"
 
-    //Google - Firebase Messaging
-    playstoreImplementation('com.google.firebase:firebase-messaging:23.3.0') {
-        exclude group: 'com.google.firebase', module: 'firebase-core'
-        exclude group: 'com.google.firebase', module: 'firebase-analytics'
-        exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
-    }
-
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0") {
         because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
     }
@@ -126,7 +105,7 @@ dependencies {
     //Third party
     implementation 'org.hsluv:hsluv:0.2'
 
-    implementation 'com.github.tony19:logback-android:2.0.1'
+    implementation 'com.github.tony19:logback-android:3.0.0'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 

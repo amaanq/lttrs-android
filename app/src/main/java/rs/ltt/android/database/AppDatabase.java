@@ -16,6 +16,7 @@
 package rs.ltt.android.database;
 
 import android.content.Context;
+import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -28,7 +29,8 @@ import rs.ltt.android.entity.SearchSuggestionEntity;
 
 @Database(
         entities = {CredentialsEntity.class, AccountEntity.class, SearchSuggestionEntity.class},
-        version = 1)
+        version = 2,
+        autoMigrations = {@AutoMigration(from = 1, to = 2)})
 @TypeConverters(Converters.class)
 public abstract class AppDatabase extends RoomDatabase {
 
