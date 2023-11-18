@@ -68,7 +68,7 @@ spotless {
 
 dependencies {
 
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 
     //AndroidX
     implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompatVersion"
@@ -97,6 +97,9 @@ dependencies {
 
     //Google
     implementation "com.google.android.material:material:$rootProject.ext.material"
+
+    implementation 'com.google.crypto.tink:apps-webpush:1.10.0'
+
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0") {
         because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
