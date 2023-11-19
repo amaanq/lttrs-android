@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Looper;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.work.Constraints;
@@ -21,6 +20,7 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -30,12 +30,14 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import okhttp3.HttpUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rs.ltt.android.MuaPool;
 import rs.ltt.android.database.AppDatabase;
 import rs.ltt.android.entity.AccountWithCredentials;
 import rs.ltt.android.worker.MainMailboxQueryRefreshWorker;
+import rs.ltt.android.worker.PushVerificationWorker;
 import rs.ltt.android.worker.QueryRefreshWorker;
 import rs.ltt.jmap.client.JmapClient;
 import rs.ltt.jmap.client.MethodResponses;
@@ -60,11 +62,12 @@ public class PushManager {
         this.context = context;
     }
 
-    public void onMessageReceived(final UUID deviceClientId, final PushMessage pushMessage) {
+    public void onMessageReceived(
+            final AccountWithCredentials account, final PushMessage pushMessage) {
         if (pushMessage instanceof PushVerification pushVerification) {
-            onPushVerificationReceived(deviceClientId, pushVerification);
+            onPushVerificationReceived(account, pushVerification);
         } else if (pushMessage instanceof StateChange stateChange) {
-            onStateChangeReceived(deviceClientId, stateChange);
+            onStateChangeReceived(account.getDeviceClientId(), stateChange);
         } else {
             throw new IllegalArgumentException(
                     String.format(
@@ -74,51 +77,17 @@ public class PushManager {
     }
 
     private void onPushVerificationReceived(
-            final UUID deviceClientId, final PushVerification pushMessage) {
-        LOGGER.info("onPushVerificationReceived({},{})", deviceClientId, pushMessage);
-        final var account =
-                AppDatabase.getInstance(context).accountDao().getAnyAccount(deviceClientId);
-        if (account == null) {
-            LOGGER.warn("No credentials found that use a deviceClientId of {}", deviceClientId);
-            return;
-        }
-        onPushVerificationReceived(account, pushMessage);
-    }
-
-    private void onPushVerificationReceived(
             final AccountWithCredentials account, final PushVerification pushMessage) {
-        final JmapClient jmapClient = MuaPool.getInstance(context, account).getJmapClient();
-        final SetPushSubscriptionMethodCall setPushSubscription =
-                SetPushSubscriptionMethodCall.builder()
-                        .update(
-                                ImmutableMap.of(
-                                        pushMessage.getPushSubscriptionId(),
-                                        ImmutableMap.of(
-                                                "verificationCode",
-                                                pushMessage.getVerificationCode())))
+        final var pushSubscriptionId = pushMessage.getPushSubscriptionId();
+        final var verificationCode = pushMessage.getVerificationCode();
+        final OneTimeWorkRequest workRequest =
+                new OneTimeWorkRequest.Builder(PushVerificationWorker.class)
+                        .setInputData(
+                                PushVerificationWorker.data(
+                                        account.getId(), pushSubscriptionId, verificationCode))
                         .build();
-        final ListenableFuture<MethodResponses> methodResponsesFuture =
-                jmapClient.call(setPushSubscription);
-        Futures.addCallback(
-                methodResponsesFuture,
-                new FutureCallback<>() {
-                    @Override
-                    public void onSuccess(@Nullable MethodResponses methodResponses) {
-                        final SetPushSubscriptionMethodResponse setResponse =
-                                methodResponses.getMain(SetPushSubscriptionMethodResponse.class);
-                        if (setResponse.getUpdated().size() == 1) {
-                            LOGGER.info("Successfully set verification code");
-                        } else {
-                            LOGGER.error("Unable to set verification code. No updates?");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull final Throwable throwable) {
-                        LOGGER.warn("Unable to set verification code", throwable);
-                    }
-                },
-                MoreExecutors.directExecutor());
+        final WorkManager workManager = WorkManager.getInstance(context.getApplicationContext());
+        workManager.enqueue(workRequest);
     }
 
     private void onStateChangeReceived(final UUID deviceClientId, final StateChange pushMessage) {
@@ -308,15 +277,49 @@ public class PushManager {
 
     private ListenableFuture<Boolean> register(
             final AccountWithCredentials account, final Uri uri) {
+        final HttpUrl httpUrl;
+        try {
+            httpUrl = HttpUrl.get(uri.toString());
+        } catch (final Exception e) {
+            return Futures.immediateFailedFuture(e);
+        }
+        return register(account, httpUrl);
+    }
+
+    private ListenableFuture<Boolean> register(
+            final AccountWithCredentials account, final HttpUrl httpUrl) {
+        final WebPushMessageEncryption.KeyMaterial keyMaterial;
+        try {
+            keyMaterial = WebPushMessageEncryption.generateKeyMaterial();
+        } catch (final GeneralSecurityException e) {
+            return Futures.immediateFailedFuture(e);
+        }
+        final var existingSubscriptionIds =
+                AppDatabase.getInstance(context)
+                        .pushSubscriptionDao()
+                        .getExistingSubscriptionIds(account.getCredentials().getId());
+        return Futures.transformAsync(
+                existingSubscriptionIds,
+                ids -> register(account, httpUrl, keyMaterial, ids),
+                MoreExecutors.directExecutor());
+    }
+
+    private ListenableFuture<Boolean> register(
+            final AccountWithCredentials account,
+            final HttpUrl httpUrl,
+            final WebPushMessageEncryption.KeyMaterial keyMaterial,
+            final Collection<String> existingSubscriptionIds) {
         final PushSubscription pushSubscription =
                 PushSubscription.builder()
                         .deviceClientId(account.getDeviceClientId().toString())
-                        .url(uri.toString())
+                        .keys(keyMaterial.asKeys())
+                        .url(httpUrl.toString())
                         .build();
         LOGGER.info("attempting push subscription {}", pushSubscription);
         final JmapClient jmapClient = MuaPool.getInstance(context, account).getJmapClient();
         final SetPushSubscriptionMethodCall setPushSubscription =
                 SetPushSubscriptionMethodCall.builder()
+                        .destroy(existingSubscriptionIds.toArray(new String[0]))
                         .create(ImmutableMap.of("ps0", pushSubscription))
                         .build();
         final ListenableFuture<MethodResponses> methodResponsesFuture =
@@ -326,7 +329,30 @@ public class PushManager {
                 methodResponses -> {
                     final SetPushSubscriptionMethodResponse response =
                             methodResponses.getMain(SetPushSubscriptionMethodResponse.class);
-                    return response.getCreated().size() >= 1;
+                    final var created = response.getCreated();
+                    if (created != null && created.containsKey("ps0")) {
+                        final var ps = created.get("ps0");
+                        final var pushSubscriptionId = ps == null ? null : ps.getId();
+                        if (Strings.isNullOrEmpty(pushSubscriptionId)) {
+                            LOGGER.warn("No pushSubscriptionId found in server response");
+                            return false;
+                        }
+                        final var expires = ps.getExpires();
+                        // expires MUST be 48h in the future. check that it is at least 36h so we
+                        // don’t loop when we try to update this every 24h
+                        // make credentialsId unique
+                        AppDatabase.getInstance(context)
+                                .pushSubscriptionDao()
+                                .insert(
+                                        account.getCredentials(),
+                                        pushSubscriptionId,
+                                        httpUrl,
+                                        keyMaterial,
+                                        expires);
+                        return true;
+                    } else {
+                        return false;
+                    }
                 },
                 MoreExecutors.directExecutor());
     }

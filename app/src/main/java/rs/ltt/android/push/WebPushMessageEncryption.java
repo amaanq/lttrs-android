@@ -6,6 +6,7 @@ import com.google.crypto.tink.apps.webpush.WebPushHybridDecrypt;
 import com.google.crypto.tink.subtle.EllipticCurves;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
+import rs.ltt.jmap.common.entity.Keys;
 
 public class WebPushMessageEncryption {
 
@@ -60,6 +61,13 @@ public class WebPushMessageEncryption {
 
         public String encodedAuthenticationSecret() {
             return BaseEncoding.base64Url().encode(this.authenticationSecret);
+        }
+
+        public Keys asKeys() {
+            return Keys.builder()
+                    .p256dh(encodedPublicKey())
+                    .auth(encodedAuthenticationSecret())
+                    .build();
         }
     }
 }

@@ -67,7 +67,8 @@ public abstract class AccountDao {
                 + " id,credentialsId,username,password,sessionResource,accountId,name,deviceClientId"
                 + " from credentials join account on credentialsId = credentials.id where"
                 + " deviceClientId=:deviceClientId limit 1")
-    public abstract AccountWithCredentials getAnyAccount(final UUID deviceClientId);
+    public abstract ListenableFuture<AccountWithCredentials> getAnyAccount(
+            final UUID deviceClientId);
 
     @Query("select id,name from account where id=:id limit 1")
     public abstract LiveData<AccountName> getAccountNameLiveData(Long id);

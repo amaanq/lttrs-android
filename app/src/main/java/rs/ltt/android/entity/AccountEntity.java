@@ -36,7 +36,7 @@ public class AccountEntity {
     @PrimaryKey(autoGenerate = true)
     public Long id;
 
-    @NonNull public long credentialsId;
+    @NonNull public Long credentialsId;
 
     public String accountId;
 

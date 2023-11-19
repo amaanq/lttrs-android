@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "4688a6ff1d773521010ac531f2160268",
+    "identityHash": "d1f52b7480bee883d1ed9890a525c0d4",
     "entities": [
       {
         "tableName": "credentials",
@@ -149,12 +149,102 @@
           }
         ],
         "foreignKeys": []
+      },
+      {
+        "tableName": "push_subscription",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `credentialsId` INTEGER NOT NULL, `pushSubscriptionId` TEXT, `url` TEXT, `verificationCode` TEXT, `expires` INTEGER, `publicKey` BLOB, `privateKey` BLOB, `authenticationSecret` BLOB, FOREIGN KEY(`credentialsId`) REFERENCES `credentials`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "credentialsId",
+            "columnName": "credentialsId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pushSubscriptionId",
+            "columnName": "pushSubscriptionId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "verificationCode",
+            "columnName": "verificationCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "expires",
+            "columnName": "expires",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "keyMaterial.publicKey",
+            "columnName": "publicKey",
+            "affinity": "BLOB",
+            "notNull": false
+          },
+          {
+            "fieldPath": "keyMaterial.privateKey",
+            "columnName": "privateKey",
+            "affinity": "BLOB",
+            "notNull": false
+          },
+          {
+            "fieldPath": "keyMaterial.authenticationSecret",
+            "columnName": "authenticationSecret",
+            "affinity": "BLOB",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_push_subscription_credentialsId",
+            "unique": true,
+            "columnNames": [
+              "credentialsId"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_push_subscription_credentialsId` ON `${TABLE_NAME}` (`credentialsId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "credentials",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "credentialsId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4688a6ff1d773521010ac531f2160268')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd1f52b7480bee883d1ed9890a525c0d4')"
     ]
   }
 }

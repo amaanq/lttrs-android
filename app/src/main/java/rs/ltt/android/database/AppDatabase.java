@@ -22,13 +22,20 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import rs.ltt.android.database.dao.AccountDao;
+import rs.ltt.android.database.dao.PushSubscriptionDao;
 import rs.ltt.android.database.dao.SearchSuggestionDao;
 import rs.ltt.android.entity.AccountEntity;
 import rs.ltt.android.entity.CredentialsEntity;
+import rs.ltt.android.entity.PushSubscriptionEntity;
 import rs.ltt.android.entity.SearchSuggestionEntity;
 
 @Database(
-        entities = {CredentialsEntity.class, AccountEntity.class, SearchSuggestionEntity.class},
+        entities = {
+            CredentialsEntity.class,
+            AccountEntity.class,
+            SearchSuggestionEntity.class,
+            PushSubscriptionEntity.class
+        },
         version = 2,
         autoMigrations = {@AutoMigration(from = 1, to = 2)})
 @TypeConverters(Converters.class)
@@ -56,4 +63,6 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract SearchSuggestionDao searchSuggestionDao();
 
     public abstract AccountDao accountDao();
+
+    public abstract PushSubscriptionDao pushSubscriptionDao();
 }
