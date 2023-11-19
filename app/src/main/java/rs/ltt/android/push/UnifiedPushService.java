@@ -45,6 +45,7 @@ public class UnifiedPushService implements PushService {
 
     public static final String EXTRA_BYTE_MESSAGE = "bytesMessage";
     public static final String EXTRA_TOKEN = "token";
+    public static final String EXTRA_ENDPOINT = "endpoint";
 
     private final Context context;
 

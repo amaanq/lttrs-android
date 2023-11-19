@@ -238,7 +238,7 @@ public class PushManager {
                 MoreExecutors.directExecutor());
     }
 
-    private void register(final AccountWithCredentials account, final Uri uri) {
+    public void register(final AccountWithCredentials account, final Uri uri) {
         final OneTimeWorkRequest workRequest =
                 new OneTimeWorkRequest.Builder(PushRegistrationWorker.class)
                         .setInputData(PushRegistrationWorker.data(account.getId(), uri.toString()))
