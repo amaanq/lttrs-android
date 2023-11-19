@@ -14,13 +14,11 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.io.BaseEncoding;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -30,27 +28,22 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import okhttp3.HttpUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rs.ltt.android.MuaPool;
 import rs.ltt.android.database.AppDatabase;
 import rs.ltt.android.entity.AccountWithCredentials;
 import rs.ltt.android.worker.MainMailboxQueryRefreshWorker;
+import rs.ltt.android.worker.PushRegistrationWorker;
 import rs.ltt.android.worker.PushVerificationWorker;
 import rs.ltt.android.worker.QueryRefreshWorker;
-import rs.ltt.jmap.client.JmapClient;
-import rs.ltt.jmap.client.MethodResponses;
 import rs.ltt.jmap.client.Services;
 import rs.ltt.jmap.client.session.Session;
 import rs.ltt.jmap.common.entity.AbstractIdentifiableEntity;
 import rs.ltt.jmap.common.entity.PushMessage;
-import rs.ltt.jmap.common.entity.PushSubscription;
 import rs.ltt.jmap.common.entity.PushVerification;
 import rs.ltt.jmap.common.entity.StateChange;
 import rs.ltt.jmap.common.entity.capability.WebPushVapidCapability;
-import rs.ltt.jmap.common.method.call.core.SetPushSubscriptionMethodCall;
-import rs.ltt.jmap.common.method.response.core.SetPushSubscriptionMethodResponse;
 
 public class PushManager {
 
@@ -238,12 +231,20 @@ public class PushManager {
                     if (optionalUri.isPresent()) {
                         final var uri = optionalUri.get();
                         LOGGER.info("WebPush uri: {}", uri);
-                        return register(account, uri);
-                    } else {
-                        return Futures.immediateFuture(Boolean.TRUE);
+                        this.register(account, uri);
                     }
+                    return Futures.immediateFuture(Boolean.TRUE);
                 },
                 MoreExecutors.directExecutor());
+    }
+
+    private void register(final AccountWithCredentials account, final Uri uri) {
+        final OneTimeWorkRequest workRequest =
+                new OneTimeWorkRequest.Builder(PushRegistrationWorker.class)
+                        .setInputData(PushRegistrationWorker.data(account.getId(), uri.toString()))
+                        .build();
+        final WorkManager workManager = WorkManager.getInstance(context.getApplicationContext());
+        workManager.enqueue(workRequest);
     }
 
     private static Optional<byte[]> getApplicationServerKey(final Session session) {
@@ -273,88 +274,6 @@ public class PushManager {
             }
         }
         return null;
-    }
-
-    private ListenableFuture<Boolean> register(
-            final AccountWithCredentials account, final Uri uri) {
-        final HttpUrl httpUrl;
-        try {
-            httpUrl = HttpUrl.get(uri.toString());
-        } catch (final Exception e) {
-            return Futures.immediateFailedFuture(e);
-        }
-        return register(account, httpUrl);
-    }
-
-    private ListenableFuture<Boolean> register(
-            final AccountWithCredentials account, final HttpUrl httpUrl) {
-        final WebPushMessageEncryption.KeyMaterial keyMaterial;
-        try {
-            keyMaterial = WebPushMessageEncryption.generateKeyMaterial();
-        } catch (final GeneralSecurityException e) {
-            return Futures.immediateFailedFuture(e);
-        }
-        final var existingSubscriptionIds =
-                AppDatabase.getInstance(context)
-                        .pushSubscriptionDao()
-                        .getExistingSubscriptionIds(account.getCredentials().getId());
-        return Futures.transformAsync(
-                existingSubscriptionIds,
-                ids -> register(account, httpUrl, keyMaterial, ids),
-                MoreExecutors.directExecutor());
-    }
-
-    private ListenableFuture<Boolean> register(
-            final AccountWithCredentials account,
-            final HttpUrl httpUrl,
-            final WebPushMessageEncryption.KeyMaterial keyMaterial,
-            final Collection<String> existingSubscriptionIds) {
-        final PushSubscription pushSubscription =
-                PushSubscription.builder()
-                        .deviceClientId(account.getDeviceClientId().toString())
-                        .keys(keyMaterial.asKeys())
-                        .url(httpUrl.toString())
-                        .build();
-        LOGGER.info("attempting push subscription {}", pushSubscription);
-        final JmapClient jmapClient = MuaPool.getInstance(context, account).getJmapClient();
-        final SetPushSubscriptionMethodCall setPushSubscription =
-                SetPushSubscriptionMethodCall.builder()
-                        .destroy(existingSubscriptionIds.toArray(new String[0]))
-                        .create(ImmutableMap.of("ps0", pushSubscription))
-                        .build();
-        final ListenableFuture<MethodResponses> methodResponsesFuture =
-                jmapClient.call(setPushSubscription);
-        return Futures.transform(
-                methodResponsesFuture,
-                methodResponses -> {
-                    final SetPushSubscriptionMethodResponse response =
-                            methodResponses.getMain(SetPushSubscriptionMethodResponse.class);
-                    final var created = response.getCreated();
-                    if (created != null && created.containsKey("ps0")) {
-                        final var ps = created.get("ps0");
-                        final var pushSubscriptionId = ps == null ? null : ps.getId();
-                        if (Strings.isNullOrEmpty(pushSubscriptionId)) {
-                            LOGGER.warn("No pushSubscriptionId found in server response");
-                            return false;
-                        }
-                        final var expires = ps.getExpires();
-                        // expires MUST be 48h in the future. check that it is at least 36h so we
-                        // don’t loop when we try to update this every 24h
-                        // make credentialsId unique
-                        AppDatabase.getInstance(context)
-                                .pushSubscriptionDao()
-                                .insert(
-                                        account.getCredentials(),
-                                        pushSubscriptionId,
-                                        httpUrl,
-                                        keyMaterial,
-                                        expires);
-                        return true;
-                    } else {
-                        return false;
-                    }
-                },
-                MoreExecutors.directExecutor());
     }
 
     private static void assertIsNotMainThread() {

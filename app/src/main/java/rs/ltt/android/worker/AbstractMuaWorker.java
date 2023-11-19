@@ -62,7 +62,7 @@ public abstract class AbstractMuaWorker extends Worker {
         return isNetworkIssue(cause);
     }
 
-    private static boolean isNetworkIssue(final Throwable cause) {
+    public static boolean isNetworkIssue(final Throwable cause) {
         return cause instanceof SocketTimeoutException
                 || cause instanceof SocketException
                 || cause instanceof SSLException;

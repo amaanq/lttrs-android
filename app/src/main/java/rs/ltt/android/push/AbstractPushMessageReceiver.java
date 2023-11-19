@@ -2,19 +2,24 @@ package rs.ltt.android.push;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.security.GeneralSecurityException;
-import java.util.Optional;
-import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.database.AppDatabase;
 import rs.ltt.android.entity.AccountWithCredentials;
 import rs.ltt.jmap.common.entity.PushMessage;
+
+import java.security.GeneralSecurityException;
+import java.util.Optional;
+import java.util.UUID;
 
 public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
 
@@ -39,7 +44,12 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
                     }
 
                     @Override
-                    public void onFailure(@NonNull Throwable throwable) {}
+                    public void onFailure(@NonNull Throwable throwable) {
+                        LOGGER.error(
+                                "Could not retrieve account for {} from database",
+                                deviceClientId,
+                                throwable);
+                    }
                 },
                 MoreExecutors.directExecutor());
     }
@@ -60,7 +70,9 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
                     }
 
                     @Override
-                    public void onFailure(@NonNull Throwable throwable) {}
+                    public void onFailure(@NonNull Throwable throwable) {
+                        LOGGER.error("Could not retrieve key material from database", throwable);
+                    }
                 },
                 MoreExecutors.directExecutor());
     }
