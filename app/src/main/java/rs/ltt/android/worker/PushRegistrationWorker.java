@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import rs.ltt.android.MuaPool;
 import rs.ltt.android.database.AppDatabase;
 import rs.ltt.android.entity.AccountWithCredentials;
+import rs.ltt.android.push.PushManager;
 import rs.ltt.android.push.WebPushMessageEncryption;
 import rs.ltt.jmap.client.JmapClient;
 import rs.ltt.jmap.client.MethodResponses;
@@ -73,7 +74,13 @@ public class PushRegistrationWorker extends ListenableWorker {
                 Exception.class,
                 ex -> {
                     LOGGER.error("Could not register PushSubscription", ex);
-                    return AbstractMuaWorker.isNetworkIssue(ex) ? Result.retry() : Result.failure();
+                    if (AbstractMuaWorker.isNetworkIssue(ex)) {
+                        return Result.retry();
+                    } else {
+                        final var pushManager = new PushManager(getApplicationContext());
+                        pushManager.scheduleRecurringMainQueryWorkers(account);
+                        return Result.failure();
+                    }
                 },
                 MoreExecutors.directExecutor());
     }
@@ -133,6 +140,7 @@ public class PushRegistrationWorker extends ListenableWorker {
                 methodResponses -> {
                     final SetPushSubscriptionMethodResponse response =
                             methodResponses.getMain(SetPushSubscriptionMethodResponse.class);
+                    final var pushManager = new PushManager(getApplicationContext());
                     final var created = response.getCreated();
                     if (created != null && created.containsKey("ps0")) {
                         final var ps = created.get("ps0");
@@ -153,8 +161,10 @@ public class PushRegistrationWorker extends ListenableWorker {
                                         httpUrl,
                                         keyMaterial,
                                         expires);
+                        pushManager.cancelRecurringMainQueryWorkers(account.getCredentials());
                         return true;
                     } else {
+                        pushManager.scheduleRecurringMainQueryWorkers(account.getCredentials());
                         return false;
                     }
                 },

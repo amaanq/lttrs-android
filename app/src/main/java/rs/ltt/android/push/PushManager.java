@@ -166,13 +166,20 @@ public class PushManager {
         }
     }
 
-    private ListenableFuture<Void> scheduleRecurringMainQueryWorkers(
+    public ListenableFuture<Void> scheduleRecurringMainQueryWorkers(
             final AccountWithCredentials.Credentials credentials) {
         final var accountIds =
                 AppDatabase.getInstance(context).accountDao().getAccountIds(credentials.getId());
         return Futures.transform(
                 accountIds,
                 this::scheduleRecurringMainQueryWorkers,
+                MoreExecutors.directExecutor());
+    }
+
+    public ListenableFuture<Void> scheduleRecurringMainQueryWorkers(Long account) {
+        return Futures.transformAsync(
+                AppDatabase.getInstance(context).accountDao().getAccountFuture(account),
+                a -> scheduleRecurringMainQueryWorkers(a.getCredentials()),
                 MoreExecutors.directExecutor());
     }
 
@@ -197,6 +204,24 @@ public class PushManager {
                     MainMailboxQueryRefreshWorker.uniquePeriodicName(accountId),
                     ExistingPeriodicWorkPolicy.REPLACE,
                     periodicWorkRequest);
+        }
+        return null;
+    }
+
+    public ListenableFuture<Void> cancelRecurringMainQueryWorkers(
+            final AccountWithCredentials.Credentials credentials) {
+        final var accountIds =
+                AppDatabase.getInstance(context).accountDao().getAccountIds(credentials.getId());
+        return Futures.transform(
+                accountIds, this::cancelRecurringMainQueryWorkers, MoreExecutors.directExecutor());
+    }
+
+    private Void cancelRecurringMainQueryWorkers(final Collection<Long> accountIds) {
+        LOGGER.info("Cancelling WorkManager fallback for accounts {}", accountIds);
+        final WorkManager workManager = WorkManager.getInstance(context);
+        for (final Long accountId : accountIds) {
+            workManager.cancelUniqueWork(
+                    MainMailboxQueryRefreshWorker.uniquePeriodicName(accountId));
         }
         return null;
     }
