@@ -131,6 +131,7 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
 
     protected void onReceiveNewEndpoint(
             final Context context, final AccountWithCredentials account, final Uri endpoint) {
+        LOGGER.info("Received new push endpoint {} for {}", endpoint, account.getDeviceClientId());
         final var pushManager = new PushManager(context);
         pushManager.register(account, endpoint);
     }

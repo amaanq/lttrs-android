@@ -18,6 +18,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -58,9 +59,6 @@ public class UnifiedPushService implements PushService {
             final byte[] applicationServerKey, final UUID uuid) {
         final var broadcastToApp = new Intent();
         broadcastToApp.setPackage(context.getPackageName());
-        final var pendingIntent =
-                PendingIntent.getBroadcast(
-                        context, 0, broadcastToApp, PendingIntent.FLAG_IMMUTABLE);
         final var distributor = Iterables.getFirst(getSupportedDistributors(), null);
         if (distributor == null) {
             return Futures.immediateFailedFuture(
@@ -68,9 +66,18 @@ public class UnifiedPushService implements PushService {
         }
         final var broadcast = new Intent(ACTION_REGISTER);
         broadcast.setPackage(distributor.packageName);
-        broadcast.putExtra("app", pendingIntent);
-        broadcast.putExtra("application", context.getPackageName());
+        if (distributor.appValidation()) {
+            final var pendingIntent =
+                    PendingIntent.getBroadcast(
+                            context, 0, broadcastToApp, PendingIntent.FLAG_IMMUTABLE);
+            broadcast.putExtra("app", pendingIntent);
+        } else {
+            broadcast.putExtra("application", context.getPackageName());
+        }
         broadcast.putExtra("token", uuid.toString());
+        final var features = new ArrayList<String>();
+        features.add(ACTION_FEATURE_BYTES_MESSAGE);
+        broadcast.putStringArrayListExtra("features", features);
         if (distributor.messenger()) {
             final var handler = new RegistrationMessageHandler(Looper.getMainLooper());
             final var messenger = new Messenger(handler);
@@ -141,9 +148,7 @@ public class UnifiedPushService implements PushService {
     }
 
     private List<Distributor> getSupportedDistributors() {
-        return getDistributors().stream()
-                .filter(d -> d.appValidation() && d.bytesMessage())
-                .toList();
+        return getDistributors().stream().filter(Distributor::bytesMessage).toList();
     }
 
     private static class Distributor {

@@ -41,6 +41,6 @@ public class FirebasePushMessageReceiver extends AbstractPushMessageReceiver {
             return;
         }
         LOGGER.info("Received push message for {} ({} bytes)", clientDeviceUuid, rawData.length);
-        this.onReceive(context, clientDeviceUuid, rawData);
+        this.onReceiveMessage(context, clientDeviceUuid, rawData);
     }
 }
