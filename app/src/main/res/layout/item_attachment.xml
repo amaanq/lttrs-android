@@ -10,11 +10,13 @@
             type="rs.ltt.jmap.common.entity.Attachment" />
     </data>
 
+    <!-- TODO decide if colorPrimaryContainer is the correct tint and then change the text and icon colors accordingly -->
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:background="@drawable/background_attachment"
+        android:backgroundTint="?colorPrimaryContainer"
         android:elevation="2dp"
         android:foreground="@drawable/foreground_attachment">
 
@@ -24,11 +26,11 @@
             android:orientation="vertical">
 
             <ImageView
-                android:visibility="gone"
                 android:id="@+id/preview"
                 android:layout_width="match_parent"
+                android:layout_height="@dimen/attachment_preview_height"
                 android:scaleType="centerInside"
-                android:layout_height="@dimen/attachment_preview_height" />
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:layout_width="match_parent"

@@ -55,7 +55,6 @@ public class PushVerificationWorker extends AbstractMuaWorker {
                 AppDatabase.getInstance(getApplicationContext())
                         .pushSubscriptionDao()
                         .setVerificationCode(account, pushSubscriptionId, verificationCode);
-                // TODO update local database
                 return Result.success();
             } else {
                 LOGGER.error("Unable to set verification code. No updates?");

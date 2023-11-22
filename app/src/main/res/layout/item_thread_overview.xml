@@ -85,6 +85,7 @@
                     android:src="@drawable/ic_selected_24dp"
                     app:from="@{thread.getFrom()}" />
 
+                <!--- the tint color of this used to be fixed to yellow -->
                 <ImageView
                     android:id="@+id/important"
                     android:layout_width="wrap_content"
@@ -94,7 +95,7 @@
                     android:layout_toEndOf="@id/avatar"
                     android:src="@drawable/ic_baseline_important_18"
                     android:visibility="@{isImportant ? View.VISIBLE : View.GONE, default=gone}"
-                    app:tint="?attr/colorIndicator" />
+                    app:tint="?colorTertiary" />
 
                 <TextView
                     android:id="@+id/froms"

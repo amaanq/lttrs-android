@@ -28,7 +28,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/cover"
             android:tintMode="multiply"
-            app:tint="?attr/colorPrimary"
+            app:tint="?colorPrimary"
             tools:ignore="ContentDescription" />
 
         <RelativeLayout
@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="?attr/colorShadowOnPrimary"
+            android:background="@color/color_primary_shadow"
             android:minHeight="56dp">
 
             <LinearLayout
@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:textAppearance="?textAppearanceTitleMedium"
-                    android:textColor="?attr/colorOnPrimary"
+                    android:textColor="?colorOnPrimary"
                     tools:text="Sam Miller" />
 
                 <TextView
@@ -64,20 +64,19 @@
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:textAppearance="?textAppearanceBodyMedium"
-                    android:textColor="?attr/colorOnPrimary"
+                    android:textColor="?colorOnPrimary"
                     tools:text="sam.miller@example.com" />
             </LinearLayout>
 
-            <ImageButton
+            <com.google.android.material.button.MaterialButton
+                style="?attr/materialIconButtonStyle"
                 android:id="@+id/toggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="12dp"
-                android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
-                app:tint="?attr/colorOnPrimary" />
+                app:icon="@drawable/ic_keyboard_arrow_down_black_24dp"
+                app:iconTint="?colorOnPrimary" />
         </RelativeLayout>
 
     </FrameLayout>

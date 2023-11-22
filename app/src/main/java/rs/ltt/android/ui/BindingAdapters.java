@@ -260,7 +260,8 @@ public class BindingAdapters {
             ImageViewCompat.setImageTintList(
                     imageView,
                     ColorStateList.valueOf(
-                            MaterialColors.getColor(imageView, R.attr.colorIndicator)));
+                            MaterialColors.getColor(
+                                    imageView, com.google.android.material.R.attr.colorPrimary)));
         } else {
             imageView.setImageResource(R.drawable.ic_star_border_no_padding_black_24dp);
             ImageViewCompat.setImageTintList(

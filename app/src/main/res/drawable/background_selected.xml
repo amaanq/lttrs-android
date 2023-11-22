@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2020 Daniel Gultsch
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,11 +13,7 @@
   ~ limitations under the License.
   -->
 
-<resources>
-
-    <style name="MainTheme" parent="BaseTheme">
-        <item name="android:navigationBarColor">?attr/colorSurface</item>
-        <item name="android:navigationBarDividerColor">@color/component_background</item>
-        <item name="android:windowLightNavigationBar">@bool/window_light_navigation_bar</item>
-    </style>
-</resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="?colorTertiaryContainer" />
+    <corners android:radius="16dp" />
+</shape>

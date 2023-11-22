@@ -17,10 +17,7 @@
 
     <!-- The DayNightTheme themes attributes that differ between Dark and Light mode -->
     <style name="DayNightTheme" parent="Theme.Material3.Light.NoActionBar">
-        <item name="opacityHighlight">0.12</item>
-        <item name="opacityButtonBackground">0.08</item>
         <item name="colorAccent">@color/material_pink_accent_700</item>
-        <item name="colorIndicator">@color/material_amber_500</item>
         <item name="colorControlNormal">@color/material_black_60</item>
         <item name="colorSurfaceWarning">@color/material_red_200</item>
         <item name="colorActionModeBackground">@color/material_gray_800</item>
@@ -32,7 +29,6 @@
         <item name="colorPrimary">@color/material_teal_600</item>
         <item name="colorPrimaryDark">@color/material_teal_900</item>
         <item name="colorOnPrimary">@android:color/white</item>
-        <item name="colorShadowOnPrimary">@color/material_black_12</item>
     </style>
 
     <!-- The MainTheme themes attributes that differ between < API 27 and API 27+
@@ -61,7 +57,6 @@
         <item name="commitIcon">@drawable/ic_search_commit_back_24dp</item>
         <item name="colorControlNormal">@color/material_black_60</item>
         <item name="colorControlHighlight">@color/material_black_12</item> <!--- TODO use color state list? -->
-        <item name="autoCompleteTextViewStyle">@style/AutoCompleteTextViewStyle</item>
         <item name="suggestionRowLayout">@layout/item_search_suggestion</item>
         <item name="android:maxWidth">9999dp</item>
         <item name="android:textColorPrimary">@color/material_black_87</item>
@@ -69,10 +64,6 @@
         <item name="android:textColorHint">@color/material_black_60</item>
     </style>
 
-    <style name="AutoCompleteTextViewStyle" parent="Widget.AppCompat.Light.AutoCompleteTextView">
-        <item name="android:popupBackground">@drawable/search_suggestions_bg</item>
-        <item name="android:popupElevation">0dp</item>
-    </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
         <item name="searchViewStyle">@style/SearchViewTheme</item>

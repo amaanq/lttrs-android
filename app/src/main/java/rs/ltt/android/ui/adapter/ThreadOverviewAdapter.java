@@ -189,8 +189,10 @@ public class ThreadOverviewAdapter
                     }
                 });
         if (selected) {
-            threadOverviewHolder.binding.threadLayout.setBackground(
-                    ContextCompat.getDrawable(context, R.drawable.selected_background));
+            // TODO consider using tint instead of color in the drawable
+            final var backgroundDrawable =
+                    ContextCompat.getDrawable(context, R.drawable.background_selected);
+            threadOverviewHolder.binding.threadLayout.setBackground(backgroundDrawable);
         } else {
             threadOverviewHolder.binding.threadLayout.setBackgroundResource(
                     MaterialBackgrounds.getBackgroundResource(

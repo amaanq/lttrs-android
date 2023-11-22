@@ -26,6 +26,7 @@
         <LinearLayout
             android:layout_width="@dimen/mailbox_width_port"
             android:layout_height="@dimen/mailbox_height_port"
+            android:backgroundTint="?colorPrimaryContainer"
             android:background="@drawable/background_mailbox_role_change"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -56,6 +57,7 @@
         <LinearLayout
             android:layout_width="@dimen/mailbox_width_port"
             android:layout_height="@dimen/mailbox_height_port"
+            android:backgroundTint="?colorPrimaryContainer"
             android:background="@drawable/background_mailbox_role_change"
             android:gravity="center_vertical"
             android:orientation="horizontal">
