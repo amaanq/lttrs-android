@@ -18,11 +18,11 @@ package rs.ltt.android.ui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import com.google.android.material.color.MaterialColors;
 import com.google.common.base.Strings;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -36,24 +36,22 @@ public class AvatarDrawable extends ColorDrawable {
     // pattern from @cketti (K-9 Mail)
     private static final Pattern LETTER_PATTERN = Pattern.compile("\\p{L}\\p{M}*");
 
-    private final Paint paint;
-    private final Paint textPaint;
+    private final Context context;
+    private final String key;
     private final String letter;
     private final int intrinsicHeight;
     private final int intrinsicWidth;
 
     public AvatarDrawable(final Context context, final From from) {
+        this.context = context;
         final String name;
-        final String key;
         if (from instanceof From.Named) {
             name = ((From.Named) from).getName();
-            key = ((From.Named) from).getEmail();
+            this.key = ((From.Named) from).getEmail();
         } else {
             name = null;
-            key = null;
+            this.key = null;
         }
-        this.paint = getPaint(key);
-        this.textPaint = getTextPaint();
         final Matcher matcher = LETTER_PATTERN.matcher(Strings.nullToEmpty(name));
         this.letter = matcher.find() ? matcher.group().toUpperCase(Locale.ROOT) : null;
         final int avatarDrawableSize =
@@ -62,16 +60,21 @@ public class AvatarDrawable extends ColorDrawable {
         this.intrinsicWidth = avatarDrawableSize;
     }
 
-    private Paint getPaint(final String key) {
+    private static Paint getPaint(final Context context, final String key) {
         final Paint paint = new Paint();
-        paint.setColor(key == null ? 0xff757575 : ConsistentColorGeneration.rgbFromKey(key));
+        paint.setColor(
+                key == null ? 0xff757575 : ConsistentColorGeneration.harmonized(context, key));
         paint.setAntiAlias(true);
         return paint;
     }
 
-    private Paint getTextPaint() {
+    private static Paint getTextPaint(final Context context) {
         final Paint textPaint = new Paint();
-        textPaint.setColor(Color.WHITE);
+        textPaint.setColor(
+                MaterialColors.getColor(
+                        context,
+                        com.google.android.material.R.attr.colorOnPrimary,
+                        "This view has no colorOnPrimary"));
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setAntiAlias(true);
         textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
@@ -80,6 +83,7 @@ public class AvatarDrawable extends ColorDrawable {
 
     @Override
     public void draw(final Canvas canvas) {
+        final Paint textPaint = getTextPaint(context);
         final float midX = getBounds().width() / 2.0f;
         final float midY = getBounds().height() / 2.0f;
         final float radius = Math.min(getBounds().width(), getBounds().height()) / 2.0f;
@@ -88,7 +92,7 @@ public class AvatarDrawable extends ColorDrawable {
         canvas.getClipBounds(r);
         final int cHeight = r.height();
         final int cWidth = r.width();
-        canvas.drawCircle(midX, midY, radius, paint);
+        canvas.drawCircle(midX, midY, radius, getPaint(this.context, this.key));
         if (letter == null) {
             return;
         }

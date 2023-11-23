@@ -157,7 +157,8 @@ public class BindingAdapters {
     public static void setTint(final ImageView imageView, final String key) {
         imageView.setImageTintList(
                 ColorStateList.valueOf(
-                        ConsistentColorGeneration.rgbFromKey(Strings.nullToEmpty(key))));
+                        ConsistentColorGeneration.harmonized(
+                                imageView.getContext(), Strings.nullToEmpty(key))));
     }
 
     @BindingAdapter("from")

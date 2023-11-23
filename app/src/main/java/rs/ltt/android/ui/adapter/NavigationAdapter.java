@@ -210,7 +210,9 @@ public class NavigationAdapter
                     }
                 });
         viewHolder.binding.icon.setImageTintList(
-                ColorStateList.valueOf(ConsistentColorGeneration.rgbFromKey(accountName.name)));
+                ColorStateList.valueOf(
+                        ConsistentColorGeneration.harmonized(
+                                viewHolder.binding.icon.getContext(), accountName.name)));
     }
 
     private void onBindViewHolder(final NavigationHeaderViewHolder viewHolder) {

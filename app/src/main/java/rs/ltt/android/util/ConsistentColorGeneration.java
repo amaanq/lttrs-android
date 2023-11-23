@@ -15,8 +15,11 @@
 
 package rs.ltt.android.util;
 
+import android.content.Context;
 import androidx.annotation.ColorInt;
 import androidx.annotation.IntRange;
+import androidx.annotation.VisibleForTesting;
+import com.google.android.material.color.MaterialColors;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import org.hsluv.HUSLColorConverter;
@@ -35,12 +38,18 @@ public final class ConsistentColorGeneration {
     }
 
     @ColorInt
-    public static int rgbFromKey(final String key) {
+    @VisibleForTesting
+    static int rgb(final String key) {
         final double[] rgb = HUSLColorConverter.hsluvToRgb(new double[] {angle(key) * 360, 85, 58});
         return rgb(
                 (int) Math.round(rgb[0] * 255),
                 (int) Math.round(rgb[1] * 255),
                 (int) Math.round(rgb[2] * 255));
+    }
+
+    @ColorInt
+    public static int harmonized(final Context context, final String input) {
+        return MaterialColors.harmonizeWithPrimary(context, rgb(input));
     }
 
     @ColorInt
