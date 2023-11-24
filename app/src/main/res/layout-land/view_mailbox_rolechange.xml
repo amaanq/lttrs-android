@@ -38,7 +38,7 @@
                 android:layout_marginEnd="32dp"
                 app:role="@{mailbox.getRole()}"
                 app:tint="?attr/colorPrimary"
-                tools:src="@drawable/ic_label_black_24dp" />
+                tools:src="@drawable/ic_label_24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_baseline_arrow_forward_24" />
+            android:src="@drawable/ic_arrow_forward_24dp" />
         <LinearLayout
             android:layout_width="@dimen/mailbox_width_land"
             android:layout_height="@dimen/mailbox_height_land"

@@ -15,24 +15,17 @@
 
 package rs.ltt.android.ui.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ActionMode;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -44,7 +37,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.work.WorkInfo;
-import com.google.android.material.color.MaterialColors;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
@@ -63,10 +55,8 @@ import rs.ltt.android.entity.MailboxOverviewItem;
 import rs.ltt.android.entity.MailboxWithRoleAndName;
 import rs.ltt.android.ui.EmptyMailboxAction;
 import rs.ltt.android.ui.ItemAnimators;
-import rs.ltt.android.ui.Theme;
 import rs.ltt.android.ui.ThreadModifier;
 import rs.ltt.android.ui.Translations;
-import rs.ltt.android.ui.WeakActionModeCallback;
 import rs.ltt.android.ui.adapter.NavigationAdapter;
 import rs.ltt.android.ui.model.LttrsViewModel;
 import rs.ltt.android.ui.notification.EmailNotification;
@@ -80,13 +70,11 @@ import rs.ltt.jmap.mua.util.Label;
 public class LttrsActivity extends AppCompatActivity
         implements ThreadModifier,
                 NavController.OnDestinationChangedListener,
-                MenuItem.OnActionExpandListener,
                 DrawerLayout.DrawerListener {
 
     public static final String EXTRA_ACCOUNT_ID = "account";
     public static final String EXTRA_THREAD_ID = "thread";
     private static final Logger LOGGER = LoggerFactory.getLogger(LttrsActivity.class);
-    private static final int NUM_TOOLBAR_ICON = 1;
     private static final List<Integer> MAIN_DESTINATIONS =
             ImmutableList.of(R.id.inbox, R.id.mailbox, R.id.keyword);
     private static final List<Integer> QUERY_DESTINATIONS =
@@ -95,9 +83,6 @@ public class LttrsActivity extends AppCompatActivity
     final NavigationAdapter navigationAdapter = new NavigationAdapter();
     private ActivityLttrsBinding binding;
     private LttrsViewModel lttrsViewModel;
-    private MenuItem mSearchItem;
-    private SearchView mSearchView;
-    private ActionMode actionMode;
     private WeakReference<Snackbar> mostRecentSnackbar;
 
     public static void launch(final FragmentActivity activity, final long accountId) {
@@ -171,7 +156,6 @@ public class LttrsActivity extends AppCompatActivity
                         getViewModelStore(),
                         new LttrsViewModel.Factory(getApplication(), accountId));
         lttrsViewModel = viewModelProvider.get(LttrsViewModel.class);
-        setSupportActionBar(binding.toolbar);
 
         binding.drawerLayout.addDrawerListener(this);
 
@@ -186,22 +170,17 @@ public class LttrsActivity extends AppCompatActivity
                     final boolean navigateToInbox = label.getRole() == Role.INBOX;
                     if (navigateToInbox) {
                         navController.navigate(LttrsNavigationDirections.actionToInbox());
-                    } else if (label instanceof MailboxOverviewItem) {
-                        final MailboxOverviewItem mailbox = (MailboxOverviewItem) label;
+                    } else if (label instanceof MailboxOverviewItem mailbox) {
                         navController.navigate(
                                 LttrsNavigationDirections.actionToMailbox(mailbox.id));
-                    } else if (label instanceof KeywordLabel) {
-                        final KeywordLabel keyword = (KeywordLabel) label;
+                    } else if (label instanceof KeywordLabel keyword) {
                         navController.navigate(LttrsNavigationDirections.actionToKeyword(keyword));
                     } else {
                         throw new IllegalStateException(
                                 String.format("%s is an unsupported label", label.getClass()));
                     }
-                    if (mSearchItem != null) {
-                        mSearchItem.collapseActionView();
-                    }
                     // currently unused should remain here in case we bring scrollable toolbar back
-                    binding.appBarLayout.setExpanded(true, false);
+                    // binding.appBarLayout.setExpanded(true, false);
                 });
         navigationAdapter.setOnAccountViewToggledListener(
                 () -> {
@@ -220,17 +199,16 @@ public class LttrsActivity extends AppCompatActivity
         navigationAdapter.setOnAdditionalNavigationItemSelected(
                 (type -> {
                     switch (type) {
-                        case ADD_ACCOUNT:
+                        case ADD_ACCOUNT -> {
                             closeDrawer(false);
                             SetupActivity.launch(this);
-                            break;
-                        case MANAGE_ACCOUNT:
+                        }
+                        case MANAGE_ACCOUNT -> {
                             closeDrawer(false);
                             AccountManagerActivity.launch(this);
-                            break;
-                        default:
-                            throw new IllegalStateException(
-                                    String.format("Not set up to handle %s", type));
+                        }
+                        default -> throw new IllegalStateException(
+                                String.format("Not set up to handle %s", type));
                     }
                 }));
         binding.navigation.setAdapter(navigationAdapter);
@@ -242,22 +220,23 @@ public class LttrsActivity extends AppCompatActivity
                 .isAccountSelectionVisible()
                 .observe(this, navigationAdapter::setAccountSelectionVisible);
         lttrsViewModel.getAccountName().observe(this, navigationAdapter::setAccountInformation);
-        lttrsViewModel.getActivityTitle().observe(this, this::setTitle);
     }
 
-    private void closeDrawer(final boolean animate) {
+    public void closeDrawer(final boolean animate) {
         binding.drawerLayout.closeDrawer(GravityCompat.START, animate);
         lttrsViewModel.setAccountSelectionVisibility(false);
+    }
+
+    public void openDrawer() {
+        binding.drawerLayout.openDrawer(GravityCompat.START);
     }
 
     private void onFailureEvent(Event<Failure> failureEvent) {
         if (failureEvent.isConsumable()) {
             final Failure failure = failureEvent.consume();
             LOGGER.info("processing failure event {}", failure.getException());
-            if (failure instanceof Failure.PreExistingMailbox) {
+            if (failure instanceof Failure.PreExistingMailbox preExistingMailbox) {
                 dismissSnackbar();
-                final Failure.PreExistingMailbox preExistingMailbox =
-                        (Failure.PreExistingMailbox) failure;
                 getNavController()
                         .navigate(
                                 LttrsNavigationDirections.actionToReassignRole(
@@ -265,41 +244,6 @@ public class LttrsActivity extends AppCompatActivity
                                         preExistingMailbox.getRole().toString()));
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        final int currentDestination = getCurrentDestinationId();
-        final boolean showSearch = QUERY_DESTINATIONS.contains(currentDestination);
-
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-
-        mSearchItem = menu.findItem(R.id.action_search);
-
-        mSearchItem.setVisible(showSearch);
-
-        if (showSearch) {
-            mSearchView = (SearchView) mSearchItem.getActionView();
-            final SearchManager searchManager = getSystemService(SearchManager.class);
-            if (searchManager != null) {
-                mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            }
-            if (currentDestination == R.id.search) {
-                prepareToolbarForSearch();
-                mSearchItem.expandActionView();
-                mSearchView.setQuery(lttrsViewModel.getCurrentSearchTerm(), false);
-                mSearchView.clearFocus();
-            } else {
-                resetToolbar();
-            }
-            mSearchItem.setOnActionExpandListener(this);
-        } else {
-            mSearchItem = null;
-            mSearchView = null;
-            resetToolbar();
-        }
-
-        return super.onCreateOptionsMenu(menu);
     }
 
     public NavController getNavController() {
@@ -336,31 +280,14 @@ public class LttrsActivity extends AppCompatActivity
         actionbar.setDisplayHomeAsUpEnabled(true);
         @DrawableRes final int upIndicator;
         if (MAIN_DESTINATIONS.contains(destinationId)) {
-            upIndicator = R.drawable.ic_menu_white_24dp;
+            upIndicator = R.drawable.ic_menu_24dp;
         } else if (FULL_SCREEN_DIALOG.contains(destinationId)) {
-            upIndicator = R.drawable.ic_baseline_close_24;
+            upIndicator = R.drawable.ic_close_24dp;
         } else {
-            upIndicator = R.drawable.ic_arrow_back_white_24dp;
+            upIndicator = R.drawable.ic_arrow_back_24dp;
         }
         actionbar.setHomeAsUpIndicator(upIndicator);
         invalidateOptionsMenu();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                final NavDestination currentDestination =
-                        getNavController().getCurrentDestination();
-                if (currentDestination != null
-                        && MAIN_DESTINATIONS.contains(currentDestination.getId())) {
-                    binding.drawerLayout.openDrawer(GravityCompat.START);
-                    return true;
-                } else {
-                    onBackPressed();
-                }
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void onNewIntent(final Intent intent) {
@@ -407,12 +334,6 @@ public class LttrsActivity extends AppCompatActivity
 
     private void handleSearchIntent(final Intent intent) {
         final String query = Strings.nullToEmpty(intent.getStringExtra(SearchManager.QUERY));
-        if (mSearchView != null) {
-            mSearchView.setQuery(query, false);
-            // this does not work on all phones / android versions; therefor we have this followed
-            // by a requestFocus() on the list
-            mSearchView.clearFocus();
-        }
         binding.navigation.requestFocus();
         lttrsViewModel.insertSearchSuggestion(query);
         getNavController().navigate(LttrsNavigationDirections.actionSearch(query));
@@ -597,110 +518,11 @@ public class LttrsActivity extends AppCompatActivity
             @NonNull NavDestination destination,
             @Nullable Bundle arguments) {
         LOGGER.debug("onDestinationChanged({})", destination.getLabel());
-        if (!QUERY_DESTINATIONS.contains(destination.getId())) {
-            endActionMode();
-        }
         configureActionBarForDestination(destination);
     }
 
     @Override
-    public boolean onMenuItemActionExpand(MenuItem item) {
-        animateShowSearchToolbar();
-        return true;
-    }
-
-    @Override
-    public boolean onMenuItemActionCollapse(MenuItem item) {
-        if (item.isActionViewExpanded()) {
-            animateCloseSearchToolbar();
-        }
-        if (getCurrentDestinationId() == R.id.search) {
-            getNavController().navigateUp();
-        }
-        return true;
-    }
-
-    public void animateShowSearchToolbar() {
-        prepareToolbarForSearch();
-        final int toolbarIconWidth =
-                getResources().getDimensionPixelSize(R.dimen.toolbar_icon_width);
-        final int width = binding.toolbar.getWidth() - ((toolbarIconWidth * NUM_TOOLBAR_ICON) / 2);
-        Animator createCircularReveal =
-                ViewAnimationUtils.createCircularReveal(
-                        binding.toolbar,
-                        Theme.isRtl(this) ? binding.toolbar.getWidth() - width : width,
-                        binding.toolbar.getHeight() / 2,
-                        0.0f,
-                        (float) width);
-        createCircularReveal.setDuration(250);
-        createCircularReveal.start();
-    }
-
-    public void animateCloseSearchToolbar() {
-        final int toolbarIconWidth =
-                getResources().getDimensionPixelSize(R.dimen.toolbar_icon_width);
-        final int width = binding.toolbar.getWidth() - ((toolbarIconWidth * NUM_TOOLBAR_ICON) / 2);
-        Animator createCircularReveal =
-                ViewAnimationUtils.createCircularReveal(
-                        binding.toolbar,
-                        Theme.isRtl(this) ? binding.toolbar.getWidth() - width : width,
-                        binding.toolbar.getHeight() / 2,
-                        (float) width,
-                        0.0f);
-        createCircularReveal.setDuration(250);
-        createCircularReveal.addListener(
-                new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        resetToolbar();
-                    }
-                });
-        createCircularReveal.start();
-    }
-
-    private void resetToolbar() {
-        setDisplayShowTitleEnable(true);
-        binding.toolbar.setBackgroundColor(
-                MaterialColors.getColor(binding.toolbar, androidx.appcompat.R.attr.colorPrimary));
-        binding.drawerLayout.setStatusBarBackgroundColor(
-                MaterialColors.getColor(
-                        binding.drawerLayout, androidx.appcompat.R.attr.colorPrimaryDark));
-    }
-
-    private void prepareToolbarForSearch() {
-        setDisplayShowTitleEnable(false);
-        binding.toolbar.setBackgroundColor(
-                MaterialColors.getColor(
-                        binding.toolbar, com.google.android.material.R.attr.colorSurface));
-        binding.drawerLayout.setStatusBarBackgroundColor(
-                MaterialColors.getColor(binding.toolbar, R.attr.colorStatusBarSearch));
-    }
-
-    private void setDisplayShowTitleEnable(final boolean enabled) {
-        final ActionBar actionBar = getSupportActionBar();
-        if (actionBar == null) {
-            throw new IllegalStateException("SupportActionBar has not been set");
-        }
-        actionBar.setDisplayShowTitleEnabled(enabled);
-    }
-
-    public ActionMode beginActionMode(final ActionMode.Callback callback) {
-        this.actionMode = startSupportActionMode(new WeakActionModeCallback(callback));
-        return this.actionMode;
-    }
-
-    public void endActionMode() {
-        if (this.actionMode != null) {
-            this.actionMode.finish();
-        }
-        this.actionMode = null;
-    }
-
-    @Override
-    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-        endActionMode();
-    }
+    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
 
     @Override
     public void onDrawerOpened(@NonNull View drawerView) {}

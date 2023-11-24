@@ -177,13 +177,13 @@ public class NavigationAdapter
             case MANAGE_ACCOUNT:
                 {
                     string = R.string.manage_accounts;
-                    icon = R.drawable.ic_baseline_manage_accounts_24;
+                    icon = R.drawable.ic_manage_accounts_24dp;
                 }
                 break;
             case ADD_ACCOUNT:
                 {
                     string = R.string.add_another_account;
-                    icon = R.drawable.ic_baseline_add_account_24;
+                    icon = R.drawable.ic_add_account_24dp;
                 }
                 break;
             default:
@@ -219,10 +219,10 @@ public class NavigationAdapter
         final @DrawableRes int imageResource;
         final @StringRes int imageDescriptionResource;
         if (accountSelectionVisible) {
-            imageResource = R.drawable.ic_baseline_keyboard_arrow_up_24;
+            imageResource = R.drawable.ic_keyboard_arrow_up_24dp;
             imageDescriptionResource = R.string.hide_account_selector;
         } else {
-            imageResource = R.drawable.ic_keyboard_arrow_down_black_24dp;
+            imageResource = R.drawable.ic_keyboard_arrow_down_24dp;
             imageDescriptionResource = R.string.show_account_selector;
         }
         viewHolder.binding.toggle.setIconResource(imageResource);

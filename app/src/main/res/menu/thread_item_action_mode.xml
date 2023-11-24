@@ -17,31 +17,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_archive"
-        android:icon="@drawable/ic_archive_white_24dp"
+        android:icon="@drawable/ic_archive_24dp"
         android:title="@string/archive"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_remove_label"
-        android:icon="@drawable/ic_label_off_white_24dp"
+        android:icon="@drawable/ic_label_off_24dp"
         android:title="@string/remove_label"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_move_to_trash"
-        android:icon="@drawable/ic_delete_white_24dp"
+        android:icon="@drawable/ic_delete_24dp"
         android:title="@string/delete"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_mark_unread"
-        android:icon="@drawable/ic_mark_unread_white_24dp"
+        android:icon="@drawable/ic_mark_unread_24dp"
         android:title="@string/mark_unread"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_mark_read"
-        android:icon="@drawable/ic_mark_read_white_24dp"
+        android:icon="@drawable/ic_mark_read_24dp"
         android:title="@string/mark_read"
         app:showAsAction="always" />
 

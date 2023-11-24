@@ -110,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/transfer_secret_key"
                     android:enabled="@{viewModel.isAutocryptEnabled() != null}"
-                    app:icon="@drawable/ic_baseline_import_export_24" />
+                    app:icon="@drawable/ic_import_export_24dp" />
             </LinearLayout>
         </LinearLayout>
 

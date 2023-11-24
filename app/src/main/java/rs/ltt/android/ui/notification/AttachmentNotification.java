@@ -46,7 +46,7 @@ public class AttachmentNotification {
             final boolean indeterminate) {
         final NotificationCompat.Builder notificationBuilder =
                 inProgressBuilder(context, id, downloadable.getName(), progress, indeterminate);
-        notificationBuilder.setSmallIcon(R.drawable.ic_baseline_download_24);
+        notificationBuilder.setSmallIcon(R.drawable.ic_download_24dp);
         return notificationBuilder.build();
     }
 
@@ -58,7 +58,7 @@ public class AttachmentNotification {
             final boolean indeterminate) {
         final NotificationCompat.Builder notificationBuilder =
                 inProgressBuilder(context, id, name, progress, indeterminate);
-        notificationBuilder.setSmallIcon(R.drawable.ic_baseline_file_upload_24);
+        notificationBuilder.setSmallIcon(R.drawable.ic_file_upload_24dp);
         return notificationBuilder.build();
     }
 
@@ -70,7 +70,7 @@ public class AttachmentNotification {
             final boolean indeterminate) {
         final NotificationCompat.Action cancelAction =
                 new NotificationCompat.Action(
-                        R.drawable.ic_baseline_cancel_24,
+                        R.drawable.ic_cancel_24dp,
                         context.getString(R.string.cancel),
                         WorkManager.getInstance(context).createCancelPendingIntent(id));
         final NotificationCompat.Builder notificationBuilder =
@@ -94,7 +94,7 @@ public class AttachmentNotification {
                 new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
         notificationBuilder.setContentTitle(context.getString(R.string.download_complete));
         notificationBuilder.setContentText(downloadable.getName());
-        notificationBuilder.setSmallIcon(R.drawable.ic_baseline_download_done_24);
+        notificationBuilder.setSmallIcon(R.drawable.ic_download_done_24dp);
         notificationBuilder.setShowWhen(false);
         return notificationBuilder.build();
     }
@@ -104,7 +104,7 @@ public class AttachmentNotification {
                 new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
         notificationBuilder.setContentTitle(context.getString(R.string.attachment_download_failed));
         notificationBuilder.setContentText(context.getString(R.string.email_not_cached));
-        notificationBuilder.setSmallIcon(R.drawable.ic_baseline_error_24);
+        notificationBuilder.setSmallIcon(R.drawable.ic_error_24dp);
         notificationBuilder.setShowWhen(false);
         return notificationBuilder.build();
     }
@@ -114,7 +114,7 @@ public class AttachmentNotification {
                 new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
         notificationBuilder.setContentTitle(context.getString(R.string.upload_complete));
         notificationBuilder.setContentText(name);
-        notificationBuilder.setSmallIcon(R.drawable.ic_baseline_done_24);
+        notificationBuilder.setSmallIcon(R.drawable.ic_done_24dp);
         notificationBuilder.setShowWhen(false);
         return notificationBuilder.build();
     }

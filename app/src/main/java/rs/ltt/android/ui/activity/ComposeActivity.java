@@ -265,7 +265,7 @@ public class ComposeActivity extends AppCompatActivity {
         final ItemAttachmentBinding attachmentBinding =
                 ItemAttachmentBinding.inflate(getLayoutInflater(), binding.attachments, false);
         attachmentBinding.setAttachment(attachment);
-        attachmentBinding.action.setImageResource(R.drawable.ic_baseline_close_24);
+        attachmentBinding.action.setImageResource(R.drawable.ic_close_24dp);
         attachmentBinding.action.setOnClickListener((v) -> deleteAttachment(attachment));
         attachmentBinding.action.setContentDescription(
                 attachmentBinding.action.getContext().getString(R.string.remove_attachment));
@@ -382,10 +382,10 @@ public class ComposeActivity extends AppCompatActivity {
             }
         }
         if (encryptionOptions.encrypted()) {
-            encryptionOptionsMenuItem.setIcon(R.drawable.ic_lock_white_24dp);
+            encryptionOptionsMenuItem.setIcon(R.drawable.ic_lock_24dp);
             encryptedMenuItem.setChecked(true);
         } else {
-            encryptionOptionsMenuItem.setIcon(R.drawable.ic_lock_open_white_24dp);
+            encryptionOptionsMenuItem.setIcon(R.drawable.ic_lock_open_24dp);
             cleartextMenuItem.setChecked(true);
         }
     }

@@ -42,7 +42,7 @@
                 android:visibility="@{flagged == null ? View.INVISIBLE : View.VISIBLE}"
                 app:isFlagged="@{flagged}"
                 tools:alpha="0.57"
-                tools:src="@drawable/ic_star_border_no_padding_black_24dp" />
+                tools:src="@drawable/ic_star_border_no_padding_24dp" />
 
             <TextView
                 android:layout_width="wrap_content"

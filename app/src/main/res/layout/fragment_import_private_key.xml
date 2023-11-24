@@ -54,7 +54,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="4dp"
                     android:contentDescription="@string/show_helper_dialog"
-                    android:src="@drawable/ic_baseline_help_24"
+                    android:src="@drawable/ic_help_24dp"
                     android:visibility="@{setupViewModel.isLoading() ? View.GONE : View.VISIBLE}" />
 
                 <LinearLayout

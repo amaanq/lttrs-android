@@ -55,6 +55,8 @@ public class LttrsViewModel extends AndroidViewModel {
     private final LiveData<List<Navigable>> navigableItems;
     private final MutableLiveData<LabelWithCount> selectedLabel = new MutableLiveData<>();
     private final MutableLiveData<Boolean> accountSelectionVisible = new MutableLiveData<>(false);
+
+    // TODO remove
     private final MutableLiveData<String> activityTitle = new MutableLiveData<>();
     private final MainRepository mainRepository;
     private final long accountId;
@@ -111,14 +113,6 @@ public class LttrsViewModel extends AndroidViewModel {
 
     public void setCurrentSearchTerm(String currentSearchTerm) {
         this.currentSearchTerm = currentSearchTerm;
-    }
-
-    public void clearActivityTitle() {
-        this.activityTitle.postValue(null);
-    }
-
-    public LiveData<String> getActivityTitle() {
-        return this.activityTitle;
     }
 
     public void setActivityTitle(final String title) {

@@ -56,13 +56,13 @@ public class QueryItemTouchHelper extends ItemTouchHelper.SimpleCallback {
                 @DrawableRes final int resource;
                 switch (swipable) {
                     case ARCHIVE:
-                        resource = R.drawable.ic_archive_white_24dp;
+                        resource = R.drawable.ic_archive_24dp;
                         break;
                     case REMOVE_FLAGGED:
-                        resource = R.drawable.ic_star_border_white_24dp;
+                        resource = R.drawable.ic_star_border_24dp;
                         break;
                     default:
-                        resource = R.drawable.ic_label_off_white_24dp;
+                        resource = R.drawable.ic_label_off_24dp;
                         break;
                 }
                 threadOverviewViewHolder.binding.endSwipeActionIndicator.setImageResource(resource);

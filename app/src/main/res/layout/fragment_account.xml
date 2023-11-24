@@ -31,7 +31,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="8dp"
-                android:src="@drawable/ic_baseline_account_box_24"
+                android:src="@drawable/ic_account_box_24dp"
                 android:visibility="@{account == null ? View.INVISIBLE : View.VISIBLE}"
                 app:tint="@{account.name}" />
 
@@ -68,7 +68,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="32dp"
-                        android:src="@drawable/ic_baseline_group_24"
+                        android:src="@drawable/ic_group_24dp"
                         app:tint="?colorControlNormal" />
 
                     <TextView
@@ -97,7 +97,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="32dp"
-                        android:src="@drawable/ic_label_black_24dp"
+                        android:src="@drawable/ic_label_24dp"
                         app:tint="?colorControlNormal" />
 
                     <TextView
@@ -126,7 +126,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="32dp"
-                        android:src="@drawable/ic_baseline_event_24"
+                        android:src="@drawable/ic_event_24dp"
                         app:tint="?colorControlNormal" />
 
                     <TextView
@@ -155,7 +155,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="32dp"
-                        android:src="@drawable/ic_baseline_security_24"
+                        android:src="@drawable/ic_security_24dp"
                         app:tint="?colorControlNormal" />
 
                     <TextView

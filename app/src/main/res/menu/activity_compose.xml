@@ -20,7 +20,7 @@
     <item
         android:id="@+id/action_encryption_options"
         android:title="@string/encryption_options"
-        android:icon="@drawable/ic_lock_white_24dp"
+        android:icon="@drawable/ic_lock_24dp"
         app:showAsAction="always">
         <menu>
             <group android:checkableBehavior="single">
@@ -37,13 +37,13 @@
     </item>
     <item
         android:id="@+id/action_attach_file"
-        android:icon="@drawable/ic_attachment_white_24dp"
+        android:icon="@drawable/ic_attachment_24dp"
         android:title="@string/attach_file"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_send"
-        android:icon="@drawable/ic_send_white_24dp"
+        android:icon="@drawable/ic_send_24dp"
         android:title="@string/send"
         app:showAsAction="always" />
 

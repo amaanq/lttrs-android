@@ -37,13 +37,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                android:theme="@style/ToolbarTheme"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight" />
+                android:layout_height="wrap_content"
+                android:minHeight="?attr/actionBarSize" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
@@ -153,12 +151,12 @@
 
                         <ImageButton
                             android:id="@+id/more_addresses"
-                            android:visibility="@{composeViewModel.extendedAddresses ? View.GONE : View.VISIBLE}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:padding="12dp"
-                            android:src="@drawable/ic_keyboard_arrow_down_black_24dp" />
+                            android:src="@drawable/ic_keyboard_arrow_down_24dp"
+                            android:visibility="@{composeViewModel.extendedAddresses ? View.GONE : View.VISIBLE}" />
 
                     </LinearLayout>
                 </RelativeLayout>
@@ -169,10 +167,10 @@
                     android:background="@drawable/background_divider" />
 
                 <RelativeLayout
-                    android:visibility="@{composeViewModel.extendedAddresses ? View.VISIBLE : View.GONE}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="56dp">
+                    android:minHeight="56dp"
+                    android:visibility="@{composeViewModel.extendedAddresses ? View.VISIBLE : View.GONE}">
 
                     <LinearLayout
                         android:id="@+id/cc_label"
@@ -212,10 +210,10 @@
                 </RelativeLayout>
 
                 <View
-                    android:visibility="@{composeViewModel.extendedAddresses ? View.VISIBLE : View.GONE}"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/divider_height"
-                    android:background="@drawable/background_divider" />
+                    android:background="@drawable/background_divider"
+                    android:visibility="@{composeViewModel.extendedAddresses ? View.VISIBLE : View.GONE}" />
 
 
                 <RelativeLayout
@@ -260,8 +258,8 @@
                     android:id="@+id/attachments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="16dp"
-                    android:orientation="vertical"/>
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp" />
 
 
                 <!-- placeholder so we have something to fetch click event and redirect them to compose-->

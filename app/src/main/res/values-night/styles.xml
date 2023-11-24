@@ -8,20 +8,4 @@
         <item name="colorStatusBarSearch">@color/material_gray_900</item>
     </style>
 
-    <style name="SearchViewTheme" parent="Widget.AppCompat.SearchView.ActionBar">
-        <item name="layout">@layout/toolbar_search_view</item>
-        <item name="commitIcon">@drawable/ic_search_commit_back_24dp</item>
-        <item name="colorControlNormal">@color/material_white_70</item> <!-- should maybe be 100 -->
-        <item name="colorControlHighlight">@color/material_white_26</item>
-        <item name="suggestionRowLayout">@layout/item_search_suggestion</item>
-        <item name="android:maxWidth">9999dp</item>
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@color/material_white_70</item>
-        <item name="android:textColorHint">@color/material_white_70</item>
-    </style>
-
-    <style name="ToolbarTheme.DayNight" parent="ToolbarTheme">
-        <item name="colorControlNormal">@color/material_white_70</item>
-    </style>
-
 </resources>

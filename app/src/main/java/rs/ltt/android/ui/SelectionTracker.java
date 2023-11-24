@@ -23,14 +23,14 @@ public class SelectionTracker {
     public void select(final String threadId) {
         if (dataSource.add(threadId)) {
             adapter.notifyItemChanged(threadId);
-            onSelectionChanged.onSelectionChanged();
+            onSelectionChanged.onSelectionChanged(dataSource.size());
         }
     }
 
     public void deselect(final String threadId) {
         if (dataSource.remove(threadId)) {
             adapter.notifyItemChanged(threadId);
-            onSelectionChanged.onSelectionChanged();
+            onSelectionChanged.onSelectionChanged(dataSource.size());
         }
     }
 
@@ -51,11 +51,15 @@ public class SelectionTracker {
             adapter.notifyItemChanged(threadId);
         }
         if (hasSelection) {
-            onSelectionChanged.onSelectionChanged();
+            onSelectionChanged.onSelectionChanged(dataSource.size());
         }
     }
 
+    public int countSelected() {
+        return this.dataSource.size();
+    }
+
     public interface OnSelectionChanged {
-        void onSelectionChanged();
+        void onSelectionChanged(int numSelected);
     }
 }

@@ -67,7 +67,7 @@
                     android:layout_centerVertical="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="12dp"
-                    android:src="@drawable/ic_baseline_save_alt_24"
+                    android:src="@drawable/ic_save_alt_24dp"
                     app:tint="?attr/colorControlNormal" />
             </RelativeLayout>
         </LinearLayout>

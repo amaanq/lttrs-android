@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/launch"
-        android:icon="@drawable/ic_baseline_launch_24"
+        android:icon="@drawable/ic_launch_24dp"
         android:title="@string/view_emails"
         app:showAsAction="always" />
 

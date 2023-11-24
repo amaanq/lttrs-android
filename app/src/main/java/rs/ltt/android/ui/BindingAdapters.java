@@ -257,14 +257,14 @@ public class BindingAdapters {
     @BindingAdapter("isFlagged")
     public static void setIsFlagged(final ImageView imageView, final boolean isFlagged) {
         if (isFlagged) {
-            imageView.setImageResource(R.drawable.ic_star_black_no_padding_24dp);
+            imageView.setImageResource(R.drawable.ic_star_no_padding_24dp);
             ImageViewCompat.setImageTintList(
                     imageView,
                     ColorStateList.valueOf(
                             MaterialColors.getColor(
                                     imageView, com.google.android.material.R.attr.colorPrimary)));
         } else {
-            imageView.setImageResource(R.drawable.ic_star_border_no_padding_black_24dp);
+            imageView.setImageResource(R.drawable.ic_star_border_no_padding_24dp);
             ImageViewCompat.setImageTintList(
                     imageView,
                     ColorStateList.valueOf(
@@ -333,38 +333,38 @@ public class BindingAdapters {
     public static void setRole(final ImageView imageView, final Role role) {
         @DrawableRes final int imageResource;
         if (role == null) {
-            imageResource = R.drawable.ic_label_black_24dp;
+            imageResource = R.drawable.ic_label_24dp;
         } else {
             switch (role) {
                 case ALL:
                     imageResource = R.drawable.ic_all_inbox_24dp;
                     break;
                 case INBOX:
-                    imageResource = R.drawable.ic_inbox_black_24dp;
+                    imageResource = R.drawable.ic_inbox_24dp;
                     break;
                 case ARCHIVE:
-                    imageResource = R.drawable.ic_archive_black_24dp;
+                    imageResource = R.drawable.ic_archive_24dp;
                     break;
                 case IMPORTANT:
-                    imageResource = R.drawable.ic_label_important_black_24dp;
+                    imageResource = R.drawable.ic_label_important_24dp;
                     break;
                 case JUNK:
-                    imageResource = R.drawable.ic_spam_black_24dp;
+                    imageResource = R.drawable.ic_spam_24dp;
                     break;
                 case DRAFTS:
-                    imageResource = R.drawable.ic_drafts_black_24dp;
+                    imageResource = R.drawable.ic_drafts_24dp;
                     break;
                 case FLAGGED:
-                    imageResource = R.drawable.ic_star_black_24dp;
+                    imageResource = R.drawable.ic_star_24dp;
                     break;
                 case TRASH:
-                    imageResource = R.drawable.ic_delete_black_24dp;
+                    imageResource = R.drawable.ic_delete_24dp;
                     break;
                 case SENT:
-                    imageResource = R.drawable.ic_send_black_24dp;
+                    imageResource = R.drawable.ic_send_24dp;
                     break;
                 default:
-                    imageResource = R.drawable.ic_folder_black_24dp;
+                    imageResource = R.drawable.ic_folder_24dp;
                     break;
             }
         }
@@ -418,31 +418,31 @@ public class BindingAdapters {
 
     private static @DrawableRes int toDrawable(final MediaType type) {
         if (type == null) {
-            return R.drawable.ic_baseline_attachment_24;
+            return R.drawable.ic_attachment_24dp;
         } else if (type.is(MediaType.ANY_IMAGE_TYPE)) {
-            return R.drawable.ic_baseline_image_24;
+            return R.drawable.ic_image_24dp;
         } else if (type.is(MediaType.ANY_VIDEO_TYPE)) {
-            return R.drawable.ic_baseline_movie_24;
+            return R.drawable.ic_movie_24dp;
         } else if (type.is(MediaType.ANY_AUDIO_TYPE)) {
-            return R.drawable.ic_baseline_audiotrack_24;
+            return R.drawable.ic_audiotrack_24dp;
         } else if (MediaTypes.isCalendar(type)) {
-            return R.drawable.ic_baseline_event_24;
+            return R.drawable.ic_event_24dp;
         } else if (type.is(MediaType.PDF)) {
-            return R.drawable.ic_baseline_pdf_box_24;
+            return R.drawable.ic_pdf_box_24dp;
         } else if (MediaTypes.isArchive(type)) {
-            return R.drawable.ic_archive_black_24dp;
+            return R.drawable.ic_archive_24dp;
         } else if (MediaTypes.isVcard(type)) {
-            return R.drawable.ic_baseline_person_24;
+            return R.drawable.ic_person_24dp;
         } else if (MediaTypes.isEbook(type)) {
-            return R.drawable.ic_baseline_book_24;
+            return R.drawable.ic_book_24dp;
         } else if (MediaTypes.isDocument(type)) {
-            return R.drawable.ic_baseline_document_24;
+            return R.drawable.ic_document_24dp;
         } else if (MediaTypes.isTour(type)) {
             return R.drawable.ic_baseline_tour_24;
         } else if (type.is(SetupMessage.AUTOCRYPT_SETUP)) {
-            return R.drawable.ic_baseline_security_24;
+            return R.drawable.ic_security_24dp;
         } else {
-            return R.drawable.ic_baseline_attachment_24;
+            return R.drawable.ic_attachment_24dp;
         }
     }
 

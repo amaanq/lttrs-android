@@ -48,7 +48,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="24dp"
-                android:src="@drawable/ic_archive_white_24dp" />
+                android:src="@drawable/ic_archive_24dp" />
 
             <ImageView
                 android:id="@+id/end_swipe_action_indicator"
@@ -57,7 +57,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="24dp"
-                android:src="@drawable/ic_archive_white_24dp" />
+                android:src="@drawable/ic_archive_24dp" />
         </RelativeLayout>
 
 
@@ -93,7 +93,7 @@
                     android:layout_alignBottom="@+id/froms"
                     android:layout_marginEnd="4sp"
                     android:layout_toEndOf="@id/avatar"
-                    android:src="@drawable/ic_baseline_important_18"
+                    android:src="@drawable/ic_important_18dp"
                     android:visibility="@{isImportant ? View.VISIBLE : View.GONE, default=gone}"
                     app:tint="?colorTertiary" />
 
@@ -172,7 +172,7 @@
                     android:baselineAlignBottom="true"
                     app:isFlagged="@{thread.showAsFlagged()}"
                     tools:alpha="0.57"
-                    tools:src="@drawable/ic_star_border_no_padding_black_24dp" />
+                    tools:src="@drawable/ic_star_border_no_padding_24dp" />
             </RelativeLayout>
         </FrameLayout>
     </FrameLayout>

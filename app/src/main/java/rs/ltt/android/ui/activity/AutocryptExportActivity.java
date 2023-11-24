@@ -81,7 +81,7 @@ public class AutocryptExportActivity extends AppCompatActivity {
         final ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_close_24);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_close_24dp);
     }
 
     public NavController getNavController() {

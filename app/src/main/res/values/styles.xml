@@ -52,30 +52,6 @@
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 
-    <style name="SearchViewTheme" parent="Widget.AppCompat.SearchView.ActionBar">
-        <item name="layout">@layout/toolbar_search_view</item>
-        <item name="commitIcon">@drawable/ic_search_commit_back_24dp</item>
-        <item name="colorControlNormal">@color/material_black_60</item>
-        <item name="colorControlHighlight">@color/material_black_12</item> <!--- TODO use color state list? -->
-        <item name="suggestionRowLayout">@layout/item_search_suggestion</item>
-        <item name="android:maxWidth">9999dp</item>
-        <item name="android:textColorPrimary">@color/material_black_87</item>
-        <item name="android:textColorSecondary">@color/material_black_60</item>
-        <item name="android:textColorHint">@color/material_black_60</item>
-    </style>
-
-
-    <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <item name="searchViewStyle">@style/SearchViewTheme</item>
-        <item name="android:actionOverflowButtonStyle">@style/ActionButton.Overflow</item>
-        <item name="actionModeStyle">@style/ActionMode</item>
-        <item name="actionModeCloseButtonStyle">@style/ActionModeCloseButtonStyle</item>
-    </style>
-
-    <style name="ToolbarTheme.DayNight" parent="ToolbarTheme">
-        <item name="colorControlNormal">@color/material_black_60</item>
-    </style>
-
     <style name="ActionMode" parent="@style/Widget.AppCompat.ActionMode">
         <item name="titleTextStyle">@style/ActionMode.Title</item>
     </style>

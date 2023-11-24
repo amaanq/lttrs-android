@@ -17,8 +17,6 @@ package rs.ltt.android.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,13 +75,9 @@ public class ThreadFragment extends AbstractLttrsFragment
     private ActivityResultLauncher<Attachment> createDocumentLauncher;
     private ActivityResultLauncher<Bundle> composeLauncher;
 
-    private ThreadViewModel.MenuConfiguration menuConfiguration =
-            ThreadViewModel.MenuConfiguration.none();
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         this.createDocumentLauncher =
                 registerForActivityResult(
                         new CreateDocumentContract(), uri -> threadViewModel.storeAttachment(uri));
@@ -106,9 +100,12 @@ public class ThreadFragment extends AbstractLttrsFragment
                                 getLttrsViewModel().getAccountId(),
                                 threadId,
                                 label));
-        getLttrsViewModel().clearActivityTitle();
         threadViewModel = viewModelProvider.get(ThreadViewModel.class);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_thread, container, false);
+
+        binding.toolbar.setNavigationOnClickListener((v) -> getNavController().navigateUp());
+
+        binding.toolbar.setOnMenuItemClickListener(this::onMenuItemClick);
 
         threadViewModel.getSeenEvent().observe(getViewLifecycleOwner(), this::onSeenEvent);
         threadViewModel
@@ -143,12 +140,7 @@ public class ThreadFragment extends AbstractLttrsFragment
         threadViewModel.getLabels().observe(getViewLifecycleOwner(), threadAdapter::setLabels);
         threadViewModel
                 .getMenuConfiguration()
-                .observe(
-                        getViewLifecycleOwner(),
-                        menuConfiguration -> {
-                            this.menuConfiguration = menuConfiguration;
-                            requireActivity().invalidateOptionsMenu();
-                        });
+                .observe(getViewLifecycleOwner(), this::modifyMenuConfiguration);
         threadAdapter.setOnFlaggedToggledListener(this);
         threadAdapter.setOnComposeActionTriggeredListener(this);
         threadAdapter.setOnAttachmentActionTriggered(this);
@@ -160,6 +152,20 @@ public class ThreadFragment extends AbstractLttrsFragment
                 .getDecryptionFailures()
                 .observe(getViewLifecycleOwner(), this::onDecryptionWorkInfo);
         return binding.getRoot();
+    }
+
+    private void modifyMenuConfiguration(
+            final ThreadViewModel.MenuConfiguration menuConfiguration) {
+        final var menu = this.binding.toolbar.getMenu();
+        menu.findItem(R.id.action_archive).setVisible(menuConfiguration.archive);
+        final MenuItem removeLabelItem = menu.findItem(R.id.action_remove_label);
+        removeLabelItem.setVisible(menuConfiguration.removeLabel);
+        removeLabelItem.setTitle(getString(R.string.remove_label_x, threadViewModel.getLabel()));
+        menu.findItem(R.id.action_move_to_inbox).setVisible(menuConfiguration.moveToInbox);
+        menu.findItem(R.id.action_move_to_trash).setVisible(menuConfiguration.moveToTrash);
+        menu.findItem(R.id.action_mark_important).setVisible(menuConfiguration.markImportant);
+        menu.findItem(R.id.action_mark_not_important)
+                .setVisible(menuConfiguration.markNotImportant);
     }
 
     private void onDecryptionWorkInfo(final Event<Collection<Failure>> event) {
@@ -292,24 +298,7 @@ public class ThreadFragment extends AbstractLttrsFragment
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(
-            @NonNull final Menu menu, @NonNull final MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_thread, menu);
-        menu.findItem(R.id.action_archive).setVisible(menuConfiguration.archive);
-        final MenuItem removeLabelItem = menu.findItem(R.id.action_remove_label);
-        removeLabelItem.setVisible(menuConfiguration.removeLabel);
-        removeLabelItem.setTitle(getString(R.string.remove_label_x, threadViewModel.getLabel()));
-        menu.findItem(R.id.action_move_to_inbox).setVisible(menuConfiguration.moveToInbox);
-        menu.findItem(R.id.action_move_to_trash).setVisible(menuConfiguration.moveToTrash);
-        menu.findItem(R.id.action_mark_important).setVisible(menuConfiguration.markImportant);
-        menu.findItem(R.id.action_mark_not_important)
-                .setVisible(menuConfiguration.markNotImportant);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem menuItem) {
+    public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
         final NavController navController = getNavController();
         final int itemId = menuItem.getItemId();
         if (itemId == R.id.action_mark_unread) {
@@ -348,7 +337,7 @@ public class ThreadFragment extends AbstractLttrsFragment
             getThreadModifier().markNotImportant(ImmutableList.of(threadViewModel.getThreadId()));
             return true;
         } else {
-            return super.onOptionsItemSelected(menuItem);
+            return false;
         }
     }
 

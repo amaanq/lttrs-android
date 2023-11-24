@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.appcompat.graphics.drawable.DrawerArrowDrawable;
 import androidx.appcompat.view.ActionMode;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.DefaultLifecycleObserver;
@@ -36,7 +37,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.util.Collection;
-import java.util.Set;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,9 +91,30 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
         final AbstractQueryViewModel viewModel = getQueryViewModel();
         this.binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_thread_list, container, false);
+        this.binding.searchBar.setNavigationIcon(
+                new DrawerArrowDrawable(this.binding.searchBar.getContext()));
+
+        requireLttrsActivity().setSupportActionBar(this.binding.searchBar);
+
+        this.binding.searchBar.setNavigationOnClickListener(
+                v -> requireLttrsActivity().openDrawer());
+
+        this.binding.contextualToolbar.setNavigationOnClickListener(
+                v -> {
+                    endActionMode();
+                    this.binding.searchBar.collapse(
+                            this.binding.contextualToolbar, this.binding.appBarLayout);
+                });
 
         setupAdapter(viewModel);
-        setupSelectionTracker(getQueryViewModel().getSelectedThreads());
+        this.tracker =
+                new SelectionTracker(
+                        getQueryViewModel().getSelectedThreads(),
+                        threadOverviewAdapter,
+                        this::onSelectionChanged);
+        if (this.tracker.hasSelection()) {
+            this.onSelectionChanged(this.tracker.countSelected(), true);
+        }
         observeThreadOverviewItems(viewModel.getThreadOverviewItems());
 
         binding.setViewModel(viewModel);
@@ -138,6 +159,10 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
         return binding.getRoot();
     }
 
+    private void endActionMode() {
+        this.tracker.clearSelection();
+    }
+
     private void setEmptyMailboxAction(final EmptyMailboxAction emptyMailboxAction) {
         // TODO if != null we might need to scroll to top
         threadOverviewAdapter.setEmptyMailboxAction(emptyMailboxAction);
@@ -161,14 +186,6 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
         this.threadOverviewAdapter.setOnEmptyMailboxActionClickedListener(this);
         this.threadOverviewAdapter.setOnSelectionToggled(this);
         this.threadOverviewAdapter.setImportantMailbox(viewModel.getImportant());
-    }
-
-    private void setupSelectionTracker(final Set<String> dataSource) {
-        this.tracker =
-                new SelectionTracker(dataSource, threadOverviewAdapter, this::toggleActionMode);
-        if (this.tracker.hasSelection()) {
-            toggleActionMode();
-        }
     }
 
     private void observeThreadOverviewItems(
@@ -217,16 +234,18 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
         this.binding = null;
     }
 
-    private void toggleActionMode() {
-        if (tracker.hasSelection()) {
-            if (this.actionMode == null) {
-                this.actionMode = requireLttrsActivity().beginActionMode(this);
-            } else {
-                this.actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
-                this.actionMode.invalidate();
-            }
-        } else if (actionMode != null) {
-            requireLttrsActivity().endActionMode();
+    private void onSelectionChanged(final int numSelected) {
+        onSelectionChanged(numSelected, false);
+    }
+
+    private void onSelectionChanged(final int numSelected, final boolean skipAnimation) {
+        if (numSelected > 0) {
+            this.binding.searchBar.expand(
+                    this.binding.contextualToolbar, this.binding.appBarLayout, skipAnimation);
+            this.binding.contextualToolbar.setTitle(String.valueOf(numSelected));
+        } else {
+            this.binding.searchBar.collapse(
+                    this.binding.contextualToolbar, this.binding.appBarLayout, skipAnimation);
         }
     }
 
