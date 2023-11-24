@@ -37,6 +37,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.work.WorkInfo;
+import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
@@ -138,6 +139,7 @@ public class LttrsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         LOGGER.debug("onCreate()");
         binding = DataBindingUtil.setContentView(this, R.layout.activity_lttrs);
+        binding.drawerLayout.setStatusBarBackgroundColor(SurfaceColors.SURFACE_0.getColor(this));
         final Intent intent = getIntent();
         final long accountId;
         if (intent != null && intent.hasExtra(EXTRA_ACCOUNT_ID)) {
