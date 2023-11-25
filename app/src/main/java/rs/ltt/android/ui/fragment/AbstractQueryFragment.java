@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable;
-import androidx.appcompat.view.ActionMode;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
@@ -65,7 +64,6 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
         implements OnFlaggedToggled,
                 ThreadOverviewAdapter.OnThreadClicked,
                 QueryItemTouchHelper.OnQueryItemSwipe,
-                ActionMode.Callback,
                 OnSelectionToggled,
                 ThreadOverviewAdapter.OnEmptyMailboxActionClicked {
 
@@ -73,7 +71,6 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
     protected FragmentThreadListBinding binding;
     private ThreadOverviewAdapter threadOverviewAdapter;
     private ItemTouchHelper itemTouchHelper;
-    private ActionMode actionMode;
     private SelectionTracker tracker;
     private ActivityResultLauncher<Bundle> composeLauncher;
 
@@ -94,8 +91,6 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
         this.binding.searchBar.setNavigationIcon(
                 new DrawerArrowDrawable(this.binding.searchBar.getContext()));
 
-        requireLttrsActivity().setSupportActionBar(this.binding.searchBar);
-
         this.binding.searchBar.setNavigationOnClickListener(
                 v -> requireLttrsActivity().openDrawer());
 
@@ -105,6 +100,7 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                     this.binding.searchBar.collapse(
                             this.binding.contextualToolbar, this.binding.appBarLayout);
                 });
+        this.binding.contextualToolbar.setOnMenuItemClickListener(this::onActionItemClicked);
 
         setupAdapter(viewModel);
         this.tracker =
@@ -121,9 +117,6 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
         binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.compose.setOnClickListener(
                 (v) -> composeLauncher.launch(ComposeActivity.compose()));
-        if (showComposeButton() && actionMode == null) {
-            binding.compose.show();
-        }
 
         binding.threadList.addOnScrollListener(ExtendedFabSizeChanger.of(binding.compose));
 
@@ -201,8 +194,8 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                                 if (atTop && binding != null) {
                                     binding.threadList.scrollToPosition(0);
                                 }
-                                if (actionMode != null) {
-                                    actionMode.invalidate();
+                                if (this.tracker.hasSelection()) {
+                                    this.onSelectionChanged(this.tracker.countSelected());
                                 }
                             });
                 });
@@ -243,9 +236,14 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
             this.binding.searchBar.expand(
                     this.binding.contextualToolbar, this.binding.appBarLayout, skipAnimation);
             this.binding.contextualToolbar.setTitle(String.valueOf(numSelected));
+            updateContextualToolbarMenu();
+            this.binding.compose.hide();
         } else {
             this.binding.searchBar.collapse(
                     this.binding.contextualToolbar, this.binding.appBarLayout, skipAnimation);
+            if (showComposeButton()) {
+                binding.compose.show();
+            }
         }
     }
 
@@ -351,18 +349,8 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
 
     protected abstract boolean showComposeButton();
 
-    @Override
-    public boolean onCreateActionMode(final ActionMode mode, final Menu menu) {
-        this.actionMode = mode;
-        this.actionMode.getMenuInflater().inflate(R.menu.thread_item_action_mode, menu);
-        this.actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
-        binding.compose.hide();
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        LOGGER.debug("prepare action mode for {} selected items", tracker.getSelection().size());
+    private void updateContextualToolbarMenu() {
+        final Menu menu = this.binding.contextualToolbar.getMenu();
         final ActionModeMenuConfiguration.QueryType queryType = getQueryType();
         getQueryViewModel().getThreadOverviewItems().getValue();
         final ActionModeMenuConfiguration.SelectionInfo selectionInfo =
@@ -411,11 +399,9 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
         removeFlag.setVisible(
                 queryType != ActionModeMenuConfiguration.QueryType.FLAGGED
                         && selectionInfo.flagged);
-        return true;
     }
 
-    @Override
-    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+    private boolean onActionItemClicked(final MenuItem item) {
         final int itemId = item.getItemId();
         final Collection<String> threadIds = Sets.newHashSet(tracker.getSelection());
         if (itemId == R.id.action_archive) {
@@ -452,15 +438,6 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
     }
 
     abstract void removeLabel(Collection<String> threadIds);
-
-    @Override
-    public void onDestroyActionMode(ActionMode mode) {
-        tracker.clearSelection();
-        if (showComposeButton()) {
-            binding.compose.show();
-        }
-        this.actionMode = null;
-    }
 
     protected abstract ActionModeMenuConfiguration.QueryType getQueryType();
 }
