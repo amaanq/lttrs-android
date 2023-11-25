@@ -1,6 +1,6 @@
 
 <resources>
-    <style name="MainTheme" parent="Theme.Material3.Light.NoActionBar">
+    <style name="BaseTheme" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
@@ -29,15 +29,14 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
     </style>
 
-    <style name="LttrsTheme" parent="MainTheme">
+    <style name="LttrsTheme" parent="BaseTheme">
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="SetupTheme" parent="MainTheme">
+    <style name="MainTheme" parent="BaseTheme">
         <item name="android:windowLightStatusBar">@bool/window_light_status_bar</item>
         <item name="android:statusBarColor">?attr/colorSurface</item>
     </style>
-
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimaryDark">@color/material_teal_600</item>

@@ -114,8 +114,7 @@
 
         <activity
             android:name=".ui.activity.SetupActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/SetupTheme" />
+            android:launchMode="singleTask"/>
 
         <activity
             android:name=".ui.activity.AccountManagerActivity"

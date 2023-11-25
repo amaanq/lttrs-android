@@ -7,4 +7,5 @@
   * add round edge to navigation item selection
   * add settings screen
   * ensure unit test are running
-  * Fix status bar color in Compose und ManageAccounts
+  * use modern back press hooks for drawer and action mode
+  * opt in to predective back

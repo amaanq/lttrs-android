@@ -11,7 +11,7 @@ public abstract class AbstractNotification {
     protected static @ColorInt int getColor(Context context, @AttrRes int colorAttributeResId) {
         final var typedValue = new TypedValue();
         final var theme = context.getResources().newTheme();
-        theme.applyStyle(R.style.MainTheme, true);
+        theme.applyStyle(R.style.BaseTheme, true);
         if (theme.resolveAttribute(colorAttributeResId, typedValue, true)) {
             return typedValue.data;
         }
