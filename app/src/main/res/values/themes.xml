@@ -1,7 +1,6 @@
 
 <resources>
-    <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
-        <item name="android:windowTranslucentStatus">true</item>
+    <style name="MainTheme" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
@@ -29,4 +28,25 @@
         <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
     </style>
+
+    <style name="LttrsTheme" parent="MainTheme">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="SetupTheme" parent="MainTheme">
+        <item name="android:windowLightStatusBar">@bool/window_light_status_bar</item>
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+    </style>
+
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimaryDark">@color/material_teal_600</item>
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+
+    <style name="AppNameTheme" parent="TextAppearance.AppCompat.Title">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textColor">?colorPrimary</item>
+    </style>
+
 </resources>

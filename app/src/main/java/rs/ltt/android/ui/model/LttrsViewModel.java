@@ -17,7 +17,6 @@ package rs.ltt.android.ui.model;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -55,9 +54,6 @@ public class LttrsViewModel extends AndroidViewModel {
     private final LiveData<List<Navigable>> navigableItems;
     private final MutableLiveData<LabelWithCount> selectedLabel = new MutableLiveData<>();
     private final MutableLiveData<Boolean> accountSelectionVisible = new MutableLiveData<>(false);
-
-    // TODO remove
-    private final MutableLiveData<String> activityTitle = new MutableLiveData<>();
     private final MainRepository mainRepository;
     private final long accountId;
     private final LttrsRepository lttrsRepository;
@@ -113,14 +109,6 @@ public class LttrsViewModel extends AndroidViewModel {
 
     public void setCurrentSearchTerm(String currentSearchTerm) {
         this.currentSearchTerm = currentSearchTerm;
-    }
-
-    public void setActivityTitle(final String title) {
-        this.activityTitle.postValue(title);
-    }
-
-    public void setActivityTitle(final @StringRes int res) {
-        this.activityTitle.postValue(getApplication().getString(res));
     }
 
     public LiveData<LabelWithCount> getSelectedLabel() {

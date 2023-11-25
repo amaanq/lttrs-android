@@ -32,8 +32,10 @@ public class ChooseLabelsFragment extends AbstractLttrsFragment
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        getLttrsViewModel().setActivityTitle(R.string.label_as);
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_label_as, container, false);
+        this.binding =
+                DataBindingUtil.inflate(inflater, R.layout.fragment_label_as, container, false);
+        this.binding.toolbar.setTitle(R.string.label_as);
+        this.binding.toolbar.setNavigationOnClickListener(this::onCancel);
 
         this.chooseLabelsAdapter = new ChooseLabelsAdapter();
         this.chooseLabelsAdapter.setOnSelectableMailboxClickListener(this);

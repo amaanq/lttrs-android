@@ -34,16 +34,17 @@ public class ReassignRoleFragment extends AbstractLttrsFragment {
         final FragmentReassignRoleBinding binding =
                 DataBindingUtil.inflate(
                         inflater, R.layout.fragment_reassign_role, container, false);
+
+        binding.toolbar.setNavigationOnClickListener(this::onCancel);
         viewModel
                 .isReassignment()
                 .observe(
                         getViewLifecycleOwner(),
                         reassign ->
-                                getLttrsViewModel()
-                                        .setActivityTitle(
-                                                reassign != null && reassign
-                                                        ? R.string.reassign_role
-                                                        : R.string.assign_role));
+                                binding.toolbar.setTitle(
+                                        Boolean.TRUE.equals(reassign)
+                                                ? R.string.reassign_role
+                                                : R.string.assign_role));
         binding.setModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.cancel.setOnClickListener(this::onCancel);

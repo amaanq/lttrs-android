@@ -51,7 +51,6 @@ import rs.ltt.android.ui.ItemAnimators;
 import rs.ltt.android.ui.QueryItemTouchHelper;
 import rs.ltt.android.ui.RecyclerViews;
 import rs.ltt.android.ui.SelectionTracker;
-import rs.ltt.android.ui.Translations;
 import rs.ltt.android.ui.activity.ComposeActivity;
 import rs.ltt.android.ui.activity.result.contract.ComposeContract;
 import rs.ltt.android.ui.adapter.OnFlaggedToggled;
@@ -110,6 +109,8 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                         this::onSelectionChanged);
         if (this.tracker.hasSelection()) {
             this.onSelectionChanged(this.tracker.countSelected(), true);
+        } else if (showComposeButton()) {
+            this.binding.compose.show();
         }
         observeThreadOverviewItems(viewModel.getThreadOverviewItems());
 
@@ -249,8 +250,8 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
 
     void onLabelOpened(final LabelWithCount label) {
         getLttrsViewModel().setSelectedLabel(label);
-        getLttrsViewModel()
-                .setActivityTitle(Translations.asHumanReadableName(requireContext(), label));
+        /*getLttrsViewModel()
+        .setActivityTitle(Translations.asHumanReadableName(requireContext(), label));*/
     }
 
     @Override

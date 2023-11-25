@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -12,69 +13,91 @@
             type="rs.ltt.android.ui.model.ReassignRoleViewModel" />
     </data>
 
-    <ScrollView
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:orientation="vertical"
-            android:paddingStart="24dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="24dp"
-            android:paddingBottom="16dp">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/question"
-                android:layout_width="wrap_content"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{model.isReassignment() ? @string/reassign_role_question(model.getMailbox().getName(), model.getMailbox().getRole(), model.getHumanReadableRole()) : @string/assign_role_question(model.getMailbox().getName(), model.getHumanReadableRole())}"
-                android:textAppearance="?textAppearanceBodyLarge"
-                tools:text="@string/reassign_role_question" />
+                android:minHeight="?attr/actionBarSize"
+                app:navigationIcon="@drawable/ic_close_24dp" />
 
-            <include
-                layout="@layout/view_mailbox_rolechange"
-                android:layout_width="wrap_content"
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/detailed_explanation"
-                android:layout_below="@+id/question"
-                android:layout_centerHorizontal="true"
-                bind:mailbox="@{model.getMailbox()}"
-                bind:role="@{model.getRole()}" />
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:paddingStart="24dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:id="@+id/question"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.isReassignment() ? @string/reassign_role_question(model.getMailbox().getName(), model.getMailbox().getRole(), model.getHumanReadableRole()) : @string/assign_role_question(model.getMailbox().getName(), model.getHumanReadableRole())}"
+                    android:textAppearance="?textAppearanceBodyLarge"
+                    tools:text="@string/reassign_role_question" />
+
+                <include
+                    layout="@layout/view_mailbox_rolechange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/detailed_explanation"
+                    android:layout_below="@+id/question"
+                    android:layout_centerHorizontal="true"
+                    bind:mailbox="@{model.getMailbox()}"
+                    bind:role="@{model.getRole()}" />
 
 
-            <TextView
-                android:id="@+id/detailed_explanation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/confirm"
-                android:layout_marginBottom="16dp"
-                android:text="@{@string/assign_role_detailed_explanation(model.getHumanReadableRole(), model.getMailbox().getName())}"
-                android:textAppearance="?textAppearanceBodySmall"
-                tools:text="@string/assign_role_detailed_explanation" />
+                <TextView
+                    android:id="@+id/detailed_explanation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/confirm"
+                    android:layout_marginBottom="16dp"
+                    android:text="@{@string/assign_role_detailed_explanation(model.getHumanReadableRole(), model.getMailbox().getName())}"
+                    android:textAppearance="?textAppearanceBodySmall"
+                    tools:text="@string/assign_role_detailed_explanation" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/cancel"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:text="@string/cancel" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancel"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:text="@string/cancel" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/confirm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:onClick="@{(v) -> model.confirm()}"
-                android:text="@string/confirm" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/confirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:onClick="@{(v) -> model.confirm()}"
+                    android:text="@string/confirm" />
 
-        </RelativeLayout>
-    </ScrollView>
+            </RelativeLayout>
+        </ScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
 </layout>
