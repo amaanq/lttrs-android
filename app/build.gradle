@@ -103,7 +103,7 @@ dependencies {
     implementation 'com.google.crypto.tink:apps-webpush:1.10.0'
 
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0") {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10") {
         because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
     }
 
@@ -123,6 +123,13 @@ dependencies {
     implementation("rs.ltt.autocrypt:autocrypt-jmap:$rootProject.ext.autocryptJmapVersion") {
         changing = true
     }
+
+    // when we bump this to anything higher (or even to the -android flavor) the app starts crashing
+    // on Android 6 and 7.1 (and possibly others) with errors such as: `java.lang.NoSuchMethodError:
+    // No virtual method splitToStream(Ljava/lang/CharSequence;)Lj$/util/stream/Stream;
+    // in class Lcom/google/common/base/Splitter; or its super classes (declaration of
+    // 'com.google.common.base.Splitter' appears in /data/app/rs.ltt.android-2/base.apk)`
+    implementation 'com.google.guava:guava:31.0.1-jre'
 
 
     //Testing
