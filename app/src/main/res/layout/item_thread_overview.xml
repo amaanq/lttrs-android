@@ -39,7 +39,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/material_teal_900">
+            android:background="?colorSecondaryFixedDim">
 
             <ImageView
                 android:id="@+id/start_swipe_action_indicator"
@@ -48,6 +48,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="24dp"
+                app:tint="?colorOnSecondaryFixed"
                 android:src="@drawable/ic_archive_24dp" />
 
             <ImageView
@@ -57,6 +58,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="24dp"
+                app:tint="?colorOnSecondaryFixed"
                 android:src="@drawable/ic_archive_24dp" />
         </RelativeLayout>
 

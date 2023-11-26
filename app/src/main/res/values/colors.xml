@@ -14,25 +14,10 @@
   -->
 
 <resources>
+    <!-- brand color; used by launcher icon and splash screen -->
     <color name="material_teal_600">#00897B</color>
-    <color name="material_teal_900">#004D40</color>
-    <color name="material_pink_accent_200">#FFFF4081</color>
-    <color name="material_pink_accent_700">#FFC51162</color>
-    <color name="material_amber_300">#FFFFD54F</color>
-    <color name="material_amber_500">#FFFFC107</color>
-    <color name="material_red_200">#FFAB91</color>
-    <color name="material_red_900">#BF360C</color>
-    <color name="material_gray_600">#ff757575</color>
-    <color name="material_gray_800">#ff424242</color>
-    <color name="material_gray_900">#ff212121</color>
-    <color name="material_black_87">#de000000</color>
-    <color name="material_black_60">#99000000</color>
-    <color name="material_black_12">#1f000000</color>
-    <color name="material_white_70">#83ffffff</color> <!-- in material 3 this has been lowered to 60% -->
-    <color name="material_white_26">#42ffffff</color>
 
-
-    <color name="seed">#00897B</color>
+    <!-- colors used by default theme (when dynamic colors are not being used) -->
     <color name="md_theme_light_primary">#006B5F</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
     <color name="md_theme_light_primaryContainer">#74F8E4</color>
