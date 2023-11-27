@@ -146,23 +146,21 @@ public class NavigationAdapter
     @Override
     public void onBindViewHolder(
             @NonNull AbstractNavigationItemViewHolder abstractHolder, final int position) {
-        if (abstractHolder instanceof NavigationHeaderViewHolder) {
-            onBindViewHolder((NavigationHeaderViewHolder) abstractHolder);
+        if (abstractHolder instanceof NavigationHeaderViewHolder navigationHeaderViewHolder) {
+            onBindViewHolder(navigationHeaderViewHolder);
             return;
         }
         final Navigable navigable = getItem(position);
-        if (abstractHolder instanceof LabelViewHolder) {
-            onBindViewHolder((LabelViewHolder) abstractHolder, (LabelWithCount) navigable);
+        if (abstractHolder instanceof LabelViewHolder labelViewHolder) {
+            onBindViewHolder(labelViewHolder, (LabelWithCount) navigable);
             return;
         }
-        if (abstractHolder instanceof AccountViewHolder) {
-            onBindViewHolder((AccountViewHolder) abstractHolder, (AccountName) navigable);
+        if (abstractHolder instanceof AccountViewHolder accountViewHolder) {
+            onBindViewHolder(accountViewHolder, (AccountName) navigable);
             return;
         }
-        if (abstractHolder instanceof AdditionalItemViewHolder) {
-            onBindViewHolder(
-                    (AdditionalItemViewHolder) abstractHolder,
-                    (AdditionalNavigationItem) navigable);
+        if (abstractHolder instanceof AdditionalItemViewHolder additionalItemViewHolder) {
+            onBindViewHolder(additionalItemViewHolder, (AdditionalNavigationItem) navigable);
             return;
         }
         throw new IllegalStateException(
@@ -174,20 +172,16 @@ public class NavigationAdapter
         @StringRes final int string;
         @DrawableRes final int icon;
         switch (item.type) {
-            case MANAGE_ACCOUNT:
-                {
-                    string = R.string.manage_accounts;
-                    icon = R.drawable.ic_manage_accounts_24dp;
-                }
-                break;
-            case ADD_ACCOUNT:
-                {
-                    string = R.string.add_another_account;
-                    icon = R.drawable.ic_add_account_24dp;
-                }
-                break;
-            default:
-                throw new IllegalStateException(String.format("Unable to draw %s", item.type));
+            case MANAGE_ACCOUNT -> {
+                string = R.string.manage_accounts;
+                icon = R.drawable.ic_manage_accounts_24dp;
+            }
+            case ADD_ACCOUNT -> {
+                string = R.string.add_another_account;
+                icon = R.drawable.ic_add_account_24dp;
+            }
+            default -> throw new IllegalStateException(
+                    String.format("Unable to draw %s", item.type));
         }
         viewHolder.binding.icon.setImageResource(icon);
         viewHolder.binding.label.setText(string);
@@ -257,8 +251,16 @@ public class NavigationAdapter
                     viewHolder.binding.icon,
                     ColorStateList.valueOf(
                             MaterialColors.getColor(
-                                    viewHolder.binding.item,
-                                    androidx.appcompat.R.attr.colorPrimary)));
+                                    viewHolder.binding.itemText,
+                                    com.google.android.material.R.attr.colorOnPrimaryContainer)));
+            viewHolder.binding.itemText.setTextColor(
+                    MaterialColors.getColor(
+                            viewHolder.binding.item,
+                            com.google.android.material.R.attr.colorOnPrimaryContainer));
+            viewHolder.binding.count.setTextColor(
+                    MaterialColors.getColor(
+                            viewHolder.binding.count,
+                            com.google.android.material.R.attr.colorOnPrimaryContainer));
         } else {
             viewHolder.binding.item.setBackgroundResource(
                     MaterialBackgrounds.getBackgroundResource(
@@ -269,6 +271,14 @@ public class NavigationAdapter
                             MaterialColors.getColor(
                                     viewHolder.binding.item,
                                     androidx.appcompat.R.attr.colorControlNormal)));
+            viewHolder.binding.itemText.setTextColor(
+                    MaterialColors.getColor(
+                            viewHolder.binding.item,
+                            com.google.android.material.R.attr.colorOnSurface));
+            viewHolder.binding.count.setTextColor(
+                    MaterialColors.getColor(
+                            viewHolder.binding.count,
+                            com.google.android.material.R.attr.colorOnSurface));
         }
     }
 
