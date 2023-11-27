@@ -21,6 +21,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,17 +39,16 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.work.WorkInfo;
+
 import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ListenableFuture;
-import java.lang.ref.WeakReference;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import rs.ltt.android.LttrsApplication;
 import rs.ltt.android.LttrsNavigationDirections;
 import rs.ltt.android.R;
@@ -68,6 +69,11 @@ import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.mua.util.KeywordLabel;
 import rs.ltt.jmap.mua.util.Label;
 
+import java.lang.ref.WeakReference;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+
 public class LttrsActivity extends AppCompatActivity
         implements ThreadModifier,
                 NavController.OnDestinationChangedListener,
@@ -85,6 +91,21 @@ public class LttrsActivity extends AppCompatActivity
     private ActivityLttrsBinding binding;
     private LttrsViewModel lttrsViewModel;
     private WeakReference<Snackbar> mostRecentSnackbar;
+
+    private final OnBackPressedCallback drawerLayoutOnBackPressedCallback =
+            new OnBackPressedCallback(false) {
+                @Override
+                public void handleOnBackPressed() {
+                    binding.drawerLayout.close();
+                }
+            };
+    private final OnBackPressedCallback accountSelectorBackPressedCallback =
+            new OnBackPressedCallback(false) {
+                @Override
+                public void handleOnBackPressed() {
+                    lttrsViewModel.setAccountSelectionVisibility(false);
+                }
+            };
 
     public static void launch(final FragmentActivity activity, final long accountId) {
         launch(activity, accountId, true);
@@ -161,6 +182,10 @@ public class LttrsActivity extends AppCompatActivity
 
         binding.drawerLayout.addDrawerListener(this);
 
+        final var backDispatcher = this.getOnBackPressedDispatcher();
+        backDispatcher.addCallback(this, this.drawerLayoutOnBackPressedCallback);
+        backDispatcher.addCallback(this, this.accountSelectorBackPressedCallback);
+
         navigationAdapter.setOnLabelSelectedListener(
                 (label, currentlySelected) -> {
                     binding.drawerLayout.closeDrawer(GravityCompat.START);
@@ -220,7 +245,14 @@ public class LttrsActivity extends AppCompatActivity
         lttrsViewModel.getSelectedLabel().observe(this, navigationAdapter::setSelectedLabel);
         lttrsViewModel
                 .isAccountSelectionVisible()
-                .observe(this, navigationAdapter::setAccountSelectionVisible);
+                .observe(
+                        this,
+                        visible -> {
+                            accountSelectorBackPressedCallback.setEnabled(
+                                    Boolean.TRUE.equals(visible));
+                            navigationAdapter.setAccountSelectionVisible(
+                                    Boolean.TRUE.equals(visible));
+                        });
         lttrsViewModel.getAccountName().observe(this, navigationAdapter::setAccountInformation);
     }
 
@@ -414,8 +446,8 @@ public class LttrsActivity extends AppCompatActivity
                                                     && snackbar.isShown()) {
                                                 LOGGER.info(
                                                         "Dismissing Move To Trash undo snackbar"
-                                                            + " prematurely because WorkInfo went"
-                                                            + " into state {}",
+                                                                + " prematurely because WorkInfo went"
+                                                                + " into state {}",
                                                         workInfo.getState());
                                                 snackbar.dismiss();
                                             }
@@ -502,19 +534,6 @@ public class LttrsActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
-        if (binding != null && binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            if (Boolean.TRUE.equals(lttrsViewModel.isAccountSelectionVisible().getValue())) {
-                lttrsViewModel.setAccountSelectionVisibility(false);
-                return;
-            }
-            binding.drawerLayout.closeDrawer(GravityCompat.START);
-            return;
-        }
-        super.onBackPressed();
-    }
-
-    @Override
     public void onDestinationChanged(
             @NonNull NavController controller,
             @NonNull NavDestination destination,
@@ -527,11 +546,14 @@ public class LttrsActivity extends AppCompatActivity
     public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
 
     @Override
-    public void onDrawerOpened(@NonNull View drawerView) {}
+    public void onDrawerOpened(@NonNull View drawerView) {
+        this.drawerLayoutOnBackPressedCallback.setEnabled(true);
+    }
 
     @Override
     public void onDrawerClosed(@NonNull View drawerView) {
-        lttrsViewModel.setAccountSelectionVisibility(false);
+        this.drawerLayoutOnBackPressedCallback.setEnabled(false);
+        this.lttrsViewModel.setAccountSelectionVisibility(false);
     }
 
     @Override

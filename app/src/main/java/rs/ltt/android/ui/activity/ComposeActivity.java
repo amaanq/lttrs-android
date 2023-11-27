@@ -17,6 +17,7 @@ package rs.ltt.android.ui.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,6 +27,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.window.OnBackInvokedCallback;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -179,6 +183,17 @@ public class ComposeActivity extends AppCompatActivity {
 
         // TODO once we handle instance state ourselves we need to call ChipDrawableSpan.reset() on
         // `to`
+
+        // finishing in here sort of defeats the purpose of OnBackPressedCallbacks; however there
+        // does not seem to be a way to passively look for the activity finishing and setting a
+        // result intent
+        getOnBackPressedDispatcher().addCallback(this,new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                saveDraft();
+                finish();
+            }
+        });
     }
 
     @Override
@@ -193,14 +208,15 @@ public class ComposeActivity extends AppCompatActivity {
     private boolean handleIntent(final Intent intent) {
         final String action = Strings.nullToEmpty(intent == null ? null : intent.getAction());
         switch (action) {
-            case Intent.ACTION_SEND:
+            case Intent.ACTION_SEND -> {
                 final Uri individualUri =
                         Objects.requireNonNull(intent).getParcelableExtra(Intent.EXTRA_STREAM);
                 if (individualUri != null) {
                     handleSendIntent(Collections.singleton(individualUri));
                 }
                 return true;
-            case Intent.ACTION_SEND_MULTIPLE:
+            }
+            case Intent.ACTION_SEND_MULTIPLE -> {
                 final ArrayList<Uri> multipleUri =
                         Objects.requireNonNull(intent)
                                 .getParcelableArrayListExtra(Intent.EXTRA_STREAM);
@@ -208,14 +224,17 @@ public class ComposeActivity extends AppCompatActivity {
                     handleSendIntent(multipleUri);
                 }
                 return true;
-            case Intent.ACTION_VIEW:
+            }
+            case Intent.ACTION_VIEW -> {
                 final Uri uri = Objects.requireNonNull(intent).getData();
                 if (uri != null) {
                     handleViewIntent(uri);
                 }
                 return true;
-            default:
+            }
+            default -> {
                 return false;
+            }
         }
     }
 
@@ -414,12 +433,6 @@ public class ComposeActivity extends AppCompatActivity {
         } else {
             return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        saveDraft();
-        super.onBackPressed();
     }
 
     private void send() {

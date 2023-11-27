@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable;
@@ -72,6 +73,14 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
     private ItemTouchHelper itemTouchHelper;
     private SelectionTracker tracker;
     private ActivityResultLauncher<Bundle> composeLauncher;
+
+    private final OnBackPressedCallback contextualToolbarOnBackPressedCallback =
+            new OnBackPressedCallback(false) {
+                @Override
+                public void handleOnBackPressed() {
+                    endActionMode();
+                }
+            };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -149,6 +158,10 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
 
         this.itemTouchHelper = new ItemTouchHelper(new QueryItemTouchHelper(this));
         this.itemTouchHelper.attachToRecyclerView(binding.threadList);
+
+        this.requireActivity()
+                .getOnBackPressedDispatcher()
+                .addCallback(getViewLifecycleOwner(), this.contextualToolbarOnBackPressedCallback);
 
         return binding.getRoot();
     }
@@ -239,12 +252,14 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
             this.binding.contextualToolbar.setTitle(String.valueOf(numSelected));
             updateContextualToolbarMenu();
             this.binding.compose.hide();
+            this.contextualToolbarOnBackPressedCallback.setEnabled(true);
         } else {
             this.binding.searchBar.collapse(
                     this.binding.contextualToolbar, this.binding.appBarLayout, skipAnimation);
             if (showComposeButton()) {
                 binding.compose.show();
             }
+            this.contextualToolbarOnBackPressedCallback.setEnabled(false);
         }
     }
 
