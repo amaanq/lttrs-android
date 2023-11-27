@@ -28,6 +28,9 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.color.MaterialColors;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -191,7 +194,8 @@ public class ThreadOverviewAdapter
         if (selected) {
             // TODO consider using tint instead of color in the drawable
             final var backgroundDrawable =
-                    ContextCompat.getDrawable(context, R.drawable.background_selected);
+                    ContextCompat.getDrawable(context, R.drawable.background_thread_overview_item_selected);
+            backgroundDrawable.setTint(MaterialColors.getColor(threadOverviewHolder.binding.threadLayout, com.google.android.material.R.attr.colorTertiaryContainer));
             threadOverviewHolder.binding.threadLayout.setBackground(backgroundDrawable);
         } else {
             threadOverviewHolder.binding.threadLayout.setBackgroundResource(

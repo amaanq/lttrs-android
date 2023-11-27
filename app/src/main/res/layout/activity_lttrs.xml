@@ -38,7 +38,8 @@
             android:layout_width="304dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            android:background="?colorSurfaceContainerHigh">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/navigation"

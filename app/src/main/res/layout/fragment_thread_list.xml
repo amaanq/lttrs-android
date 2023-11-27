@@ -80,6 +80,16 @@
             app:menu="@menu/thread_item_action_mode"
             app:navigationIcon="@drawable/ic_arrow_back_24dp" />
 
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/compose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:text="@string/compose"
+            android:visibility="gone"
+            app:icon="@drawable/ic_edit_24dp"
+            tools:visibility="visible" />
 
         <com.google.android.material.search.SearchView
             android:layout_width="match_parent"
@@ -91,16 +101,6 @@
         </com.google.android.material.search.SearchView>
 
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/compose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:text="@string/compose"
-            android:visibility="gone"
-            app:icon="@drawable/ic_edit_24dp"
-            tools:visibility="visible" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

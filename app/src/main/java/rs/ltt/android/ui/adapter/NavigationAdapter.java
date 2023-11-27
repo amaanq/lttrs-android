@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.AsyncDifferConfig;
@@ -243,10 +244,14 @@ public class NavigationAdapter
                     }
                 });
         if (same(label, this.selectedLabel)) {
-            viewHolder.binding.item.setBackgroundColor(
+            final var backgroundDrawable =
+                    ContextCompat.getDrawable(
+                            context, R.drawable.background_navigation_label_selected);
+            backgroundDrawable.setTint(
                     MaterialColors.getColor(
                             viewHolder.binding.icon,
                             com.google.android.material.R.attr.colorPrimaryContainer));
+            viewHolder.binding.item.setBackground(backgroundDrawable);
             ImageViewCompat.setImageTintList(
                     viewHolder.binding.icon,
                     ColorStateList.valueOf(

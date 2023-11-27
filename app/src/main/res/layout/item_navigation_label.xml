@@ -28,7 +28,8 @@
         android:id="@+id/item"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="?selectableItemBackground">
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/background_navigation_label_selected">
 
         <ImageView
             android:id="@+id/icon"
@@ -39,7 +40,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="32dp"
             app:role="@{label.getRole()}"
-            tools:src="@drawable/ic_archive_black_24dp" />
+            tools:src="@drawable/ic_archive_24dp" />
 
         <TextView
             android:id="@+id/item_text"
