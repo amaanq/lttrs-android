@@ -376,7 +376,7 @@ public class EmailNotification extends AbstractNotification {
         public static Tag parse(final Uri uri) {
             if (SCHEME.equals(uri.getScheme())) {
                 final String path = uri.getPath();
-                if (path.length() < 1) {
+                if (path == null || path.length() < 1) {
                     throw new IllegalArgumentException("Path not long enough to contain ID");
                 }
                 return parse(uri.getAuthority(), path.substring(1));

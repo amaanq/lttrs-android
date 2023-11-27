@@ -17,7 +17,6 @@ package rs.ltt.android.ui.activity;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,8 +26,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.window.OnBackInvokedCallback;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -187,13 +184,16 @@ public class ComposeActivity extends AppCompatActivity {
         // finishing in here sort of defeats the purpose of OnBackPressedCallbacks; however there
         // does not seem to be a way to passively look for the activity finishing and setting a
         // result intent
-        getOnBackPressedDispatcher().addCallback(this,new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                saveDraft();
-                finish();
-            }
-        });
+        getOnBackPressedDispatcher()
+                .addCallback(
+                        this,
+                        new OnBackPressedCallback(true) {
+                            @Override
+                            public void handleOnBackPressed() {
+                                saveDraft();
+                                finish();
+                            }
+                        });
     }
 
     @Override

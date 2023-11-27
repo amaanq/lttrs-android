@@ -84,7 +84,7 @@
                     android:layout_height="40dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_selected_24dp"
+                    tools:src="@drawable/ic_selected_24dp"
                     app:from="@{thread.getFrom()}" />
 
                 <!--- the tint color of this used to be fixed to yellow -->

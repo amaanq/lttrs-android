@@ -21,12 +21,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
-
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -39,16 +36,17 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.work.WorkInfo;
-
 import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ListenableFuture;
-
+import java.lang.ref.WeakReference;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.android.LttrsApplication;
 import rs.ltt.android.LttrsNavigationDirections;
 import rs.ltt.android.R;
@@ -69,11 +67,6 @@ import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.mua.util.KeywordLabel;
 import rs.ltt.jmap.mua.util.Label;
 
-import java.lang.ref.WeakReference;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-
 public class LttrsActivity extends AppCompatActivity
         implements ThreadModifier,
                 NavController.OnDestinationChangedListener,
@@ -84,9 +77,6 @@ public class LttrsActivity extends AppCompatActivity
     private static final Logger LOGGER = LoggerFactory.getLogger(LttrsActivity.class);
     private static final List<Integer> MAIN_DESTINATIONS =
             ImmutableList.of(R.id.inbox, R.id.mailbox, R.id.keyword);
-    private static final List<Integer> QUERY_DESTINATIONS =
-            ImmutableList.of(R.id.inbox, R.id.mailbox, R.id.keyword, R.id.search);
-    private static final List<Integer> FULL_SCREEN_DIALOG = ImmutableList.of(R.id.label_as);
     final NavigationAdapter navigationAdapter = new NavigationAdapter();
     private ActivityLttrsBinding binding;
     private LttrsViewModel lttrsViewModel;
@@ -305,23 +295,27 @@ public class LttrsActivity extends AppCompatActivity
         getNavController().removeOnDestinationChangedListener(this);
     }
 
-    private void configureActionBarForDestination(NavDestination destination) {
-        final ActionBar actionbar = getSupportActionBar();
-        if (actionbar == null) {
+    private void configureDrawerLayoutForDestination(@Nullable final NavDestination destination) {
+        final var drawerUnlocked =
+                destination == null || MAIN_DESTINATIONS.contains(destination.getId());
+        if (drawerUnlocked) {
+            binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        } else {
+            binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        }
+    }
+
+    public void lockDrawerLayout() {
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    public void unlockDrawerLayout() {
+        configureDrawerLayoutForDestination(getNavController().getCurrentDestination());
+        final var destination = getNavController().getCurrentDestination();
+        if (destination == null) {
             return;
         }
-        final int destinationId = destination.getId();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        @DrawableRes final int upIndicator;
-        if (MAIN_DESTINATIONS.contains(destinationId)) {
-            upIndicator = R.drawable.ic_menu_24dp;
-        } else if (FULL_SCREEN_DIALOG.contains(destinationId)) {
-            upIndicator = R.drawable.ic_close_24dp;
-        } else {
-            upIndicator = R.drawable.ic_arrow_back_24dp;
-        }
-        actionbar.setHomeAsUpIndicator(upIndicator);
-        invalidateOptionsMenu();
+        configureDrawerLayoutForDestination(destination);
     }
 
     public void onNewIntent(final Intent intent) {
@@ -332,18 +326,28 @@ public class LttrsActivity extends AppCompatActivity
     private boolean handleIntent(final Intent intent) {
         final String action = Strings.nullToEmpty(intent == null ? null : intent.getAction());
         switch (action) {
-            case Intent.ACTION_SEARCH:
+            case Intent.ACTION_SEARCH -> {
                 handleSearchIntent(Objects.requireNonNull(intent));
                 return true;
-            case Intent.ACTION_VIEW:
+            }
+            case Intent.ACTION_VIEW -> {
                 return handleViewIntent(Objects.requireNonNull(intent));
-            default:
+            }
+            default -> {
                 return false;
+            }
         }
     }
 
     private boolean handleViewIntent(final Intent intent) {
-        final EmailNotification.Tag tag = EmailNotification.Tag.parse(intent.getData());
+        if (intent == null) {
+            return false;
+        }
+        final var data = intent.getData();
+        if (data == null) {
+            return false;
+        }
+        final EmailNotification.Tag tag = EmailNotification.Tag.parse(data);
         final long accountId = intent.getLongExtra(EXTRA_ACCOUNT_ID, -1L);
         final String threadId = intent.getStringExtra(EXTRA_THREAD_ID);
         if (accountId != this.lttrsViewModel.getAccountId()) {
@@ -446,8 +450,8 @@ public class LttrsActivity extends AppCompatActivity
                                                     && snackbar.isShown()) {
                                                 LOGGER.info(
                                                         "Dismissing Move To Trash undo snackbar"
-                                                                + " prematurely because WorkInfo went"
-                                                                + " into state {}",
+                                                            + " prematurely because WorkInfo went"
+                                                            + " into state {}",
                                                         workInfo.getState());
                                                 snackbar.dismiss();
                                             }
@@ -539,7 +543,7 @@ public class LttrsActivity extends AppCompatActivity
             @NonNull NavDestination destination,
             @Nullable Bundle arguments) {
         LOGGER.debug("onDestinationChanged({})", destination.getLabel());
-        configureActionBarForDestination(destination);
+        configureDrawerLayoutForDestination(destination);
     }
 
     @Override

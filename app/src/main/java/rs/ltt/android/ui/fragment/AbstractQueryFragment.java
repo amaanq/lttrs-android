@@ -247,6 +247,7 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
 
     private void onSelectionChanged(final int numSelected, final boolean skipAnimation) {
         if (numSelected > 0) {
+            requireLttrsActivity().lockDrawerLayout();
             this.binding.searchBar.expand(
                     this.binding.contextualToolbar, this.binding.appBarLayout, skipAnimation);
             this.binding.contextualToolbar.setTitle(String.valueOf(numSelected));
@@ -254,6 +255,7 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
             this.binding.compose.hide();
             this.contextualToolbarOnBackPressedCallback.setEnabled(true);
         } else {
+            requireLttrsActivity().unlockDrawerLayout();
             this.binding.searchBar.collapse(
                     this.binding.contextualToolbar, this.binding.appBarLayout, skipAnimation);
             if (showComposeButton()) {

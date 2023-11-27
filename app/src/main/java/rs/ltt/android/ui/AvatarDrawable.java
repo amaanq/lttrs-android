@@ -73,7 +73,7 @@ public class AvatarDrawable extends ColorDrawable {
         textPaint.setColor(
                 MaterialColors.getColor(
                         context,
-                        com.google.android.material.R.attr.colorOnPrimary,
+                        com.google.android.material.R.attr.colorSurface,
                         "This view has no colorOnPrimary"));
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setAntiAlias(true);

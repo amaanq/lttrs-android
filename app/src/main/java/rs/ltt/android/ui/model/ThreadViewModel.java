@@ -285,7 +285,8 @@ public class ThreadViewModel extends AbstractAttachmentViewModel {
         return mailbox;
     }
 
-    public void waitForEdit(UUID uuid) {
+    public void waitForEdit(final UUID uuid) {
+        LOGGER.info("waiting for email edit to complete");
         final WorkManager workManager = WorkManager.getInstance(getApplication());
         final LiveData<WorkInfo> liveData = workManager.getWorkInfoByIdLiveData(uuid);
         threadViewRedirect.addSource(

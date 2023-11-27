@@ -19,7 +19,7 @@
     android:viewportWidth="24.0"
     android:viewportHeight="24.0">
     <path
-        android:fillColor="?attr/colorAccent"
+        android:fillColor="?attr/colorTertiary"
         android:pathData="M12,12m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0" />
     <group
         android:scaleX="0.7"
@@ -27,7 +27,7 @@
         android:translateX="3.8"
         android:translateY="3.8">
         <path
-            android:fillColor="#FFffffff"
+            android:fillColor="?colorSurface"
             android:pathData="M9,16.2L4.8,12l-1.4,1.4L9,19 21,7l-1.4,-1.4L9,16.2z" />
     </group>
 </vector>

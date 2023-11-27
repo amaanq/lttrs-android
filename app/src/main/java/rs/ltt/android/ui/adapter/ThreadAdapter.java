@@ -57,7 +57,7 @@ public class ThreadAdapter
         extends RecyclerView.Adapter<ThreadAdapter.AbstractThreadItemViewHolder> {
 
     private static final DiffUtil.ItemCallback<EmailWithBodies> ITEM_CALLBACK =
-            new DiffUtil.ItemCallback<EmailWithBodies>() {
+            new DiffUtil.ItemCallback<>() {
 
                 @Override
                 public boolean areItemsTheSame(
@@ -191,11 +191,16 @@ public class ThreadAdapter
     private void onBindViewHolder(
             @NonNull final ThreadItemViewHolder itemViewHolder, final int position) {
         final EmailWithBodies email = mDiffer.getItem(position - 1);
+        this.onBindViewHolder(itemViewHolder, email);
         final boolean lastEmail = mDiffer.getItemCount() == position;
+        itemViewHolder.binding.divider.setVisibility(lastEmail ? View.GONE : View.VISIBLE);
+    }
+
+    private void onBindViewHolder(
+            @NonNull final ThreadItemViewHolder itemViewHolder, final EmailWithBodies email) {
         final boolean expanded = email != null && expandedItems.contains(email.id);
         itemViewHolder.binding.setExpanded(expanded);
         itemViewHolder.binding.setEmail(email);
-        itemViewHolder.binding.divider.setVisibility(lastEmail ? View.GONE : View.VISIBLE);
         if (expanded) {
             Touch.expandTouchArea(itemViewHolder.binding.moreOptions, 8);
         } else {
@@ -208,7 +213,11 @@ public class ThreadAdapter
                     } else {
                         expandedItems.add(email.id);
                     }
-                    notifyItemChanged(position);
+                    // we previously called `notifyItemChanged(position)` here; however when
+                    // an item gets removed above this item; this view, and therefor this listener
+                    // does not get updated; we could figure out our updated position and call
+                    // notifyItemChanged(position) or we just refresh the view in place
+                    onBindViewHolder(itemViewHolder, email);
                 });
         itemViewHolder.binding.edit.setOnClickListener(
                 v -> onComposeActionTriggered.onEditDraft(email.id));
@@ -330,8 +339,8 @@ public class ThreadAdapter
         mDiffer.submitList(pagedList, runnable);
     }
 
-    public void expand(Collection<ExpandedPosition> positions) {
-        for (ExpandedPosition expandedPosition : positions) {
+    public void expand(final Collection<ExpandedPosition> positions) {
+        for (final ExpandedPosition expandedPosition : positions) {
             this.expandedItems.add(expandedPosition.emailId);
         }
     }
