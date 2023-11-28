@@ -37,9 +37,7 @@
             android:layout_margin="16dp"
             android:contentDescription="@string/add_another_account"
             android:src="@drawable/ic_add_account_24dp"
-            android:visibility="visible"
-            app:backgroundTint="?attr/colorPrimary"
-            app:tint="?attr/colorOnPrimary" />
+            android:visibility="visible" />
 
     </FrameLayout>
 </layout>

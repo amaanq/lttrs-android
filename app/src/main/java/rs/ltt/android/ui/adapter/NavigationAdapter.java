@@ -249,18 +249,18 @@ public class NavigationAdapter
                             context, R.drawable.background_navigation_label_selected);
             backgroundDrawable.setTint(
                     MaterialColors.getColor(
-                            viewHolder.binding.icon,
+                            viewHolder.binding.item,
                             com.google.android.material.R.attr.colorPrimaryContainer));
             viewHolder.binding.item.setBackground(backgroundDrawable);
             ImageViewCompat.setImageTintList(
                     viewHolder.binding.icon,
                     ColorStateList.valueOf(
                             MaterialColors.getColor(
-                                    viewHolder.binding.itemText,
+                                    viewHolder.binding.icon,
                                     com.google.android.material.R.attr.colorOnPrimaryContainer)));
             viewHolder.binding.itemText.setTextColor(
                     MaterialColors.getColor(
-                            viewHolder.binding.item,
+                            viewHolder.binding.itemText,
                             com.google.android.material.R.attr.colorOnPrimaryContainer));
             viewHolder.binding.count.setTextColor(
                     MaterialColors.getColor(

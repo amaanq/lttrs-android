@@ -19,10 +19,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.activity.ComponentActivity;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import rs.ltt.android.R;
 import rs.ltt.android.SetupNavigationDirections;
 import rs.ltt.android.databinding.ActivitySetupBinding;
@@ -34,8 +37,20 @@ import rs.ltt.jmap.mua.util.MailToUri;
 
 public class SetupActivity extends AppCompatActivity {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SetupActivity.class);
+
     public static String EXTRA_NEXT_ACTION = "rs.ltt.android.extras.next-action";
     private SetupViewModel setupViewModel;
+
+    private final OnBackPressedCallback loadingBackPressedCallback =
+            new OnBackPressedCallback(false) {
+                @Override
+                public void handleOnBackPressed() {
+                    if (setupViewModel.cancel()) {
+                        LOGGER.info("Cancelled current tasks");
+                    }
+                }
+            };
 
     public static void launch(final ComponentActivity activity) {
         final Intent intent = new Intent(activity, SetupActivity.class);
@@ -52,6 +67,14 @@ public class SetupActivity extends AppCompatActivity {
         this.setupViewModel = viewModelProvider.get(SetupViewModel.class);
         this.setupViewModel.getRedirection().observe(this, this::onRedirectionEvent);
         this.setupViewModel.getWarningMessage().observe(this, this::onWarningMessage);
+        this.getOnBackPressedDispatcher().addCallback(this, this.loadingBackPressedCallback);
+        this.setupViewModel
+                .isLoading()
+                .observe(
+                        this,
+                        loading ->
+                                this.loadingBackPressedCallback.setEnabled(
+                                        Boolean.TRUE.equals(loading)));
     }
 
     private void onWarningMessage(Event<String> event) {
@@ -63,31 +86,17 @@ public class SetupActivity extends AppCompatActivity {
             final NavController navController = getNavController();
             final SetupViewModel.Target target = targetEvent.consume();
             switch (target) {
-                case ENTER_PASSWORD:
-                    navController.navigate(SetupNavigationDirections.enterPassword());
-                    break;
-                case ENTER_URL:
-                    navController.navigate(SetupNavigationDirections.enterSessionResource());
-                    break;
-                case DONE:
-                    redirectToLttrs(this.setupViewModel.getPrimaryAccountId());
-                    break;
-                case IMPORT_PRIVATE_KEY:
-                    navController.navigate(SetupNavigationDirections.importPrivateKey());
-                    break;
-                default:
-                    throw new IllegalStateException(
-                            String.format("Unable to navigate to target %s", target));
+                case ENTER_PASSWORD -> navController.navigate(
+                        SetupNavigationDirections.enterPassword());
+                case ENTER_URL -> navController.navigate(
+                        SetupNavigationDirections.enterSessionResource());
+                case DONE -> redirectToLttrs(this.setupViewModel.getPrimaryAccountId());
+                case IMPORT_PRIVATE_KEY -> navController.navigate(
+                        SetupNavigationDirections.importPrivateKey());
+                default -> throw new IllegalStateException(
+                        String.format("Unable to navigate to target %s", target));
             }
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (this.setupViewModel.cancel()) {
-            return;
-        }
-        super.onBackPressed();
     }
 
     private NavController getNavController() {

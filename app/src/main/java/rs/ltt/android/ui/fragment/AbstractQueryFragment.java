@@ -34,8 +34,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.search.SearchView;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -65,7 +67,8 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                 ThreadOverviewAdapter.OnThreadClicked,
                 QueryItemTouchHelper.OnQueryItemSwipe,
                 OnSelectionToggled,
-                ThreadOverviewAdapter.OnEmptyMailboxActionClicked {
+                ThreadOverviewAdapter.OnEmptyMailboxActionClicked,
+                SearchView.TransitionListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQueryFragment.class);
     protected FragmentThreadListBinding binding;
@@ -79,6 +82,13 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                 @Override
                 public void handleOnBackPressed() {
                     endActionMode();
+                }
+            };
+    private final OnBackPressedCallback searchViewOnBackPressedCallback =
+            new OnBackPressedCallback(false) {
+                @Override
+                public void handleOnBackPressed() {
+                    binding.searchView.hide();
                 }
             };
 
@@ -159,9 +169,13 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
         this.itemTouchHelper = new ItemTouchHelper(new QueryItemTouchHelper(this));
         this.itemTouchHelper.attachToRecyclerView(binding.threadList);
 
-        this.requireActivity()
-                .getOnBackPressedDispatcher()
-                .addCallback(getViewLifecycleOwner(), this.contextualToolbarOnBackPressedCallback);
+        this.binding.searchView.addTransitionListener(this);
+
+        final var dispatcher = this.requireActivity().getOnBackPressedDispatcher();
+
+        dispatcher.addCallback(
+                getViewLifecycleOwner(), this.contextualToolbarOnBackPressedCallback);
+        dispatcher.addCallback(getViewLifecycleOwner(), this.searchViewOnBackPressedCallback);
 
         return binding.getRoot();
     }
@@ -458,4 +472,21 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
     abstract void removeLabel(Collection<String> threadIds);
 
     protected abstract ActionModeMenuConfiguration.QueryType getQueryType();
+
+    @Override
+    public void onStateChanged(
+            @NonNull SearchView searchView,
+            @NonNull SearchView.TransitionState previousState,
+            @NonNull SearchView.TransitionState newState) {
+        final boolean isShowing =
+                Arrays.asList(SearchView.TransitionState.SHOWING, SearchView.TransitionState.SHOWN)
+                        .contains(newState);
+        if (isShowing) {
+            this.searchViewOnBackPressedCallback.setEnabled(true);
+            requireLttrsActivity().lockDrawerLayout();
+        } else {
+            this.searchViewOnBackPressedCallback.setEnabled(false);
+            requireLttrsActivity().unlockDrawerLayout();
+        }
+    }
 }
