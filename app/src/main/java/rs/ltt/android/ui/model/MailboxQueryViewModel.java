@@ -25,6 +25,7 @@ import rs.ltt.android.entity.MailboxOverviewItem;
 import rs.ltt.android.entity.QueryInfo;
 import rs.ltt.android.ui.EmptyMailboxAction;
 import rs.ltt.jmap.common.entity.query.EmailQuery;
+import rs.ltt.jmap.mua.util.LabelWithCount;
 import rs.ltt.jmap.mua.util.StandardQueries;
 
 public class MailboxQueryViewModel extends AbstractQueryViewModel {
@@ -87,6 +88,11 @@ public class MailboxQueryViewModel extends AbstractQueryViewModel {
         } else {
             return new QueryInfo(queryRepository.getAccountId(), QueryInfo.Type.MAILBOX, mailboxId);
         }
+    }
+
+    @Override
+    public LiveData<LabelWithCount> getLabelWithCount() {
+        return Transformations.map(this.mailbox, m -> (LabelWithCount) m);
     }
 
     public static class Factory implements ViewModelProvider.Factory {

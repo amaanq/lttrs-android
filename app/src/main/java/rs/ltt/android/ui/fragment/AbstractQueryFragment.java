@@ -54,12 +54,14 @@ import rs.ltt.android.ui.ItemAnimators;
 import rs.ltt.android.ui.QueryItemTouchHelper;
 import rs.ltt.android.ui.RecyclerViews;
 import rs.ltt.android.ui.SelectionTracker;
+import rs.ltt.android.ui.Translations;
 import rs.ltt.android.ui.activity.ComposeActivity;
 import rs.ltt.android.ui.activity.result.contract.ComposeContract;
 import rs.ltt.android.ui.adapter.OnFlaggedToggled;
 import rs.ltt.android.ui.adapter.OnSelectionToggled;
 import rs.ltt.android.ui.adapter.ThreadOverviewAdapter;
 import rs.ltt.android.ui.model.AbstractQueryViewModel;
+import rs.ltt.android.ui.model.SearchQueryViewModel;
 import rs.ltt.jmap.mua.util.LabelWithCount;
 
 public abstract class AbstractQueryFragment extends AbstractLttrsFragment
@@ -177,6 +179,10 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                 getViewLifecycleOwner(), this.contextualToolbarOnBackPressedCallback);
         dispatcher.addCallback(getViewLifecycleOwner(), this.searchViewOnBackPressedCallback);
 
+        this.getQueryViewModel()
+                .getLabelWithCount()
+                .observe(getViewLifecycleOwner(), this::onLabelOpened);
+
         return binding.getRoot();
     }
 
@@ -279,10 +285,14 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
         }
     }
 
-    void onLabelOpened(final LabelWithCount label) {
+    private void onLabelOpened(final LabelWithCount label) {
         getLttrsViewModel().setSelectedLabel(label);
-        /*getLttrsViewModel()
-        .setActivityTitle(Translations.asHumanReadableName(requireContext(), label));*/
+        if (label instanceof SearchQueryViewModel.SearchLabel) {
+            this.threadOverviewAdapter.setTitle(getString(R.string.results_in_email));
+        } else {
+            this.threadOverviewAdapter.setTitle(
+                    Translations.asHumanReadableName(requireContext(), label));
+        }
     }
 
     @Override

@@ -48,9 +48,8 @@ public class KeywordQueryFragment extends AbstractQueryFragment {
                         new KeywordQueryViewModel.Factory(
                                 requireActivity().getApplication(),
                                 getLttrsViewModel().getAccountId(),
-                                keywordLabel.getKeyword()));
+                                keywordLabel));
         this.keywordQueryViewModel = viewModelProvider.get(KeywordQueryViewModel.class);
-        onLabelOpened(keywordLabel);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

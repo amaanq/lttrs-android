@@ -32,6 +32,7 @@ import rs.ltt.android.entity.ThreadOverviewItem;
 import rs.ltt.android.repository.QueryRepository;
 import rs.ltt.android.ui.EmptyMailboxAction;
 import rs.ltt.jmap.common.entity.query.EmailQuery;
+import rs.ltt.jmap.mua.util.LabelWithCount;
 
 public abstract class AbstractQueryViewModel extends AndroidViewModel {
 
@@ -105,4 +106,6 @@ public abstract class AbstractQueryViewModel extends AndroidViewModel {
     protected abstract LiveData<EmailQuery> getQuery();
 
     public abstract QueryInfo getQueryInfo();
+
+    public abstract LiveData<LabelWithCount> getLabelWithCount();
 }

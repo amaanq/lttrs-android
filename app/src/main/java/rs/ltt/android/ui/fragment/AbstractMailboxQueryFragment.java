@@ -53,21 +53,6 @@ public abstract class AbstractMailboxQueryFragment extends AbstractQueryFragment
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mailboxQueryViewModel
-                .getMailbox()
-                .observe(
-                        getViewLifecycleOwner(),
-                        mailboxOverviewItem -> {
-                            if (mailboxOverviewItem == null) {
-                                return;
-                            }
-                            onLabelOpened(mailboxOverviewItem);
-                        });
-    }
-
-    @Override
     protected QueryItemTouchHelper.Swipable onQueryItemSwipe(ThreadOverviewItem item) {
         final MailboxOverviewItem mailbox =
                 mailboxQueryViewModel != null

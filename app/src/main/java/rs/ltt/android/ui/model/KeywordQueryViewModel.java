@@ -18,32 +18,38 @@ package rs.ltt.android.ui.model;
 import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import rs.ltt.android.entity.QueryInfo;
 import rs.ltt.jmap.common.entity.query.EmailQuery;
+import rs.ltt.jmap.mua.util.KeywordLabel;
+import rs.ltt.jmap.mua.util.LabelWithCount;
 import rs.ltt.jmap.mua.util.StandardQueries;
 
 public class KeywordQueryViewModel extends AbstractQueryViewModel {
 
     private final LiveData<EmailQuery> emailQueryLiveData;
 
-    private final String keyword;
+    private final KeywordLabel keywordLabel;
 
     private KeywordQueryViewModel(
-            final Application application, final long accountId, @NonNull final String keyword) {
+            final Application application,
+            final long accountId,
+            @NonNull final KeywordLabel keywordLabel) {
         super(application, accountId);
-        this.keyword = keyword;
+        this.keywordLabel = keywordLabel;
         this.emailQueryLiveData =
                 Transformations.map(
                         queryRepository.getTrashAndJunk(),
-                        trashAndJunk -> StandardQueries.keyword(keyword, trashAndJunk));
+                        trashAndJunk ->
+                                StandardQueries.keyword(keywordLabel.getKeyword(), trashAndJunk));
         init();
     }
 
     public String getKeyword() {
-        return this.keyword;
+        return this.keywordLabel.getKeyword();
     }
 
     @Override
@@ -53,17 +59,25 @@ public class KeywordQueryViewModel extends AbstractQueryViewModel {
 
     @Override
     public QueryInfo getQueryInfo() {
-        return new QueryInfo(queryRepository.getAccountId(), QueryInfo.Type.KEYWORD, keyword);
+        return new QueryInfo(
+                queryRepository.getAccountId(), QueryInfo.Type.KEYWORD, keywordLabel.getKeyword());
+    }
+
+    @Override
+    public LiveData<LabelWithCount> getLabelWithCount() {
+        return new MutableLiveData<>(keywordLabel);
     }
 
     public static class Factory implements ViewModelProvider.Factory {
 
         private final Application application;
         private final long accountId;
-        private final String keyword;
+        private final KeywordLabel keyword;
 
         public Factory(
-                @NonNull Application application, final long accountId, @NonNull String keyword) {
+                @NonNull Application application,
+                final long accountId,
+                @NonNull KeywordLabel keyword) {
             this.application = application;
             this.accountId = accountId;
             this.keyword = keyword;

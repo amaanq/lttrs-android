@@ -89,7 +89,7 @@ public class ThreadAdapter
     // https://developer.android.com/reference/android/arch/paging/AsyncPagedListDiffer
     private final AsyncPagedListDiffer<EmailWithBodies> mDiffer =
             new AsyncPagedListDiffer<>(
-                    new OffsetListUpdateCallback<>(this, 1),
+                    new OffsetListUpdateCallback<>(this, 1, 0),
                     new AsyncDifferConfig.Builder<>(ITEM_CALLBACK).build());
     private SubjectWithImportance subjectWithImportance;
     private List<MailboxWithRoleAndName> labels = Collections.emptyList();

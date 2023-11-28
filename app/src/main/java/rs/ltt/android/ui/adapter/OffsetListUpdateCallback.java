@@ -25,36 +25,44 @@ public class OffsetListUpdateCallback<VH extends RecyclerView.ViewHolder>
         implements ListUpdateCallback {
 
     private final AdapterListUpdateCallback adapterCallback;
-    private final int offset;
-    private boolean isOffsetVisible = true;
+
+    private final int fixedOffset;
+    private final int variableOffset;
+    private boolean isVariableOffsetVisible = true;
 
     public OffsetListUpdateCallback(
             final RecyclerView.Adapter<VH> adapter,
-            final int offset,
-            final boolean isOffsetVisible) {
-        this(adapter, offset);
-        this.isOffsetVisible = isOffsetVisible;
+            final int fixedOffset,
+            final int variableOffset,
+            final boolean isVariableOffsetVisible) {
+        this(adapter, fixedOffset, variableOffset);
+        this.isVariableOffsetVisible = isVariableOffsetVisible;
     }
 
-    public OffsetListUpdateCallback(final RecyclerView.Adapter<VH> adapter, final int offset) {
-        Preconditions.checkArgument(offset >= 0, "Offset can not be negative");
+    public OffsetListUpdateCallback(
+            final RecyclerView.Adapter<VH> adapter,
+            final int fixedOffset,
+            final int variableOffset) {
+        Preconditions.checkArgument(fixedOffset >= 0, "fixed offset can not be negative");
+        Preconditions.checkArgument(variableOffset >= 0, "variable offset can not be negative");
         this.adapterCallback = new AdapterListUpdateCallback(adapter);
-        this.offset = offset;
+        this.fixedOffset = fixedOffset;
+        this.variableOffset = variableOffset;
     }
 
-    public boolean isOffsetVisible() {
-        return this.isOffsetVisible;
+    public boolean isVariableOffsetVisible() {
+        return this.isVariableOffsetVisible;
     }
 
-    public void setOffsetVisible(final boolean offsetVisible) {
-        if (this.isOffsetVisible == offsetVisible || offset == 0) {
+    public void setVariableOffsetVisible(final boolean variableOffsetVisible) {
+        if (this.isVariableOffsetVisible == variableOffsetVisible || variableOffset == 0) {
             return;
         }
-        this.isOffsetVisible = offsetVisible;
-        if (offsetVisible) {
-            adapterCallback.onInserted(0, offset);
+        this.isVariableOffsetVisible = variableOffsetVisible;
+        if (variableOffsetVisible) {
+            adapterCallback.onInserted(fixedOffset, variableOffset);
         } else {
-            adapterCallback.onRemoved(0, offset);
+            adapterCallback.onRemoved(fixedOffset, variableOffset);
         }
     }
 
@@ -79,6 +87,10 @@ public class OffsetListUpdateCallback<VH extends RecyclerView.ViewHolder>
     }
 
     public int getCurrentOffset() {
-        return this.isOffsetVisible ? this.offset : 0;
+        return (this.isVariableOffsetVisible ? this.variableOffset : 0) + fixedOffset;
+    }
+
+    public int getFixedOffset() {
+        return this.fixedOffset;
     }
 }

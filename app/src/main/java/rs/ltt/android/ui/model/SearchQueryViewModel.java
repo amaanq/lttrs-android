@@ -29,6 +29,7 @@ import rs.ltt.android.entity.QueryInfo;
 import rs.ltt.android.entity.ThreadOverviewItem;
 import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.common.entity.query.EmailQuery;
+import rs.ltt.jmap.mua.util.LabelWithCount;
 import rs.ltt.jmap.mua.util.MailboxUtil;
 import rs.ltt.jmap.mua.util.StandardQueries;
 
@@ -63,6 +64,11 @@ public class SearchQueryViewModel extends AbstractQueryViewModel {
     public QueryInfo getQueryInfo() {
         return new QueryInfo(
                 queryRepository.getAccountId(), QueryInfo.Type.SEARCH, this.searchTerm);
+    }
+
+    @Override
+    public LiveData<LabelWithCount> getLabelWithCount() {
+        return new MutableLiveData<>(new SearchLabel());
     }
 
     public boolean isInInbox(ThreadOverviewItem item) {
@@ -103,6 +109,26 @@ public class SearchQueryViewModel extends AbstractQueryViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             return modelClass.cast(new SearchQueryViewModel(application, accountId, query));
+        }
+    }
+
+    public static class SearchLabel implements LabelWithCount {
+
+        private SearchLabel() {}
+
+        @Override
+        public Integer getCount() {
+            return null;
+        }
+
+        @Override
+        public String getName() {
+            throw new IllegalStateException("This class is only used to identify searches");
+        }
+
+        @Override
+        public Role getRole() {
+            throw new IllegalStateException("This class is only used to identify searches");
         }
     }
 }

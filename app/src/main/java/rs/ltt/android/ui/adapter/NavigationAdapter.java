@@ -88,7 +88,7 @@ public class NavigationAdapter
 
     private final AsyncListDiffer<Navigable> mDiffer =
             new AsyncListDiffer<>(
-                    new OffsetListUpdateCallback<>(this, 1),
+                    new OffsetListUpdateCallback<>(this, 1, 0),
                     new AsyncDifferConfig.Builder<>(ITEM_CALLBACK).build());
 
     // current state
