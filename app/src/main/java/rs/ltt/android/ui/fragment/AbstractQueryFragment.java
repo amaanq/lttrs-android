@@ -52,6 +52,7 @@ import rs.ltt.android.ui.ActionModeMenuConfiguration;
 import rs.ltt.android.ui.EmptyMailboxAction;
 import rs.ltt.android.ui.ExtendedFabSizeChanger;
 import rs.ltt.android.ui.ItemAnimators;
+import rs.ltt.android.ui.LiveDataTextWatcher;
 import rs.ltt.android.ui.QueryItemTouchHelper;
 import rs.ltt.android.ui.RecyclerViews;
 import rs.ltt.android.ui.SelectionTracker;
@@ -60,6 +61,7 @@ import rs.ltt.android.ui.activity.ComposeActivity;
 import rs.ltt.android.ui.activity.result.contract.ComposeContract;
 import rs.ltt.android.ui.adapter.OnFlaggedToggled;
 import rs.ltt.android.ui.adapter.OnSelectionToggled;
+import rs.ltt.android.ui.adapter.SearchSuggestionAdapter;
 import rs.ltt.android.ui.adapter.ThreadOverviewAdapter;
 import rs.ltt.android.ui.model.AbstractQueryViewModel;
 import rs.ltt.android.ui.model.SearchQueryViewModel;
@@ -80,6 +82,8 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
     private ItemTouchHelper itemTouchHelper;
     private SelectionTracker tracker;
     private ActivityResultLauncher<Bundle> composeLauncher;
+
+    private SearchSuggestionAdapter searchSuggestionAdapter;
 
     private final OnBackPressedCallback contextualToolbarOnBackPressedCallback =
             new OnBackPressedCallback(false) {
@@ -182,6 +186,20 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                             binding.searchView.setVisible(false);
                             return executeSearch(query);
                         });
+        this.searchSuggestionAdapter = new SearchSuggestionAdapter();
+        this.searchSuggestionAdapter.setOnSearchSuggestionClicked(
+                suggestion -> {
+                    executeSearch(suggestion.value);
+                });
+        this.binding.searchSuggestionList.setAdapter(this.searchSuggestionAdapter);
+        viewModel
+                .getSearchSuggestions()
+                .observe(getViewLifecycleOwner(), searchSuggestionAdapter::submitList);
+        this.binding
+                .searchView
+                .getEditText()
+                .addTextChangedListener(
+                        new LiveDataTextWatcher(viewModel.getSearchQueryLiveData()));
 
         final var dispatcher = this.requireActivity().getOnBackPressedDispatcher();
 
@@ -229,6 +247,7 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                 getNavController().popBackStack();
             }
         } else {
+            getLttrsViewModel().insertSearchSuggestion(query);
             getNavController().navigate(LttrsNavigationDirections.actionSearch(query));
         }
         return false;
@@ -540,9 +559,11 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                 Arrays.asList(SearchView.TransitionState.SHOWING, SearchView.TransitionState.SHOWN)
                         .contains(newState);
         if (isShowing) {
+            this.getQueryViewModel().setSearchEnabled(true);
             this.searchViewOnBackPressedCallback.setEnabled(true);
-            requireLttrsActivity().lockDrawerLayout();
+            this.requireLttrsActivity().lockDrawerLayout();
         } else {
+            this.getQueryViewModel().setSearchEnabled(false);
             this.searchViewOnBackPressedCallback.setEnabled(false);
             requireLttrsActivity().unlockDrawerLayout();
         }

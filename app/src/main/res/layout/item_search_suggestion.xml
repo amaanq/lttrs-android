@@ -1,74 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@android:id/icon1"
-        style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown.Icon1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:visibility="invisible" />
+    <data>
 
-    <ImageView
-        android:id="@+id/edit_query"
-        style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown.Query"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:background="?attr/selectableItemBackground"
-        android:scaleType="centerInside"
-        android:visibility="gone" />
+        <variable
+            name="suggestion"
+            type="rs.ltt.android.entity.SearchSuggestion" />
+    </data>
 
-    <ImageView
-        android:id="@id/android:icon2"
-        style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown.Icon2"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:scaleType="centerInside"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@android:id/text2"
-        style="?android:attr/dropDownItemStyle"
-        android:layout_width="match_parent"
-        android:layout_height="29dp"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_alignParentBottom="true"
-        android:gravity="top"
-        android:maxLines="1"
-        android:paddingBottom="4dp"
-        android:textColor="?android:textColorSecondary"
-        android:textSize="12sp"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@android:id/text1"
-        style="?android:attr/dropDownItemStyle"
+    <RelativeLayout
+        android:id="@+id/wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@android:id/text2"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="24dp"
-        android:layout_toEndOf="@android:id/icon1"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:scrollHorizontally="false"
-        android:textColor="?android:attr/textColorSecondary"
-        android:textSize="16sp" />
+        android:minHeight="48dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        android:background="?selectableItemBackground">
 
-    <View
-        android:id="@+id/suggestion_divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_height"
-        android:background="@drawable/background_divider"
-        android:visibility="gone" />
-</RelativeLayout>
+        <ImageView
+            android:src="@{suggestion}"
+            android:id="@+id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            tools:src="@drawable/ic_manage_search_24dp" />
+
+        <TextView
+            android:id="@+id/search_suggestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16sp"
+            android:layout_toEndOf="@+id/icon"
+            android:maxLines="2"
+            android:text="@{suggestion}"
+            android:textAppearance="?textAppearanceBodyMedium"
+            tools:text="@string/search_for_x_in_email" />
+    </RelativeLayout>
+</layout>

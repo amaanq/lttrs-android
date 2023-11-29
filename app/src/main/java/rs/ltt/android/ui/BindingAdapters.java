@@ -56,6 +56,7 @@ import rs.ltt.android.R;
 import rs.ltt.android.entity.From;
 import rs.ltt.android.entity.IdentityWithNameAndEmail;
 import rs.ltt.android.entity.Preview;
+import rs.ltt.android.entity.SearchSuggestion;
 import rs.ltt.android.entity.Subject;
 import rs.ltt.android.entity.SubjectWithImportance;
 import rs.ltt.android.util.ConsistentColorGeneration;
@@ -187,6 +188,34 @@ public class BindingAdapters {
                     spannable.length(),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             textView.setText(spannable);
+        }
+    }
+
+    @BindingAdapter("android:text")
+    public static void setText(final TextView textView, final SearchSuggestion suggestion) {
+        if (suggestion == null) {
+            return;
+        }
+        switch (suggestion.type) {
+            case SEARCH_IN_EMAIL -> textView.setText(
+                    textView.getContext()
+                            .getString(R.string.search_for_x_in_email, suggestion.value));
+            case CONTACT -> textView.setText(suggestion.value);
+            default -> throw new IllegalStateException(
+                    String.format("No implementation for %s", suggestion.type));
+        }
+    }
+
+    @BindingAdapter("android:src")
+    public static void setIcon(final ImageView imageView, final SearchSuggestion suggestion) {
+        if (suggestion == null) {
+            return;
+        }
+        switch (suggestion.type) {
+            case SEARCH_IN_EMAIL -> imageView.setImageResource(R.drawable.ic_manage_search_24dp);
+            case CONTACT -> imageView.setImageResource(R.drawable.ic_person_24dp);
+            default -> throw new IllegalStateException(
+                    String.format("No implementation for %s", suggestion.type));
         }
     }
 

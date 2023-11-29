@@ -15,7 +15,7 @@ import rs.ltt.android.entity.AccountName;
 public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountViewHolder> {
 
     private static final DiffUtil.ItemCallback<AccountName> DIFF_ITEM_CALLBACK =
-            new DiffUtil.ItemCallback<AccountName>() {
+            new DiffUtil.ItemCallback<>() {
                 @Override
                 public boolean areItemsTheSame(
                         @NonNull AccountName oldItem, @NonNull AccountName newItem) {

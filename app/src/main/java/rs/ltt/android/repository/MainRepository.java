@@ -18,9 +18,12 @@ package rs.ltt.android.repository;
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 import androidx.work.WorkManager;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
@@ -41,6 +44,7 @@ import rs.ltt.android.database.LttrsDatabase;
 import rs.ltt.android.entity.AccountName;
 import rs.ltt.android.entity.AccountWithCredentials;
 import rs.ltt.android.entity.AutocryptSetupMessage;
+import rs.ltt.android.entity.SearchSuggestion;
 import rs.ltt.android.entity.SearchSuggestionEntity;
 import rs.ltt.android.push.PushManager;
 import rs.ltt.android.service.EventMonitorService;
@@ -73,6 +77,27 @@ public class MainRepository {
     public void insertSearchSuggestion(final String term) {
         IO_EXECUTOR.execute(
                 () -> appDatabase.searchSuggestionDao().insert(SearchSuggestionEntity.of(term)));
+    }
+
+    public LiveData<List<SearchSuggestion>> getSearchSuggestions(final String term) {
+        return Transformations.map(
+                appDatabase.searchSuggestionDao().getSearchSuggestions(String.format("%s%%", term)),
+                suggestions -> {
+                    final var previousSearches =
+                            Lists.transform(
+                                    suggestions,
+                                    query ->
+                                            new SearchSuggestion(
+                                                    SearchSuggestion.Type.SEARCH_IN_EMAIL, query));
+
+                    if (previousSearches.size() >= 1 || term.trim().isEmpty()) {
+                        return ImmutableList.copyOf(previousSearches);
+                    } else {
+                        return ImmutableList.of(
+                                new SearchSuggestion(
+                                        SearchSuggestion.Type.SEARCH_IN_EMAIL, term.trim()));
+                    }
+                });
     }
 
     public ListenableFuture<InsertOperation> insertAccountDiscoverSetupMessage(

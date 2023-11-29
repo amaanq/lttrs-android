@@ -23,12 +23,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.paging.PagedList;
 import com.google.common.util.concurrent.ListenableFuture;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
 import rs.ltt.android.entity.MailboxWithRoleAndName;
 import rs.ltt.android.entity.QueryInfo;
+import rs.ltt.android.entity.SearchSuggestion;
 import rs.ltt.android.entity.ThreadOverviewItem;
+import rs.ltt.android.repository.MainRepository;
 import rs.ltt.android.repository.QueryRepository;
 import rs.ltt.android.ui.EmptyMailboxAction;
 import rs.ltt.jmap.common.entity.query.EmailQuery;
@@ -43,10 +47,27 @@ public abstract class AbstractQueryViewModel extends AndroidViewModel {
     private LiveData<Boolean> refreshing;
     private LiveData<Boolean> runningPagingRequest;
 
+    private final MutableLiveData<String> searchQueryLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> searchEnabled = new MutableLiveData<>();
+
+    private final LiveData<List<SearchSuggestion>> searchSuggestion;
+
     AbstractQueryViewModel(@NonNull Application application, final long accountId) {
         super(application);
+        final MainRepository mainRepository = new MainRepository(application);
         this.queryRepository = new QueryRepository(application, accountId);
         this.important = this.queryRepository.getImportant();
+        this.searchSuggestion =
+                Transformations.switchMap(
+                        searchEnabled,
+                        enabled -> {
+                            if (Boolean.TRUE.equals(enabled)) {
+                                return Transformations.switchMap(
+                                        searchQueryLiveData, mainRepository::getSearchSuggestions);
+                            } else {
+                                return new MutableLiveData<>(Collections.emptyList());
+                            }
+                        });
     }
 
     void init() {
@@ -108,4 +129,16 @@ public abstract class AbstractQueryViewModel extends AndroidViewModel {
     public abstract QueryInfo getQueryInfo();
 
     public abstract LiveData<LabelWithCount> getLabelWithCount();
+
+    public LiveData<List<SearchSuggestion>> getSearchSuggestions() {
+        return this.searchSuggestion;
+    }
+
+    public MutableLiveData<String> getSearchQueryLiveData() {
+        return this.searchQueryLiveData;
+    }
+
+    public void setSearchEnabled(final boolean enabled) {
+        this.searchEnabled.postValue(enabled);
+    }
 }

@@ -127,7 +127,7 @@ public class LttrsViewModel extends AndroidViewModel {
         return this.navigableItems;
     }
 
-    public void insertSearchSuggestion(String term) {
+    public void insertSearchSuggestion(final String term) {
         this.mainRepository.insertSearchSuggestion(term);
     }
 

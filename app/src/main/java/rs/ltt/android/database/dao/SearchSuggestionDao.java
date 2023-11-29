@@ -17,6 +17,7 @@ package rs.ltt.android.database.dao;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -31,4 +32,7 @@ public abstract class SearchSuggestionDao {
 
     @Query("select `query` from search_suggestion")
     public abstract List<String> getSearchQueries();
+
+    @Query("select `query` from search_suggestion WHERE `query` LIKE :term")
+    public abstract LiveData<List<String>> getSearchSuggestions(final String term);
 }

@@ -98,7 +98,13 @@
             android:hint="@string/search_hint"
             app:layout_anchor="@id/search_bar"
             app:useDrawerArrowDrawable="true">
-            <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/search_suggestion_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_search_suggestion" />
         </com.google.android.material.search.SearchView>
 
 
