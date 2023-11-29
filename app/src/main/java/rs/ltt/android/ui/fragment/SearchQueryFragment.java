@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.common.base.Preconditions;
 import java.util.Collection;
@@ -52,13 +53,8 @@ public class SearchQueryFragment extends AbstractQueryFragment {
     }
 
     @Override
-    protected AbstractQueryViewModel getQueryViewModel() {
-        return this.searchQueryViewModel;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         searchQueryViewModel
                 .getSearchTerm()
                 .observe(
@@ -67,9 +63,13 @@ public class SearchQueryFragment extends AbstractQueryFragment {
                             if (searchTerm == null) {
                                 return;
                             }
-                            getLttrsViewModel().setSelectedLabel(null);
-                            getLttrsViewModel().setCurrentSearchTerm(searchTerm);
+                            binding.searchBar.setText(searchTerm);
                         });
+    }
+
+    @Override
+    protected AbstractQueryViewModel getQueryViewModel() {
+        return this.searchQueryViewModel;
     }
 
     @Override

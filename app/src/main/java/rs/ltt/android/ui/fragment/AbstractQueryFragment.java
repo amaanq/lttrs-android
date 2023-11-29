@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.search.SearchView;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.util.Arrays;
@@ -62,6 +63,7 @@ import rs.ltt.android.ui.adapter.OnSelectionToggled;
 import rs.ltt.android.ui.adapter.ThreadOverviewAdapter;
 import rs.ltt.android.ui.model.AbstractQueryViewModel;
 import rs.ltt.android.ui.model.SearchQueryViewModel;
+import rs.ltt.android.util.CharSequences;
 import rs.ltt.jmap.mua.util.LabelWithCount;
 
 public abstract class AbstractQueryFragment extends AbstractLttrsFragment
@@ -173,6 +175,17 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
 
         this.binding.searchView.addTransitionListener(this);
 
+        this.binding
+                .searchView
+                .getEditText()
+                .setOnEditorActionListener(
+                        (textView, actionId, event) -> {
+                            final String query = CharSequences.nullToEmpty(textView.getText());
+                            binding.searchView.clearFocusAndHideKeyboard();
+                            binding.searchView.setVisible(false);
+                            return executeSearch(query);
+                        });
+
         final var dispatcher = this.requireActivity().getOnBackPressedDispatcher();
 
         dispatcher.addCallback(
@@ -184,6 +197,18 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                 .observe(getViewLifecycleOwner(), this::onLabelOpened);
 
         return binding.getRoot();
+    }
+
+    private boolean executeSearch(final String query) {
+        if (Strings.isNullOrEmpty(query)) {
+            final var destination = getNavController().getCurrentDestination();
+            if (destination != null && destination.getId() == R.id.search) {
+                getNavController().popBackStack();
+            }
+        } else {
+            getNavController().navigate(LttrsNavigationDirections.actionSearch(query));
+        }
+        return false;
     }
 
     private void endActionMode() {

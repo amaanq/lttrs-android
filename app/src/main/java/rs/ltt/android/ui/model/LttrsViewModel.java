@@ -57,7 +57,6 @@ public class LttrsViewModel extends AndroidViewModel {
     private final MainRepository mainRepository;
     private final long accountId;
     private final LttrsRepository lttrsRepository;
-    private String currentSearchTerm;
 
     public LttrsViewModel(@NonNull Application application, final long accountId) {
         super(application);
@@ -101,14 +100,6 @@ public class LttrsViewModel extends AndroidViewModel {
 
     public LiveData<AccountName> getAccountName() {
         return this.mainRepository.getAccountName(this.accountId);
-    }
-
-    public String getCurrentSearchTerm() {
-        return currentSearchTerm;
-    }
-
-    public void setCurrentSearchTerm(String currentSearchTerm) {
-        this.currentSearchTerm = currentSearchTerm;
     }
 
     public LiveData<LabelWithCount> getSelectedLabel() {

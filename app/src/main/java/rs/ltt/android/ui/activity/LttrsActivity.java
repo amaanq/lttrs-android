@@ -339,10 +339,7 @@ public class LttrsActivity extends AppCompatActivity
         }
     }
 
-    private boolean handleViewIntent(final Intent intent) {
-        if (intent == null) {
-            return false;
-        }
+    private boolean handleViewIntent(@NonNull final Intent intent) {
         final var data = intent.getData();
         if (data == null) {
             return false;
@@ -370,7 +367,7 @@ public class LttrsActivity extends AppCompatActivity
         return true;
     }
 
-    private void handleSearchIntent(final Intent intent) {
+    private void handleSearchIntent(@NonNull final Intent intent) {
         final String query = Strings.nullToEmpty(intent.getStringExtra(SearchManager.QUERY));
         binding.navigation.requestFocus();
         lttrsViewModel.insertSearchSuggestion(query);
