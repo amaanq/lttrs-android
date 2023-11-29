@@ -112,4 +112,9 @@ public class KeywordQueryFragment extends AbstractQueryFragment {
             return ActionModeMenuConfiguration.QueryType.LABEL;
         }
     }
+
+    @Override
+    protected NavigationAction getNavigationAction() {
+        return NavigationAction.DRAWER;
+    }
 }

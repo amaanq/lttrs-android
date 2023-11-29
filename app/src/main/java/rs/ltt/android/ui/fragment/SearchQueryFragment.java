@@ -105,4 +105,9 @@ public class SearchQueryFragment extends AbstractQueryFragment {
     protected ActionModeMenuConfiguration.QueryType getQueryType() {
         return ActionModeMenuConfiguration.QueryType.SPECIAL;
     }
+
+    @Override
+    protected NavigationAction getNavigationAction() {
+        return NavigationAction.UP;
+    }
 }

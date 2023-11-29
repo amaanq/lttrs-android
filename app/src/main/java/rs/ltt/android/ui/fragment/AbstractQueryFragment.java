@@ -110,11 +110,8 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
         final AbstractQueryViewModel viewModel = getQueryViewModel();
         this.binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_thread_list, container, false);
-        this.binding.searchBar.setNavigationIcon(
-                new DrawerArrowDrawable(this.binding.searchBar.getContext()));
 
-        this.binding.searchBar.setNavigationOnClickListener(
-                v -> requireLttrsActivity().openDrawer());
+        this.configureNavigationAction();
 
         this.binding.contextualToolbar.setNavigationOnClickListener(
                 v -> {
@@ -197,6 +194,32 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                 .observe(getViewLifecycleOwner(), this::onLabelOpened);
 
         return binding.getRoot();
+    }
+
+    private void configureNavigationAction() {
+        final var navigationAction = getNavigationAction();
+        switch (navigationAction) {
+            case DRAWER -> {
+                this.binding.searchBar.setNavigationIcon(
+                        new DrawerArrowDrawable(this.binding.searchBar.getContext()));
+
+                this.binding.searchBar.setNavigationOnClickListener(
+                        v -> requireLttrsActivity().openDrawer());
+            }
+            case UP -> {
+                this.binding.searchBar.setNavigationIcon(R.drawable.ic_arrow_back_24dp);
+                this.binding.searchBar.setNavigationOnClickListener(
+                        v -> getNavController().navigateUp());
+                // this overwrites `app:useDrawerArrowDrawable="true"` on the view; otherwise we
+                // would get the animation from drawer to arrow if though this is already an arrow
+                this.binding
+                        .searchView
+                        .getToolbar()
+                        .setNavigationIcon(R.drawable.ic_arrow_back_24dp);
+            }
+            default -> throw new IllegalStateException(
+                    String.format("%s is not a valid navigation action", navigationAction));
+        }
     }
 
     private boolean executeSearch(final String query) {
@@ -523,5 +546,12 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
             this.searchViewOnBackPressedCallback.setEnabled(false);
             requireLttrsActivity().unlockDrawerLayout();
         }
+    }
+
+    protected abstract NavigationAction getNavigationAction();
+
+    protected enum NavigationAction {
+        DRAWER,
+        UP
     }
 }

@@ -105,4 +105,9 @@ public abstract class AbstractMailboxQueryFragment extends AbstractQueryFragment
             return ActionModeMenuConfiguration.QueryType.SPECIAL;
         }
     }
+
+    @Override
+    protected NavigationAction getNavigationAction() {
+        return NavigationAction.DRAWER;
+    }
 }
