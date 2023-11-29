@@ -17,37 +17,14 @@ package rs.ltt.android.database.dao;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
-import android.app.SearchManager;
-import android.database.Cursor;
-import android.provider.BaseColumns;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import java.util.List;
-import rs.ltt.android.R;
 import rs.ltt.android.entity.SearchSuggestionEntity;
 
 @Dao
 public abstract class SearchSuggestionDao {
-
-    @Query(
-            "select id as "
-                    + BaseColumns._ID
-                    + ", `query` as "
-                    + SearchManager.SUGGEST_COLUMN_TEXT_1
-                    + ","
-                    + R.drawable.ic_restore_24dp
-                    + " as "
-                    + SearchManager.SUGGEST_COLUMN_ICON_1
-                    + ",`query` as "
-                    + SearchManager.SUGGEST_COLUMN_QUERY
-                    + " from search_suggestion where `query` like :needle and `query` is not"
-                    + " :actual order by id desc limit 30")
-    abstract Cursor getSearchSuggestions(String needle, String actual);
-
-    public Cursor getSearchSuggestions(String needle) {
-        return getSearchSuggestions('%' + needle + (needle.isEmpty() ? "" : "%"), needle);
-    }
 
     @Insert(onConflict = REPLACE)
     public abstract void insert(SearchSuggestionEntity entity);

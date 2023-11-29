@@ -84,11 +84,6 @@
 
         </provider>
 
-        <provider
-            android:name=".provider.EmailSearchSuggestionsProvider"
-            android:authorities="rs.ltt.android.provider.EmailSearchSuggestionsProvider"
-            android:exported="false" />
-
         <!-- MainActivity either redirects to LttrsActivity passing the most recently used
         account id as an extra parameter or to SetupActivity if no accounts have been configured -->
         <activity
