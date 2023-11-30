@@ -10,7 +10,13 @@
 Proof of concept e-mail (JMAP) client (pronounced \"Letters\").
 Makes heavy use of Android Jetpack to be more maintainable than some of the other Android e-mail clients.
 
-![Android screenshot](https://gultsch.de/files/lttrs-android.png)
+<p align="center">
+<img src="https://codeberg.org/iNPUTmice/lttrs-android/raw/branch/master/fastlane/metadata/android/en-US/images/1.png" width="260"/>
+<img src="https://codeberg.org/iNPUTmice/lttrs-android/raw/branch/master/fastlane/metadata/android/en-US/images/2.png" width="260"/>
+<img src="https://codeberg.org/iNPUTmice/lttrs-android/raw/branch/master/fastlane/metadata/android/en-US/images/3.png" width="260"/>
+<img src="https://codeberg.org/iNPUTmice/lttrs-android/raw/branch/master/fastlane/metadata/android/en-US/images/4.png" width="260"/>
+</p>
+
 
 If the above screenshots don’t do enough to convince you, you can watch this
 [short video on YouTube](https://www.youtube.com/watch?v=ArCuudFwJX4).
