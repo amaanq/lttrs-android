@@ -27,17 +27,16 @@ import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.core.widget.ImageViewCompat;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.LiveData;
 import com.google.android.material.color.MaterialColors;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.common.base.Strings;
@@ -168,7 +167,7 @@ public class BindingAdapters {
             imageView.setImageResource(R.drawable.ic_selected_24dp);
             return;
         }
-        imageView.setImageDrawable(new AvatarDrawable(imageView.getContext(), from));
+        imageView.setImageDrawable(AvatarDrawable.of(imageView.getContext(), from));
     }
 
     @BindingAdapter("android:text")
@@ -421,7 +420,8 @@ public class BindingAdapters {
 
     @BindingAdapter("identities")
     public static void setIdentities(
-            final AppCompatSpinner spinner, final List<IdentityWithNameAndEmail> identities) {
+            final MaterialAutoCompleteTextView spinner,
+            final List<IdentityWithNameAndEmail> identities) {
         final List<String> representations;
         if (identities == null) {
             representations = Collections.emptyList();
@@ -431,13 +431,7 @@ public class BindingAdapters {
                             identities,
                             input -> EmailAddressUtil.toString(input.getEmailAddress()));
         }
-        final ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(
-                        spinner.getContext(),
-                        android.R.layout.simple_spinner_item,
-                        representations);
-        adapter.setDropDownViewResource(R.layout.item_simple_spinner_dropdown);
-        spinner.setAdapter(adapter);
+        spinner.setSimpleItems(representations.toArray(new String[0]));
     }
 
     @BindingAdapter("android:src")

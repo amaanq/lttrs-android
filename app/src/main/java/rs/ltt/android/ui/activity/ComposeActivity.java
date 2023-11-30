@@ -59,11 +59,13 @@ import rs.ltt.android.ui.model.ComposeViewModel;
 import rs.ltt.android.ui.model.ComposeViewModel.EncryptionOptions;
 import rs.ltt.android.ui.model.ComposeViewModel.UserEncryptionChoice;
 import rs.ltt.android.ui.preview.AttachmentPreview;
+import rs.ltt.android.util.CharSequences;
 import rs.ltt.android.util.Event;
 import rs.ltt.android.util.MediaTypes;
 import rs.ltt.android.util.ToolTips;
 import rs.ltt.autocrypt.client.Decision;
 import rs.ltt.jmap.common.entity.Attachment;
+import rs.ltt.jmap.mua.util.EmailAddressUtil;
 import rs.ltt.jmap.mua.util.MailToUri;
 
 // TODO handle save instance state
@@ -160,6 +162,26 @@ public class ComposeActivity extends AppCompatActivity {
 
         binding.setComposeViewModel(composeViewModel);
         binding.setLifecycleOwner(this);
+
+        composeViewModel
+                .getIdentities()
+                .observe(
+                        this,
+                        identities -> {
+                            final var position = composeViewModel.getSelectedIdentityPosition();
+                            if (identities == null
+                                    || position == null
+                                    || position > identities.size()) {
+                                binding.from.setText(CharSequences.EMPTY_STRING);
+                            } else {
+                                binding.from.setText(
+                                        EmailAddressUtil.toString(
+                                                identities.get(position).getEmailAddress()));
+                            }
+                        });
+        binding.from.setOnItemClickListener(
+                (parent, view, position, id) ->
+                        composeViewModel.setSelectedIdentityPosition(position));
 
         binding.to.addTextChangedListener(new ChipTextWatcher(binding.to));
         binding.to.setOnFocusChangeListener(this::focusOnRecipientFieldChanged);

@@ -91,7 +91,7 @@ public class ComposeViewModel extends AbstractAttachmentViewModel {
                                 }
                             });
 
-    private final MutableLiveData<Integer> selectedIdentityPosition = new MutableLiveData<>();
+    private final MutableLiveData<Integer> selectedIdentityPosition = new MutableLiveData<>(0);
     private final MutableLiveData<Boolean> extendedAddresses = new MutableLiveData<>();
     private final MutableLiveData<String> to = new MutableLiveData<>();
     private final MutableLiveData<String> cc = new MutableLiveData<>();
@@ -244,8 +244,8 @@ public class ComposeViewModel extends AbstractAttachmentViewModel {
         return this.identities;
     }
 
-    public MutableLiveData<Integer> getSelectedIdentityPosition() {
-        return this.selectedIdentityPosition;
+    public Integer getSelectedIdentityPosition() {
+        return this.selectedIdentityPosition.getValue();
     }
 
     public LiveData<EncryptionOptions> getEncryptionOptions() {
@@ -632,6 +632,10 @@ public class ComposeViewModel extends AbstractAttachmentViewModel {
         final EmailWithReferences email = getEmail();
         final String emailId = email == null ? null : email.getId();
         open(emailId, attachment);
+    }
+
+    public void setSelectedIdentityPosition(int position) {
+        this.selectedIdentityPosition.postValue(position);
     }
 
     public static class Parameter {

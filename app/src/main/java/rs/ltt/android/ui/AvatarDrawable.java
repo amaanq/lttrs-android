@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import rs.ltt.android.R;
 import rs.ltt.android.entity.From;
 import rs.ltt.android.util.ConsistentColorGeneration;
+import rs.ltt.jmap.common.entity.EmailAddress;
 
 public class AvatarDrawable extends ColorDrawable {
 
@@ -42,16 +43,9 @@ public class AvatarDrawable extends ColorDrawable {
     private final int intrinsicHeight;
     private final int intrinsicWidth;
 
-    public AvatarDrawable(final Context context, final From from) {
+    private AvatarDrawable(final Context context, final String email, final String name) {
         this.context = context;
-        final String name;
-        if (from instanceof From.Named) {
-            name = ((From.Named) from).getName();
-            this.key = ((From.Named) from).getEmail();
-        } else {
-            name = null;
-            this.key = null;
-        }
+        this.key = email;
         final Matcher matcher = LETTER_PATTERN.matcher(Strings.nullToEmpty(name));
         this.letter = matcher.find() ? matcher.group().toUpperCase(Locale.ROOT) : null;
         final int avatarDrawableSize =
@@ -83,23 +77,23 @@ public class AvatarDrawable extends ColorDrawable {
 
     @Override
     public void draw(final Canvas canvas) {
+        final Rect bounds = getBounds();
         final Paint textPaint = getTextPaint(context);
-        final float midX = getBounds().width() / 2.0f;
-        final float midY = getBounds().height() / 2.0f;
+        final float midX = bounds.width() / 2.0f;
+        final float midY = bounds.height() / 2.0f;
         final float radius = Math.min(getBounds().width(), getBounds().height()) / 2.0f;
         textPaint.setTextSize(radius);
-        final Rect r = new Rect();
-        canvas.getClipBounds(r);
-        final int cHeight = r.height();
-        final int cWidth = r.width();
+        final int cHeight = bounds.height();
+        final int cWidth = bounds.width();
         canvas.drawCircle(midX, midY, radius, getPaint(this.context, this.key));
         if (letter == null) {
             return;
         }
         textPaint.setTextAlign(Paint.Align.LEFT);
-        textPaint.getTextBounds(letter, 0, letter.length(), r);
-        float x = cWidth / 2f - r.width() / 2f - r.left;
-        float y = cHeight / 2f + r.height() / 2f - r.bottom;
+        final Rect textBounds = new Rect();
+        textPaint.getTextBounds(letter, 0, letter.length(), textBounds);
+        float x = cWidth / 2f - textBounds.width() / 2f - textBounds.left;
+        float y = cHeight / 2f + textBounds.height() / 2f - textBounds.bottom;
         canvas.drawText(letter, x, y, textPaint);
     }
 
@@ -121,5 +115,23 @@ public class AvatarDrawable extends ColorDrawable {
         this.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         this.draw(canvas);
         return bitmap;
+    }
+
+    public static AvatarDrawable of(final Context context, final From from) {
+        if (from instanceof From.Named named) {
+            return new AvatarDrawable(context, named.getEmail(), named.getName());
+        } else {
+            return new AvatarDrawable(context, null, null);
+        }
+    }
+
+    public static AvatarDrawable of(final Context context, final EmailAddress emailAddress) {
+        final String name;
+        if (Strings.isNullOrEmpty(emailAddress.getName())) {
+            name = emailAddress.getEmail();
+        } else {
+            name = emailAddress.getName();
+        }
+        return new AvatarDrawable(context, emailAddress.getEmail(), name);
     }
 }

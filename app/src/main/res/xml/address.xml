@@ -16,7 +16,7 @@
 <!-- TODO do we want to remove theming and let MDC do that for us? -->
 <chip xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/Widget.MaterialComponents.Chip.Entry"
+    style="@style/Widget.Material3.Chip.Input"
     app:closeIconEnabled="false"
     android:textAppearance="?textAppearanceBodyMedium"
     app:chipStrokeColor="?colorOutline"

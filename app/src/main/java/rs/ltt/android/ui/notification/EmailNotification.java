@@ -233,7 +233,7 @@ public class EmailNotification extends AbstractNotification {
 
     private Notification get(final EmailWithBodiesAndSubject email) {
         final From from = email.getFirstFrom();
-        final AvatarDrawable avatar = new AvatarDrawable(context, from);
+        final AvatarDrawable avatar = AvatarDrawable.of(context, from);
         final String subject = getSubject(email);
         final Preview preview = email.getPreview();
         final String bigText;
