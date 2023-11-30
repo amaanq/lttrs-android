@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="BaseTheme">
+        <!-- modifying the color works pre Android 8.1 but windowLightNavigationBar only works on 8.1 and up -->
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightNavigationBar">@bool/window_light_navigation_bar</item>
+    </style>
+</resources>

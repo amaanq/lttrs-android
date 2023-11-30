@@ -29,13 +29,16 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
     </style>
 
-    <style name="LttrsTheme" parent="BaseTheme">
+    <style name="AppTheme" parent="BaseTheme"/>
+
+    <style name="LttrsTheme" parent="AppTheme">
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="MainTheme" parent="BaseTheme">
+    <style name="MainTheme" parent="AppTheme">
         <item name="android:windowLightStatusBar">@bool/window_light_status_bar</item>
         <item name="android:statusBarColor">?attr/colorSurface</item>
+
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
