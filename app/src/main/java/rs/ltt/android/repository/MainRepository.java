@@ -93,9 +93,7 @@ public class MainRepository {
                     if (previousSearches.size() >= 1 || term.trim().isEmpty()) {
                         return ImmutableList.copyOf(previousSearches);
                     } else {
-                        return ImmutableList.of(
-                                new SearchSuggestion(
-                                        SearchSuggestion.Type.SEARCH_IN_EMAIL, term.trim()));
+                        return ImmutableList.of(SearchSuggestion.userInput(term.trim()));
                     }
                 });
     }

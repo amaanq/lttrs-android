@@ -29,4 +29,15 @@ public class SearchSuggestion {
         SEARCH_IN_EMAIL,
         CONTACT
     }
+
+    public static SearchSuggestion userInput(final String userInput) {
+        return new UserInput(userInput);
+    }
+
+    public static class UserInput extends SearchSuggestion {
+
+        private UserInput(final String value) {
+            super(Type.SEARCH_IN_EMAIL, value);
+        }
+    }
 }

@@ -23,7 +23,12 @@ public class SearchSuggestionAdapter
                 @Override
                 public boolean areItemsTheSame(
                         @NonNull SearchSuggestion oldItem, @NonNull SearchSuggestion newItem) {
-                    return oldItem.equals(newItem);
+                    if (oldItem instanceof SearchSuggestion.UserInput
+                            && newItem instanceof SearchSuggestion.UserInput) {
+                        return true;
+                    } else {
+                        return oldItem.equals(newItem);
+                    }
                 }
 
                 @Override
@@ -52,9 +57,7 @@ public class SearchSuggestionAdapter
         final var searchSuggestion = getItem(position);
         holder.binding.setSuggestion(searchSuggestion);
         holder.binding.wrapper.setOnClickListener(
-                v -> {
-                    onSearchSuggestionClicked.accept(searchSuggestion);
-                });
+                v -> onSearchSuggestionClicked.accept(searchSuggestion));
     }
 
     public void setOnSearchSuggestionClicked(final Consumer<SearchSuggestion> consumer) {
