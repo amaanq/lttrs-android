@@ -182,15 +182,11 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                 .setOnEditorActionListener(
                         (textView, actionId, event) -> {
                             final String query = CharSequences.nullToEmpty(textView.getText());
-                            binding.searchView.clearFocusAndHideKeyboard();
-                            binding.searchView.setVisible(false);
                             return executeSearch(query);
                         });
         this.searchSuggestionAdapter = new SearchSuggestionAdapter();
         this.searchSuggestionAdapter.setOnSearchSuggestionClicked(
-                suggestion -> {
-                    executeSearch(suggestion.value);
-                });
+                suggestion -> executeSearch(suggestion.value));
         this.binding.searchSuggestionList.setAdapter(this.searchSuggestionAdapter);
         viewModel
                 .getSearchSuggestions()
@@ -241,6 +237,8 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
     }
 
     private boolean executeSearch(final String query) {
+        binding.searchView.clearFocusAndHideKeyboard();
+        binding.searchView.setVisible(false);
         if (Strings.isNullOrEmpty(query)) {
             final var destination = getNavController().getCurrentDestination();
             if (destination != null && destination.getId() == R.id.search) {
