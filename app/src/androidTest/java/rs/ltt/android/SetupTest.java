@@ -87,7 +87,7 @@ public class SetupTest {
 
         onView(withId(R.id.thread_list))
                 .perform(scrollToPosition(0))
-                .check(matches(atPosition(0, hasDescendant(withText("Mary Smith")))));
+                .check(matches(atPosition(1, hasDescendant(withText("Mary Smith")))));
 
         mockMailServer.generateEmailOnTop();
 
@@ -97,7 +97,7 @@ public class SetupTest {
 
         onView(withId(R.id.thread_list))
                 .perform(scrollToPosition(0))
-                .check(matches(atPosition(0, hasDescendant(withText("Sandra Anderson")))));
+                .check(matches(atPosition(1, hasDescendant(withText("Sandra Anderson")))));
     }
 
     @Test
@@ -122,10 +122,10 @@ public class SetupTest {
 
         onView(withId(R.id.thread_list))
                 .perform(scrollToPosition(0))
-                .check(matches(atPosition(0, hasDescendant(withText("Mary Smith")))));
+                .check(matches(atPosition(1, hasDescendant(withText("Mary Smith")))));
 
         onView(withId(R.id.thread_list))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeRight()));
+                .perform(RecyclerViewActions.actionOnItemAtPosition(1, swipeRight()));
 
         Thread.sleep(1000);
 
@@ -137,7 +137,7 @@ public class SetupTest {
 
         onView(withId(R.id.thread_list))
                 .perform(scrollToPosition(0))
-                .check(matches(atPosition(0, hasDescendant(withText("Mary Smith")))));
+                .check(matches(atPosition(1, hasDescendant(withText("Mary Smith")))));
     }
 
     @Test
@@ -161,13 +161,14 @@ public class SetupTest {
 
         intended(hasComponent(LttrsActivity.class.getName()));
 
-        onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar))))
-                .check(matches(withText("Inbox")));
+        onView(withId(R.id.thread_list))
+                .perform(scrollToPosition(0))
+                .check(matches(atPosition(0, hasDescendant(withText("Inbox")))));
 
         Thread.sleep(3000);
 
         // click on first email
-        onView(withId(R.id.thread_list)).perform(actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.thread_list)).perform(actionOnItemAtPosition(1, click()));
 
         Thread.sleep(2000);
 

@@ -70,9 +70,10 @@ public class AccountSwitcherTest {
 
         intended(hasComponent(LttrsActivity.class.getName()));
 
+        // position 0 is the mailbox title; position 1 is the first email
         onView(withId(R.id.thread_list))
                 .perform(scrollToPosition(0))
-                .check(matches(atPosition(0, hasDescendant(withText("Mary Smith")))));
+                .check(matches(atPosition(1, hasDescendant(withText("Mary Smith")))));
 
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
 
@@ -105,9 +106,10 @@ public class AccountSwitcherTest {
 
         Thread.sleep(5000);
 
+        // position 0 is the mailbox title; position 1 is the first email
         onView(withId(R.id.thread_list))
-                .perform(scrollToPosition(0))
-                .check(matches(atPosition(0, hasDescendant(withText("Thomas Jones")))));
+                .perform(scrollToPosition(1))
+                .check(matches(atPosition(1, hasDescendant(withText("Thomas Jones")))));
 
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
 
@@ -126,9 +128,10 @@ public class AccountSwitcherTest {
 
         Thread.sleep(3000);
 
+        // position 0 is the mailbox title; position 1 is the first email
         onView(withId(R.id.thread_list))
                 .perform(scrollToPosition(0))
-                .check(matches(atPosition(0, hasDescendant(withText("Mary Smith")))));
+                .check(matches(atPosition(1, hasDescendant(withText("Mary Smith")))));
     }
 
     @Before

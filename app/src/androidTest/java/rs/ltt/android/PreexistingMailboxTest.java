@@ -96,8 +96,9 @@ public class PreexistingMailboxTest {
         Thread.sleep(5000);
 
         intended(hasComponent(LttrsActivity.class.getName()));
+        // swipe on the first email
         onView(withId(R.id.thread_list))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeRight()));
+                .perform(RecyclerViewActions.actionOnItemAtPosition(1, swipeRight()));
 
         Thread.sleep(5000);
 
