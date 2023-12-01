@@ -319,9 +319,11 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
 
     private void nullReferences() {
         this.binding.threadList.setAdapter(null);
+        this.binding.searchSuggestionList.setAdapter(null);
         this.itemTouchHelper.attachToRecyclerView(null);
         this.itemTouchHelper = null;
         this.threadOverviewAdapter = null;
+        this.searchSuggestionAdapter = null;
         this.tracker = null;
         this.binding = null;
     }
