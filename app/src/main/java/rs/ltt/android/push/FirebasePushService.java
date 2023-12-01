@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -18,6 +17,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 import java.util.Optional;
 import java.util.UUID;
+import okhttp3.HttpUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public class FirebasePushService implements PushService {
     }
 
     @Override
-    public ListenableFuture<Optional<Uri>> register(
+    public ListenableFuture<Optional<Endpoint>> register(
             final byte[] applicationServerKey, final UUID uuid) {
         if (applicationServerKey == null || applicationServerKey.length == 0) {
             return Futures.immediateFailedFuture(
@@ -69,7 +69,7 @@ public class FirebasePushService implements PushService {
 
     private static class RegistrationMessageHandler extends Handler {
 
-        private final SettableFuture<Uri> endpointFuture = SettableFuture.create();
+        private final SettableFuture<Endpoint> endpointFuture = SettableFuture.create();
 
         public RegistrationMessageHandler(final Looper looper) {
             super(looper);
@@ -92,8 +92,8 @@ public class FirebasePushService implements PushService {
                 }
                 LOGGER.info("registration id: {}", registrationId);
                 final var endpoint =
-                        Uri.parse(String.format(URI_WEB_PUSH_ENDPOINT, registrationId));
-                endpointFuture.set(endpoint);
+                        HttpUrl.get(String.format(URI_WEB_PUSH_ENDPOINT, registrationId));
+                endpointFuture.set(new Endpoint(endpoint, PACKAGE_NAME_GMS));
             } else {
                 endpointFuture.setException(
                         new IllegalStateException("Response did not contain intent"));

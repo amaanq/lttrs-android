@@ -26,6 +26,7 @@ public class PushSubscriptionEntity {
 
     @NonNull public Long credentialsId;
 
+    public String distributor;
     public String pushSubscriptionId;
 
     public HttpUrl url;

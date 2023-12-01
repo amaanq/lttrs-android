@@ -2,9 +2,9 @@ package rs.ltt.android.push;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import com.google.common.base.Strings;
 import java.util.UUID;
+import okhttp3.HttpUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,15 @@ public class UnifiedPushMessageReceiver extends AbstractPushMessageReceiver {
             LOGGER.warn("Received new endpoint but clientDeviceId is not a valid UUID");
             return;
         }
-        this.onReceiveNewEndpoint(context, clientDeviceId, Uri.parse(endpoint));
+        final HttpUrl url;
+        try {
+            url = HttpUrl.get(endpoint);
+        } catch (final IllegalArgumentException e) {
+            LOGGER.warn("Received new endpoint but url is not a valid", e);
+            return;
+        }
+        // TODO figure out distributor from intent (needs UnifiedPush extension)
+        this.onReceiveNewEndpoint(context, clientDeviceId, new PushService.Endpoint(url, null));
     }
 
     private void onReceiveMessage(

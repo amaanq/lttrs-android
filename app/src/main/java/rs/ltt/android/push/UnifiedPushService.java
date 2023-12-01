@@ -5,13 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import androidx.annotation.NonNull;
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.util.concurrent.Futures;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import okhttp3.HttpUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +56,7 @@ public class UnifiedPushService implements PushService {
     }
 
     @Override
-    public ListenableFuture<Optional<Uri>> register(
+    public ListenableFuture<Optional<Endpoint>> register(
             final byte[] applicationServerKey, final UUID uuid) {
         final var broadcastToApp = new Intent();
         broadcastToApp.setPackage(context.getPackageName());
@@ -79,12 +80,14 @@ public class UnifiedPushService implements PushService {
         features.add(ACTION_FEATURE_BYTES_MESSAGE);
         broadcast.putStringArrayListExtra("features", features);
         if (distributor.messenger()) {
-            final var handler = new RegistrationMessageHandler(Looper.getMainLooper());
+            final var handler =
+                    new RegistrationMessageHandler(Looper.getMainLooper(), distributor.packageName);
             final var messenger = new Messenger(handler);
             broadcast.putExtra("messenger", messenger);
             this.context.sendBroadcast(broadcast);
-            return Futures.transform(
-                    handler.endpointFuture, Optional::of, MoreExecutors.directExecutor());
+            // TODO add timeout
+            final var endpointFuture = handler.endpointFuture;
+            return Futures.transform(endpointFuture, Optional::of, MoreExecutors.directExecutor());
         } else {
             this.context.sendBroadcast(broadcast);
             return Futures.immediateFuture(Optional.empty());
@@ -93,19 +96,36 @@ public class UnifiedPushService implements PushService {
 
     private static class RegistrationMessageHandler extends Handler {
 
-        private final SettableFuture<Uri> endpointFuture = SettableFuture.create();
+        private final SettableFuture<Endpoint> endpointFuture = SettableFuture.create();
 
-        public RegistrationMessageHandler(final Looper looper) {
+        private final String distributor;
+
+        public RegistrationMessageHandler(final Looper looper, final String distributor) {
             super(looper);
+            this.distributor = distributor;
         }
 
         @Override
         public void handleMessage(@NonNull final Message message) {
             if (message.obj instanceof Intent intent) {
                 if (ACTION_NEW_ENDPOINT.equals(intent.getAction())) {
-                    final var endpoint = intent.getStringExtra("endpoint");
+                    final var uri = intent.getStringExtra("endpoint");
+                    if (Strings.isNullOrEmpty(uri)) {
+                        endpointFuture.setException(
+                                new IllegalStateException(
+                                        "Registration intent did not contain uri"));
+                        return;
+                    }
+                    final HttpUrl url;
+                    try {
+                        url = HttpUrl.get(uri);
+                    } catch (final IllegalArgumentException e) {
+                        endpointFuture.setException(e);
+                        return;
+                    }
+                    final Endpoint endpoint = new Endpoint(url, distributor);
                     LOGGER.info("received endpoint {}", endpoint);
-                    endpointFuture.set(Uri.parse(endpoint));
+                    endpointFuture.set(endpoint);
                 } else if (ACTION_REGISTRATION_FAILED.equalsIgnoreCase(intent.getAction())) {
                     endpointFuture.setException(new IllegalStateException("Registration failed"));
                 } else {

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "d1f52b7480bee883d1ed9890a525c0d4",
+    "identityHash": "64135d62d6f1096cb376dbd68dc6c5a4",
     "entities": [
       {
         "tableName": "credentials",
@@ -152,7 +152,7 @@
       },
       {
         "tableName": "push_subscription",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `credentialsId` INTEGER NOT NULL, `pushSubscriptionId` TEXT, `url` TEXT, `verificationCode` TEXT, `expires` INTEGER, `publicKey` BLOB, `privateKey` BLOB, `authenticationSecret` BLOB, FOREIGN KEY(`credentialsId`) REFERENCES `credentials`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `credentialsId` INTEGER NOT NULL, `distributor` TEXT, `pushSubscriptionId` TEXT, `url` TEXT, `verificationCode` TEXT, `expires` INTEGER, `publicKey` BLOB, `privateKey` BLOB, `authenticationSecret` BLOB, FOREIGN KEY(`credentialsId`) REFERENCES `credentials`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -165,6 +165,12 @@
             "columnName": "credentialsId",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "distributor",
+            "columnName": "distributor",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "pushSubscriptionId",
@@ -244,7 +250,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd1f52b7480bee883d1ed9890a525c0d4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '64135d62d6f1096cb376dbd68dc6c5a4')"
     ]
   }
 }

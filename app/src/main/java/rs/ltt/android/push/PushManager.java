@@ -1,7 +1,6 @@
 package rs.ltt.android.push;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
@@ -248,25 +247,26 @@ public class PushManager {
             return Futures.immediateFailedFuture(
                     new IllegalStateException("Missing clientDeviceId on credentials"));
         }
-        final var uriFuture =
+        final var endpointFuture =
                 pushService.register(applicationServerKey.orElse(null), clientDeviceId);
         return Futures.transformAsync(
-                uriFuture,
-                optionalUri -> {
-                    if (optionalUri.isPresent()) {
-                        final var uri = optionalUri.get();
-                        LOGGER.info("WebPush uri: {}", uri);
-                        this.register(account, uri);
+                endpointFuture,
+                optionalEndpoint -> {
+                    if (optionalEndpoint.isPresent()) {
+                        final var endpoint = optionalEndpoint.get();
+                        LOGGER.info("WebPush endpoint: {}", endpoint);
+                        this.register(account, endpoint);
                     }
                     return Futures.immediateFuture(Boolean.TRUE);
                 },
                 MoreExecutors.directExecutor());
     }
 
-    public void register(final AccountWithCredentials account, final Uri uri) {
+    public void register(
+            final AccountWithCredentials account, final PushService.Endpoint endpoint) {
         final OneTimeWorkRequest workRequest =
                 new OneTimeWorkRequest.Builder(PushRegistrationWorker.class)
-                        .setInputData(PushRegistrationWorker.data(account.getId(), uri.toString()))
+                        .setInputData(PushRegistrationWorker.data(account.getId(), endpoint))
                         .build();
         final WorkManager workManager = WorkManager.getInstance(context.getApplicationContext());
         workManager.enqueue(workRequest);

@@ -19,6 +19,7 @@ import rs.ltt.android.MuaPool;
 import rs.ltt.android.database.AppDatabase;
 import rs.ltt.android.entity.AccountWithCredentials;
 import rs.ltt.android.push.PushManager;
+import rs.ltt.android.push.PushService;
 import rs.ltt.android.push.WebPushMessageEncryption;
 import rs.ltt.jmap.client.JmapClient;
 import rs.ltt.jmap.client.MethodResponses;
@@ -32,8 +33,10 @@ public class PushRegistrationWorker extends ListenableWorker {
 
     private static final String KEY_ACCOUNT = "account";
     private static final String KEY_URI = "uri";
+    private static final String KEY_DISTRIBUTOR = "distributor";
     private final Long account;
     private final String uri;
+    private final String distributor;
 
     public PushRegistrationWorker(
             @NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -45,6 +48,7 @@ public class PushRegistrationWorker extends ListenableWorker {
             this.account = null;
         }
         this.uri = data.getString(KEY_URI);
+        this.distributor = data.getString(KEY_DISTRIBUTOR);
     }
 
     @NonNull
@@ -61,7 +65,7 @@ public class PushRegistrationWorker extends ListenableWorker {
         final var registrationFuture =
                 Futures.transformAsync(
                         accountFuture,
-                        account -> register(account, this.uri),
+                        account -> register(account, this.distributor, this.uri),
                         MoreExecutors.directExecutor());
         final var resultFuture =
                 Futures.transform(
@@ -86,18 +90,18 @@ public class PushRegistrationWorker extends ListenableWorker {
     }
 
     private ListenableFuture<Boolean> register(
-            final AccountWithCredentials account, final String uri) {
+            final AccountWithCredentials account, final String distributor, final String uri) {
         final HttpUrl httpUrl;
         try {
             httpUrl = HttpUrl.get(uri);
         } catch (final Exception e) {
             return Futures.immediateFailedFuture(e);
         }
-        return register(account, httpUrl);
+        return register(account, distributor, httpUrl);
     }
 
     private ListenableFuture<Boolean> register(
-            final AccountWithCredentials account, final HttpUrl httpUrl) {
+            final AccountWithCredentials account, final String distributor, final HttpUrl httpUrl) {
         final WebPushMessageEncryption.KeyMaterial keyMaterial;
         try {
             keyMaterial = WebPushMessageEncryption.generateKeyMaterial();
@@ -110,12 +114,13 @@ public class PushRegistrationWorker extends ListenableWorker {
                         .getExistingSubscriptionIds(account.getCredentials().getId());
         return Futures.transformAsync(
                 existingSubscriptionIds,
-                ids -> register(account, httpUrl, keyMaterial, ids),
+                ids -> register(account, distributor, httpUrl, keyMaterial, ids),
                 MoreExecutors.directExecutor());
     }
 
     private ListenableFuture<Boolean> register(
             final AccountWithCredentials account,
+            final String distributor,
             final HttpUrl httpUrl,
             final WebPushMessageEncryption.KeyMaterial keyMaterial,
             final Collection<String> existingSubscriptionIds) {
@@ -157,6 +162,7 @@ public class PushRegistrationWorker extends ListenableWorker {
                                 .pushSubscriptionDao()
                                 .insert(
                                         account.getCredentials(),
+                                        distributor,
                                         pushSubscriptionId,
                                         httpUrl,
                                         keyMaterial,
@@ -171,7 +177,11 @@ public class PushRegistrationWorker extends ListenableWorker {
                 MoreExecutors.directExecutor());
     }
 
-    public static Data data(final Long account, final String uri) {
-        return new Data.Builder().putLong(KEY_ACCOUNT, account).putString(KEY_URI, uri).build();
+    public static Data data(final Long account, final PushService.Endpoint endpoint) {
+        return new Data.Builder()
+                .putLong(KEY_ACCOUNT, account)
+                .putString(KEY_DISTRIBUTOR, endpoint.distributor)
+                .putString(KEY_URI, endpoint.url.toString())
+                .build();
     }
 }

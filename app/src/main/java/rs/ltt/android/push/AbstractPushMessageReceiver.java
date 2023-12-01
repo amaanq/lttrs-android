@@ -2,7 +2,6 @@ package rs.ltt.android.push;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.common.util.concurrent.FutureCallback;
@@ -101,7 +100,7 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
     }
 
     protected void onReceiveNewEndpoint(
-            final Context context, final UUID deviceClientId, final Uri endpoint) {
+            final Context context, final UUID deviceClientId, final PushService.Endpoint endpoint) {
         final var accountFuture =
                 AppDatabase.getInstance(context).accountDao().getAnyAccount(deviceClientId);
         Futures.addCallback(
@@ -130,7 +129,9 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
     }
 
     protected void onReceiveNewEndpoint(
-            final Context context, final AccountWithCredentials account, final Uri endpoint) {
+            final Context context,
+            final AccountWithCredentials account,
+            final PushService.Endpoint endpoint) {
         LOGGER.info("Received new push endpoint {} for {}", endpoint, account.getDeviceClientId());
         final var pushManager = new PushManager(context);
         pushManager.register(account, endpoint);

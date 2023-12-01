@@ -23,12 +23,14 @@ public abstract class PushSubscriptionDao {
 
     public void insert(
             final AccountWithCredentials.Credentials credentials,
+            final String distributor,
             final String pushSubscriptionId,
             final HttpUrl url,
             final WebPushMessageEncryption.KeyMaterial keyMaterial,
             final Instant expires) {
         final var entity = new PushSubscriptionEntity();
         entity.credentialsId = credentials.getId();
+        entity.distributor = distributor;
         entity.pushSubscriptionId = pushSubscriptionId;
         entity.url = url;
         entity.keyMaterial = keyMaterial;
