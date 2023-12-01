@@ -1,6 +1,6 @@
 ## 0.4.0 · (tbd)
 
-* Support for Material U
+* Support Material U (Dynamic Colors)
 * Add support for UnifiedPush and Firebase Cloud Messaging in one, open source build flavor
 
 ## 0.3.3 · Ignition (2022-01-30)
@@ -26,7 +26,7 @@ This project has received funding from the European Union’s Horizon 2020 resea
 ## 0.2.4 · Configured for Flight (2021-11-10)
 
 * Refactoring to allow for easier theming
-*Use Material 3 design elements
+* Use Material 3 design elements
 
 ## 0.2.3 · Configured for Flight (2021-11-04)
 
