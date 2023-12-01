@@ -1,3 +1,16 @@
+## 0.4.0 · (tbd)
+
+* Support for Material U
+* Add support for UnifiedPush and Firebase Cloud Messaging in one, open source build flavor
+
+## 0.3.3 · Ignition (2022-01-30)
+
+* Fix crash when using software keyboard to go to next screen in setup dialog
+
+## 0.3.2 · Ignition (2022-01-29)
+
+* Fixed problems related to Autocrypt-Setup message discovery
+
 ## 0.3.1 · Ignition (2022-01-25)
 
 * Preview attachments
