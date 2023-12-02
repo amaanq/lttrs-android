@@ -1,7 +1,9 @@
 package rs.ltt.android.push;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import com.google.common.base.Strings;
 import java.util.UUID;
 import okhttp3.HttpUrl;
@@ -22,12 +24,16 @@ public class UnifiedPushMessageReceiver extends AbstractPushMessageReceiver {
             case UnifiedPushService.ACTION_NEW_ENDPOINT -> onReceiveNewEndpoint(
                     context,
                     intent.getStringExtra(UnifiedPushService.EXTRA_TOKEN),
-                    intent.getStringExtra(UnifiedPushService.EXTRA_ENDPOINT));
+                    intent.getStringExtra(UnifiedPushService.EXTRA_ENDPOINT),
+                    intent.getParcelableExtra(UnifiedPushService.EXTRA_DISTRIBUTOR));
         }
     }
 
     private void onReceiveNewEndpoint(
-            final Context context, final String token, final String endpoint) {
+            final Context context,
+            final String token,
+            final String endpoint,
+            final Parcelable distributorVerification) {
         if (Strings.isNullOrEmpty(token) || Strings.isNullOrEmpty(endpoint)) {
             return;
         }
@@ -45,8 +51,15 @@ public class UnifiedPushMessageReceiver extends AbstractPushMessageReceiver {
             LOGGER.warn("Received new endpoint but url is not a valid", e);
             return;
         }
-        // TODO figure out distributor from intent (needs UnifiedPush extension)
-        this.onReceiveNewEndpoint(context, clientDeviceId, new PushService.Endpoint(url, null));
+        final String distributor;
+        if (distributorVerification instanceof PendingIntent pendingIntent) {
+            distributor = pendingIntent.getIntentSender().getCreatorPackage();
+        } else {
+            distributor = null;
+        }
+
+        this.onReceiveNewEndpoint(
+                context, clientDeviceId, new PushService.Endpoint(url, distributor));
     }
 
     private void onReceiveMessage(

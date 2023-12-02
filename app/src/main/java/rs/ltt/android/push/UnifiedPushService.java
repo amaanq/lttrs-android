@@ -22,9 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import okhttp3.HttpUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import rs.ltt.jmap.client.Services;
 
 public class UnifiedPushService implements PushService {
 
@@ -45,9 +47,16 @@ public class UnifiedPushService implements PushService {
     public static final String ACTION_REGISTRATION_FAILED =
             "org.unifiedpush.android.connector.REGISTRATION_FAILED";
 
+    // this action is only used in 'messenger' communication to tell the app that a registration is
+    // probably fine but can not be processed right now; for example due to spotty internet
+    public static final String ACTION_REGISTRATION_DELAYED =
+            "org.unifiedpush.android.connector.REGISTRATION_DELAYED";
+
     public static final String EXTRA_BYTE_MESSAGE = "bytesMessage";
     public static final String EXTRA_TOKEN = "token";
     public static final String EXTRA_ENDPOINT = "endpoint";
+    public static final String EXTRA_DISTRIBUTOR = "distributor";
+    public static final String EXTRA_MESSAGE = "message";
 
     private final Context context;
 
@@ -58,8 +67,6 @@ public class UnifiedPushService implements PushService {
     @Override
     public ListenableFuture<Optional<Endpoint>> register(
             final byte[] applicationServerKey, final UUID uuid) {
-        final var broadcastToApp = new Intent();
-        broadcastToApp.setPackage(context.getPackageName());
         final var distributor = Iterables.getFirst(getSupportedDistributors(), null);
         if (distributor == null) {
             return Futures.immediateFailedFuture(
@@ -68,6 +75,8 @@ public class UnifiedPushService implements PushService {
         final var broadcast = new Intent(ACTION_REGISTER);
         broadcast.setPackage(distributor.packageName);
         if (distributor.appValidation()) {
+            final var broadcastToApp = new Intent();
+            broadcastToApp.setPackage(context.getPackageName());
             final var pendingIntent =
                     PendingIntent.getBroadcast(
                             context, 0, broadcastToApp, PendingIntent.FLAG_IMMUTABLE);
@@ -85,8 +94,12 @@ public class UnifiedPushService implements PushService {
             final var messenger = new Messenger(handler);
             broadcast.putExtra("messenger", messenger);
             this.context.sendBroadcast(broadcast);
-            // TODO add timeout
-            final var endpointFuture = handler.endpointFuture;
+            final var endpointFuture =
+                    Futures.withTimeout(
+                            handler.endpointFuture,
+                            30,
+                            TimeUnit.SECONDS,
+                            Services.SCHEDULED_EXECUTOR_SERVICE);
             return Futures.transform(endpointFuture, Optional::of, MoreExecutors.directExecutor());
         } else {
             this.context.sendBroadcast(broadcast);
@@ -108,7 +121,8 @@ public class UnifiedPushService implements PushService {
         @Override
         public void handleMessage(@NonNull final Message message) {
             if (message.obj instanceof Intent intent) {
-                if (ACTION_NEW_ENDPOINT.equals(intent.getAction())) {
+                final String action = intent.getAction();
+                if (ACTION_NEW_ENDPOINT.equals(action)) {
                     final var uri = intent.getStringExtra("endpoint");
                     if (Strings.isNullOrEmpty(uri)) {
                         endpointFuture.setException(
@@ -126,8 +140,24 @@ public class UnifiedPushService implements PushService {
                     final Endpoint endpoint = new Endpoint(url, distributor);
                     LOGGER.info("received endpoint {}", endpoint);
                     endpointFuture.set(endpoint);
-                } else if (ACTION_REGISTRATION_FAILED.equalsIgnoreCase(intent.getAction())) {
-                    endpointFuture.setException(new IllegalStateException("Registration failed"));
+                } else if (ACTION_REGISTRATION_FAILED.equalsIgnoreCase(action)) {
+                    final var errorMessage = intent.getStringExtra("message");
+                    LOGGER.error(
+                            "Registration failed with '{}'", Strings.nullToEmpty(errorMessage));
+                    endpointFuture.setException(
+                            new IllegalStateException(
+                                    String.format(
+                                            "Registration failed with '%s'",
+                                            Strings.nullToEmpty(errorMessage))));
+                } else if (ACTION_REGISTRATION_DELAYED.equalsIgnoreCase(action)) {
+                    final var errorMessage = intent.getStringExtra("message");
+                    LOGGER.error(
+                            "Registration delayed due to '{}'", Strings.nullToEmpty(errorMessage));
+                    endpointFuture.setException(
+                            new IllegalStateException(
+                                    String.format(
+                                            "Registration delayed due to '%s'",
+                                            Strings.nullToEmpty(errorMessage))));
                 } else {
                     endpointFuture.setException(
                             new IllegalStateException(
