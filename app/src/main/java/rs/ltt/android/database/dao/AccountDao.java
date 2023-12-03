@@ -92,9 +92,6 @@ public abstract class AccountDao {
     @Query("select exists (select 1 from account)")
     public abstract boolean hasAccounts();
 
-    @Query("select credentialsId from account where id=:id")
-    abstract Long getCredentialsId(final Long id);
-
     @Query("delete from account where id=:id")
     abstract void deleteAccount(final Long id);
 
@@ -137,13 +134,14 @@ public abstract class AccountDao {
     }
 
     @Transaction
-    public void delete(final long id) {
-        final Long credentialsId = getCredentialsId(id);
-        deleteAccount(id);
-        if (hasAccountsWithCredentialsId(credentialsId)) {
-            return;
+    public boolean delete(final AccountWithCredentials account) {
+        final var credentials = account.getCredentials();
+        deleteAccount(account.getId());
+        if (hasAccountsWithCredentialsId(credentials.getId())) {
+            return false;
         }
-        deleteCredentials(id);
+        deleteCredentials(credentials.getId());
+        return true;
     }
 
     @Query("update account set selected=1 where id=:id")

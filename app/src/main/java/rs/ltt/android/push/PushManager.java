@@ -317,4 +317,18 @@ public class PushManager {
     public static PushMessage deserialize(final byte[] message) {
         return Services.GSON.fromJson(new String(message), PushMessage.class);
     }
+
+    public void unregister(final Collection<PushSubscription> pushSubscriptions) {
+        for (final PushSubscription pushSubscription : pushSubscriptions) {
+            unregister(pushSubscription);
+        }
+    }
+
+    private void unregister(final PushSubscription pushSubscription) {
+        if (FirebasePushService.PACKAGE_NAME_GMS.equals(pushSubscription.distributor)) {
+            return;
+        }
+        UnifiedPushService.unregister(
+                context, pushSubscription.distributor, pushSubscription.deviceClientId);
+    }
 }

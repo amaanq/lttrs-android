@@ -75,20 +75,26 @@ public abstract class PushSubscriptionDao {
             long credentialsId, final String pushSubscriptionId, final String verificationCode);
 
     @Query(
+            "SELECT id,credentialsId,deviceClientId,distributor,pushSubscriptionId FROM"
+                    + " push_subscription WHERE credentialsId=:credentialsId")
+    public abstract List<PushSubscription> getPushSubscriptions(Long credentialsId);
+
+    @Query(
             "SELECT pushSubscriptionId FROM push_subscription WHERE credentialsId=:credentialsId"
                     + " AND pushSubscriptionId IS NOT NULL")
     public abstract ListenableFuture<List<String>> getExistingSubscriptionIds(
             final long credentialsId);
 
     @Query(
-            "SELECT id,credentialsId,deviceClientId,distributor FROM push_subscription WHERE"
-                    + " deviceClientId=:deviceClientId")
+            "SELECT id,credentialsId,deviceClientId,distributor,pushSubscriptionId FROM"
+                    + " push_subscription WHERE deviceClientId=:deviceClientId")
     protected abstract ListenableFuture<PushSubscription> getPushSubscriptionInternal(
             final UUID deviceClientId);
 
     @Query(
-            "SELECT id,credentialsId,deviceClientId,distributor FROM push_subscription WHERE"
-                    + " deviceClientId=:deviceClientId AND distributor=:distributor")
+            "SELECT id,credentialsId,deviceClientId,distributor,pushSubscriptionId FROM"
+                    + " push_subscription WHERE deviceClientId=:deviceClientId AND"
+                    + " distributor=:distributor")
     protected abstract ListenableFuture<PushSubscription> getPushSubscriptionInternal(
             final UUID deviceClientId, final String distributor);
 

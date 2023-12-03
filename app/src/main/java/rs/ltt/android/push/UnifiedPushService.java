@@ -34,6 +34,8 @@ public class UnifiedPushService implements PushService {
 
     public static final String ACTION_REGISTER = "org.unifiedpush.android.distributor.REGISTER";
 
+    public static final String ACTION_UNREGISTER = "org.unifiedpush.android.distributor.UNREGISTER";
+
     public static final String ACTION_MESSAGE = "org.unifiedpush.android.connector.MESSAGE";
 
     public static final String ACTION_FEATURE_BYTES_MESSAGE =
@@ -62,6 +64,14 @@ public class UnifiedPushService implements PushService {
 
     public UnifiedPushService(final Context context) {
         this.context = context;
+    }
+
+    public static void unregister(
+            final Context context, final String distributor, final UUID deviceClientId) {
+        final var intent = new Intent(ACTION_UNREGISTER);
+        intent.setPackage(distributor);
+        intent.putExtra(EXTRA_TOKEN, deviceClientId.toString());
+        context.sendBroadcast(intent);
     }
 
     @Override

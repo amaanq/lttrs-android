@@ -221,18 +221,26 @@ public class MainRepository {
     }
 
     public ListenableFuture<Void> removeAccountAsync(final long accountId) {
-        return IO_EXECUTOR.submit(
-                () -> {
-                    removeAccount(accountId);
-                    return null;
-                });
+        return IO_EXECUTOR.submit(() -> removeAccount(accountId));
     }
 
-    private void removeAccount(final long accountId) {
-        this.appDatabase.accountDao().delete(accountId);
+    private Void removeAccount(final long accountId) {
+        final var account = this.appDatabase.accountDao().getAccount(accountId);
+        final var pushSubscriptions =
+                this.appDatabase
+                        .pushSubscriptionDao()
+                        .getPushSubscriptions(account.getCredentials().getId());
+        final boolean credentialsDeleted = this.appDatabase.accountDao().delete(account);
+        if (credentialsDeleted) {
+            final var pushManager = new PushManager(application);
+            pushManager.unregister(pushSubscriptions);
+        }
         LttrsApplication.get(application).invalidateMostRecentlySelectedAccountId();
         EventMonitorService.stopMonitoring(application, accountId);
         cancelAllWork(accountId);
+
+        // TODO delete push subscriptions and then evict
+
         MuaPool.evict(accountId);
         final File file = LttrsDatabase.close(accountId);
         if (file != null && SQLiteDatabase.deleteDatabase(file)) {
@@ -240,6 +248,7 @@ public class MainRepository {
         }
         EmailNotification.cancel(application, accountId);
         EmailNotification.deleteChannel(application, accountId);
+        return null;
     }
 
     public boolean cancelNetworkFuture() {

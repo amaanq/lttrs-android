@@ -10,10 +10,18 @@ public class PushSubscription {
 
     public final String distributor;
 
-    public PushSubscription(long id, Long credentialsId, UUID deviceClientId, String distributor) {
+    public final String pushSubscriptionId;
+
+    public PushSubscription(
+            long id,
+            Long credentialsId,
+            UUID deviceClientId,
+            String distributor,
+            final String pushSubscriptionId) {
         this.id = id;
         this.credentialsId = credentialsId;
         this.deviceClientId = deviceClientId;
         this.distributor = distributor;
+        this.pushSubscriptionId = pushSubscriptionId;
     }
 }
