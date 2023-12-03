@@ -20,9 +20,9 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import okhttp3.HttpUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,8 +65,7 @@ public class UnifiedPushService implements PushService {
     }
 
     @Override
-    public ListenableFuture<Optional<Endpoint>> register(
-            final byte[] applicationServerKey, final UUID uuid) {
+    public ListenableFuture<Endpoint> register(final byte[] applicationServerKey, final UUID uuid) {
         final var distributor = Iterables.getFirst(getSupportedDistributors(), null);
         if (distributor == null) {
             return Futures.immediateFailedFuture(
@@ -94,16 +93,20 @@ public class UnifiedPushService implements PushService {
             final var messenger = new Messenger(handler);
             broadcast.putExtra("messenger", messenger);
             this.context.sendBroadcast(broadcast);
-            final var endpointFuture =
+            final var endpointWithTimeout =
                     Futures.withTimeout(
                             handler.endpointFuture,
                             30,
                             TimeUnit.SECONDS,
                             Services.SCHEDULED_EXECUTOR_SERVICE);
-            return Futures.transform(endpointFuture, Optional::of, MoreExecutors.directExecutor());
+            return Futures.catching(
+                    endpointWithTimeout,
+                    TimeoutException.class,
+                    ex -> new Endpoint(null, distributor.packageName),
+                    MoreExecutors.directExecutor());
         } else {
             this.context.sendBroadcast(broadcast);
-            return Futures.immediateFuture(Optional.empty());
+            return Futures.immediateFuture(new Endpoint(null, distributor.packageName));
         }
     }
 
@@ -141,7 +144,7 @@ public class UnifiedPushService implements PushService {
                     LOGGER.info("received endpoint {}", endpoint);
                     endpointFuture.set(endpoint);
                 } else if (ACTION_REGISTRATION_FAILED.equalsIgnoreCase(action)) {
-                    final var errorMessage = intent.getStringExtra("message");
+                    final var errorMessage = intent.getStringExtra(EXTRA_MESSAGE);
                     LOGGER.error(
                             "Registration failed with '{}'", Strings.nullToEmpty(errorMessage));
                     endpointFuture.setException(
@@ -150,14 +153,10 @@ public class UnifiedPushService implements PushService {
                                             "Registration failed with '%s'",
                                             Strings.nullToEmpty(errorMessage))));
                 } else if (ACTION_REGISTRATION_DELAYED.equalsIgnoreCase(action)) {
-                    final var errorMessage = intent.getStringExtra("message");
+                    final var errorMessage = intent.getStringExtra(EXTRA_MESSAGE);
                     LOGGER.error(
                             "Registration delayed due to '{}'", Strings.nullToEmpty(errorMessage));
-                    endpointFuture.setException(
-                            new IllegalStateException(
-                                    String.format(
-                                            "Registration delayed due to '%s'",
-                                            Strings.nullToEmpty(errorMessage))));
+                    endpointFuture.set(new Endpoint(null, distributor));
                 } else {
                     endpointFuture.setException(
                             new IllegalStateException(

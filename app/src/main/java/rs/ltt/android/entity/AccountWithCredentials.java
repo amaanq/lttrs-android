@@ -16,7 +16,6 @@
 package rs.ltt.android.entity;
 
 import com.google.common.base.Objects;
-import java.util.UUID;
 import okhttp3.HttpUrl;
 
 public class AccountWithCredentials {
@@ -28,17 +27,15 @@ public class AccountWithCredentials {
     private final String username;
     private final String password;
     private final HttpUrl sessionResource;
-    private final UUID deviceClientId;
 
     public AccountWithCredentials(
-            Long id,
-            Long credentialsId,
-            String accountId,
+            final Long id,
+            final Long credentialsId,
+            final String accountId,
             final String name,
-            String username,
-            String password,
-            HttpUrl sessionResource,
-            UUID deviceClientId) {
+            final String username,
+            final String password,
+            final HttpUrl sessionResource) {
         this.credentialsId = credentialsId;
         this.id = id;
         this.accountId = accountId;
@@ -46,7 +43,6 @@ public class AccountWithCredentials {
         this.username = username;
         this.password = password;
         this.sessionResource = sessionResource;
-        this.deviceClientId = deviceClientId;
     }
 
     /**
@@ -75,10 +71,6 @@ public class AccountWithCredentials {
         return new Credentials(credentialsId, username, password, sessionResource);
     }
 
-    public UUID getDeviceClientId() {
-        return deviceClientId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,21 +82,13 @@ public class AccountWithCredentials {
                 && Objects.equal(name, that.name)
                 && Objects.equal(username, that.username)
                 && Objects.equal(password, that.password)
-                && Objects.equal(sessionResource, that.sessionResource)
-                && Objects.equal(deviceClientId, that.deviceClientId);
+                && Objects.equal(sessionResource, that.sessionResource);
     }
 
     @Override
     public int hashCode() {
         return Objects.hashCode(
-                id,
-                credentialsId,
-                accountId,
-                name,
-                username,
-                password,
-                sessionResource,
-                deviceClientId);
+                id, credentialsId, accountId, name, username, password, sessionResource);
     }
 
     public static class Credentials {

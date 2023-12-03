@@ -10,10 +10,12 @@ import com.google.common.util.concurrent.MoreExecutors;
 import java.security.GeneralSecurityException;
 import java.util.Optional;
 import java.util.UUID;
+import okhttp3.HttpUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rs.ltt.android.database.AppDatabase;
 import rs.ltt.android.entity.AccountWithCredentials;
+import rs.ltt.android.entity.PushSubscription;
 import rs.ltt.jmap.common.entity.PushMessage;
 
 public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
@@ -21,21 +23,26 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPushMessageReceiver.class);
 
     protected void onReceiveMessage(
-            final Context context, final UUID deviceClientId, final byte[] message) {
-        final var accountFuture =
-                AppDatabase.getInstance(context).accountDao().getAnyAccount(deviceClientId);
+            final Context context,
+            @NonNull final UUID deviceClientId,
+            @Nullable final String distributor,
+            final byte[] message) {
+        final var pushSubscriptionFuture =
+                AppDatabase.getInstance(context)
+                        .pushSubscriptionDao()
+                        .getPushSubscription(deviceClientId, distributor);
         Futures.addCallback(
-                accountFuture,
+                pushSubscriptionFuture,
                 new FutureCallback<>() {
                     @Override
-                    public void onSuccess(final AccountWithCredentials account) {
-                        if (account == null) {
+                    public void onSuccess(final PushSubscription pushSubscription) {
+                        if (pushSubscription == null) {
                             LOGGER.warn(
-                                    "No credentials found that use a deviceClientId of {}",
+                                    "No push subscription found that use a deviceClientId of {}",
                                     deviceClientId);
                             return;
                         }
-                        onReceiveMessage(context, account, message);
+                        onReceiveMessage(context, pushSubscription, message);
                     }
 
                     @Override
@@ -50,18 +57,21 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
     }
 
     private void onReceiveMessage(
-            final Context context, final AccountWithCredentials account, final byte[] pushMessage) {
+            final Context context,
+            final PushSubscription pushSubscription,
+            final byte[] pushMessage) {
         final var keyMaterialFuture =
                 AppDatabase.getInstance(context)
                         .pushSubscriptionDao()
-                        .getOptionalKeyMaterial(account.getCredentials().getId());
+                        .getOptionalKeyMaterial(pushSubscription.id);
         Futures.addCallback(
                 keyMaterialFuture,
                 new FutureCallback<>() {
                     @Override
                     public void onSuccess(
                             final Optional<WebPushMessageEncryption.KeyMaterial> keyMaterial) {
-                        onReceiveMessage(context, account, keyMaterial.orElse(null), pushMessage);
+                        onReceiveMessage(
+                                context, pushSubscription, keyMaterial.orElse(null), pushMessage);
                     }
 
                     @Override
@@ -74,7 +84,7 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
 
     private void onReceiveMessage(
             final Context context,
-            @NonNull final AccountWithCredentials account,
+            @NonNull final PushSubscription pushSubscription,
             @Nullable final WebPushMessageEncryption.KeyMaterial keyMaterial,
             final byte[] message) {
         final byte[] plaintextMessage;
@@ -96,25 +106,35 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
             return;
         }
         final var pushManager = new PushManager(context);
-        pushManager.onMessageReceived(account, pushMessage);
+        pushManager.onMessageReceived(pushSubscription, pushMessage);
     }
 
     protected void onReceiveNewEndpoint(
-            final Context context, final UUID deviceClientId, final PushService.Endpoint endpoint) {
-        final var accountFuture =
-                AppDatabase.getInstance(context).accountDao().getAnyAccount(deviceClientId);
+            final Context context,
+            final UUID deviceClientId,
+            @NonNull final HttpUrl url,
+            @Nullable final String distributor) {
+        final var pushSubscriptionFuture =
+                AppDatabase.getInstance(context)
+                        .pushSubscriptionDao()
+                        .getPushSubscription(deviceClientId, distributor);
         Futures.addCallback(
-                accountFuture,
+                pushSubscriptionFuture,
                 new FutureCallback<>() {
                     @Override
-                    public void onSuccess(final AccountWithCredentials account) {
-                        if (account == null) {
+                    public void onSuccess(final PushSubscription pushSubscription) {
+                        if (pushSubscription == null) {
                             LOGGER.warn(
-                                    "No credentials found that use a deviceClientId of {}",
+                                    "No push subscription found that use a deviceClientId of {}",
                                     deviceClientId);
                             return;
                         }
-                        onReceiveNewEndpoint(context, account, endpoint);
+                        final var deviceIdEndpoint =
+                                new PushService.DeviceIdEndpoint(
+                                        pushSubscription.deviceClientId,
+                                        url,
+                                        pushSubscription.distributor);
+                        onReceiveNewEndpoint(context, pushSubscription, deviceIdEndpoint);
                     }
 
                     @Override
@@ -130,10 +150,25 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
 
     protected void onReceiveNewEndpoint(
             final Context context,
-            final AccountWithCredentials account,
-            final PushService.Endpoint endpoint) {
-        LOGGER.info("Received new push endpoint {} for {}", endpoint, account.getDeviceClientId());
-        final var pushManager = new PushManager(context);
-        pushManager.register(account, endpoint);
+            final PushSubscription pushSubscription,
+            final PushService.DeviceIdEndpoint deviceIdEndpoint) {
+        LOGGER.info("Received new push endpoint {}", deviceIdEndpoint);
+        final var anyAccountFuture =
+                AppDatabase.getInstance(context)
+                        .accountDao()
+                        .getAnyAccountFuture(pushSubscription.credentialsId);
+        Futures.addCallback(
+                anyAccountFuture,
+                new FutureCallback<>() {
+                    @Override
+                    public void onSuccess(AccountWithCredentials account) {
+                        final var pushManager = new PushManager(context);
+                        pushManager.register(account, deviceIdEndpoint);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Throwable throwable) {}
+                },
+                MoreExecutors.directExecutor());
     }
 }

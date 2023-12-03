@@ -12,6 +12,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import java.security.GeneralSecurityException;
 import java.util.Collection;
+import java.util.UUID;
 import okhttp3.HttpUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,9 +33,13 @@ public class PushRegistrationWorker extends ListenableWorker {
     private static final Logger LOGGER = LoggerFactory.getLogger(PushRegistrationWorker.class);
 
     private static final String KEY_ACCOUNT = "account";
+
+    private static final String KEY_DEVICE_CLIENT_ID = "deviceClientId";
     private static final String KEY_URI = "uri";
     private static final String KEY_DISTRIBUTOR = "distributor";
     private final Long account;
+
+    private final String deviceClientId;
     private final String uri;
     private final String distributor;
 
@@ -49,13 +54,16 @@ public class PushRegistrationWorker extends ListenableWorker {
         }
         this.uri = data.getString(KEY_URI);
         this.distributor = data.getString(KEY_DISTRIBUTOR);
+        this.deviceClientId = data.getString(KEY_DEVICE_CLIENT_ID);
     }
 
     @NonNull
     @Override
     public ListenableFuture<Result> startWork() {
-        if (this.account == null || Strings.isNullOrEmpty(this.uri)) {
-            LOGGER.error("Missing input parameters (account and uri)");
+        if (this.account == null
+                || Strings.isNullOrEmpty(this.uri)
+                || Strings.isNullOrEmpty(deviceClientId)) {
+            LOGGER.error("Missing input parameters (account, uri, deviceClientId)");
             return Futures.immediateFuture(Result.failure());
         }
         final var accountFuture =
@@ -64,9 +72,7 @@ public class PushRegistrationWorker extends ListenableWorker {
                         .getAccountFuture(this.account);
         final var registrationFuture =
                 Futures.transformAsync(
-                        accountFuture,
-                        account -> register(account, this.distributor, this.uri),
-                        MoreExecutors.directExecutor());
+                        accountFuture, this::register, MoreExecutors.directExecutor());
         final var resultFuture =
                 Futures.transform(
                         registrationFuture,
@@ -89,19 +95,27 @@ public class PushRegistrationWorker extends ListenableWorker {
                 MoreExecutors.directExecutor());
     }
 
-    private ListenableFuture<Boolean> register(
-            final AccountWithCredentials account, final String distributor, final String uri) {
+    private ListenableFuture<Boolean> register(final AccountWithCredentials account) {
         final HttpUrl httpUrl;
         try {
             httpUrl = HttpUrl.get(uri);
         } catch (final Exception e) {
             return Futures.immediateFailedFuture(e);
         }
-        return register(account, distributor, httpUrl);
+        final UUID deviceClientId;
+        try {
+            deviceClientId = UUID.fromString(this.deviceClientId);
+        } catch (final IllegalArgumentException e) {
+            return Futures.immediateFailedFuture(e);
+        }
+        return register(account, deviceClientId, distributor, httpUrl);
     }
 
     private ListenableFuture<Boolean> register(
-            final AccountWithCredentials account, final String distributor, final HttpUrl httpUrl) {
+            final AccountWithCredentials account,
+            final UUID deviceClientId,
+            final String distributor,
+            final HttpUrl httpUrl) {
         final WebPushMessageEncryption.KeyMaterial keyMaterial;
         try {
             keyMaterial = WebPushMessageEncryption.generateKeyMaterial();
@@ -114,19 +128,20 @@ public class PushRegistrationWorker extends ListenableWorker {
                         .getExistingSubscriptionIds(account.getCredentials().getId());
         return Futures.transformAsync(
                 existingSubscriptionIds,
-                ids -> register(account, distributor, httpUrl, keyMaterial, ids),
+                ids -> register(account, deviceClientId, distributor, httpUrl, keyMaterial, ids),
                 MoreExecutors.directExecutor());
     }
 
     private ListenableFuture<Boolean> register(
             final AccountWithCredentials account,
+            final UUID deviceClientId,
             final String distributor,
             final HttpUrl httpUrl,
             final WebPushMessageEncryption.KeyMaterial keyMaterial,
             final Collection<String> existingSubscriptionIds) {
         final PushSubscription pushSubscription =
                 PushSubscription.builder()
-                        .deviceClientId(account.getDeviceClientId().toString())
+                        .deviceClientId(deviceClientId.toString())
                         .keys(keyMaterial.asKeys())
                         .url(httpUrl.toString())
                         .build();
@@ -147,6 +162,8 @@ public class PushRegistrationWorker extends ListenableWorker {
                             methodResponses.getMain(SetPushSubscriptionMethodResponse.class);
                     final var pushManager = new PushManager(getApplicationContext());
                     final var created = response.getCreated();
+                    final var destroyed = response.getDestroyed();
+                    // TODO delete 'destroyed' from pushSubscription
                     if (created != null && created.containsKey("ps0")) {
                         final var ps = created.get("ps0");
                         final var pushSubscriptionId = ps == null ? null : ps.getId();
@@ -158,30 +175,43 @@ public class PushRegistrationWorker extends ListenableWorker {
                         // expires MUST be 48h in the future. check that it is at least 36h so we
                         // don’t loop when we try to update this every 24h
                         // make credentialsId unique
-                        AppDatabase.getInstance(getApplicationContext())
-                                .pushSubscriptionDao()
-                                .insert(
-                                        account.getCredentials(),
-                                        distributor,
-                                        pushSubscriptionId,
-                                        httpUrl,
-                                        keyMaterial,
-                                        expires);
-                        pushManager.cancelRecurringMainQueryWorkers(account.getCredentials());
-                        return true;
+                        final var success =
+                                AppDatabase.getInstance(getApplicationContext())
+                                        .pushSubscriptionDao()
+                                        .update(
+                                                account.getCredentials(),
+                                                deviceClientId,
+                                                pushSubscriptionId,
+                                                httpUrl,
+                                                keyMaterial,
+                                                expires);
+                        if (success) {
+                            pushManager.cancelRecurringMainQueryWorkers(account.getCredentials());
+                        } else {
+                            LOGGER.error("Unable to update PushSubscription in database");
+                            pushManager.scheduleRecurringMainQueryWorkers(account.getCredentials());
+                        }
+                        return success;
                     } else {
                         pushManager.scheduleRecurringMainQueryWorkers(account.getCredentials());
                         return false;
                     }
                 },
-                MoreExecutors.directExecutor());
+                AppDatabase.getInstance(getApplicationContext()).getQueryExecutor());
     }
 
-    public static Data data(final Long account, final PushService.Endpoint endpoint) {
+    public static Data data(
+            final Long account, final PushService.DeviceIdEndpoint deviceIdEndpoint) {
+        final var optionalUri = deviceIdEndpoint.endpoint.getUrl();
+        if (optionalUri.isEmpty()) {
+            throw new IllegalArgumentException("endpoint URL can not be empty");
+        }
+        final var endpoint = deviceIdEndpoint.endpoint;
         return new Data.Builder()
                 .putLong(KEY_ACCOUNT, account)
+                .putString(KEY_DEVICE_CLIENT_ID, deviceIdEndpoint.deviceClientId.toString())
                 .putString(KEY_DISTRIBUTOR, endpoint.distributor)
-                .putString(KEY_URI, endpoint.url.toString())
+                .putString(KEY_URI, optionalUri.get().toString())
                 .build();
     }
 }

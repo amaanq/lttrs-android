@@ -18,7 +18,6 @@ package rs.ltt.android.entity;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import com.google.common.base.Objects;
-import java.util.UUID;
 import okhttp3.HttpUrl;
 
 @Entity(tableName = "credentials")
@@ -30,17 +29,12 @@ public class CredentialsEntity {
     public String username;
     public String password;
     public HttpUrl sessionResource;
-    public UUID deviceClientId;
 
     public CredentialsEntity(
-            final String username,
-            final String password,
-            final HttpUrl sessionResource,
-            UUID deviceClientId) {
+            final String username, final String password, final HttpUrl sessionResource) {
         this.username = username;
         this.password = password;
         this.sessionResource = sessionResource;
-        this.deviceClientId = deviceClientId;
     }
 
     @Override
@@ -51,12 +45,11 @@ public class CredentialsEntity {
         return Objects.equal(id, that.id)
                 && Objects.equal(username, that.username)
                 && Objects.equal(password, that.password)
-                && Objects.equal(sessionResource, that.sessionResource)
-                && Objects.equal(deviceClientId, that.deviceClientId);
+                && Objects.equal(sessionResource, that.sessionResource);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, username, password, sessionResource, deviceClientId);
+        return Objects.hashCode(id, username, password, sessionResource);
     }
 }

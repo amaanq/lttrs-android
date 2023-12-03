@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "64135d62d6f1096cb376dbd68dc6c5a4",
+    "identityHash": "6782edac35ce109f001a34c2df930781",
     "entities": [
       {
         "tableName": "credentials",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `username` TEXT, `password` TEXT, `sessionResource` TEXT, `deviceClientId` BLOB)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `username` TEXT, `password` TEXT, `sessionResource` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -30,12 +30,6 @@
             "fieldPath": "sessionResource",
             "columnName": "sessionResource",
             "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "deviceClientId",
-            "columnName": "deviceClientId",
-            "affinity": "BLOB",
             "notNull": false
           }
         ],
@@ -152,7 +146,7 @@
       },
       {
         "tableName": "push_subscription",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `credentialsId` INTEGER NOT NULL, `distributor` TEXT, `pushSubscriptionId` TEXT, `url` TEXT, `verificationCode` TEXT, `expires` INTEGER, `publicKey` BLOB, `privateKey` BLOB, `authenticationSecret` BLOB, FOREIGN KEY(`credentialsId`) REFERENCES `credentials`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `credentialsId` INTEGER NOT NULL, `deviceClientId` BLOB NOT NULL, `distributor` TEXT NOT NULL, `pushSubscriptionId` TEXT, `url` TEXT, `verificationCode` TEXT, `expires` INTEGER, `publicKey` BLOB, `privateKey` BLOB, `authenticationSecret` BLOB, FOREIGN KEY(`credentialsId`) REFERENCES `credentials`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -167,10 +161,16 @@
             "notNull": true
           },
           {
+            "fieldPath": "deviceClientId",
+            "columnName": "deviceClientId",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
             "fieldPath": "distributor",
             "columnName": "distributor",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "pushSubscriptionId",
@@ -223,13 +223,14 @@
         },
         "indices": [
           {
-            "name": "index_push_subscription_credentialsId",
+            "name": "index_push_subscription_credentialsId_deviceClientId",
             "unique": true,
             "columnNames": [
-              "credentialsId"
+              "credentialsId",
+              "deviceClientId"
             ],
             "orders": [],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_push_subscription_credentialsId` ON `${TABLE_NAME}` (`credentialsId`)"
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_push_subscription_credentialsId_deviceClientId` ON `${TABLE_NAME}` (`credentialsId`, `deviceClientId`)"
           }
         ],
         "foreignKeys": [
@@ -250,7 +251,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '64135d62d6f1096cb376dbd68dc6c5a4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6782edac35ce109f001a34c2df930781')"
     ]
   }
 }

@@ -20,7 +20,8 @@ public class UnifiedPushMessageReceiver extends AbstractPushMessageReceiver {
             case UnifiedPushService.ACTION_MESSAGE -> onReceiveMessage(
                     context,
                     intent.getStringExtra(UnifiedPushService.EXTRA_TOKEN),
-                    intent.getByteArrayExtra(UnifiedPushService.EXTRA_BYTE_MESSAGE));
+                    intent.getByteArrayExtra(UnifiedPushService.EXTRA_BYTE_MESSAGE),
+                    intent.getParcelableExtra(UnifiedPushService.EXTRA_DISTRIBUTOR));
             case UnifiedPushService.ACTION_NEW_ENDPOINT -> onReceiveNewEndpoint(
                     context,
                     intent.getStringExtra(UnifiedPushService.EXTRA_TOKEN),
@@ -58,12 +59,14 @@ public class UnifiedPushMessageReceiver extends AbstractPushMessageReceiver {
             distributor = null;
         }
 
-        this.onReceiveNewEndpoint(
-                context, clientDeviceId, new PushService.Endpoint(url, distributor));
+        this.onReceiveNewEndpoint(context, clientDeviceId, url, distributor);
     }
 
     private void onReceiveMessage(
-            final Context context, final String token, final byte[] byteMessage) {
+            final Context context,
+            final String token,
+            final byte[] byteMessage,
+            final Parcelable distributorVerification) {
         if (Strings.isNullOrEmpty(token) || byteMessage == null || byteMessage.length == 0) {
             return;
         }
@@ -74,7 +77,13 @@ public class UnifiedPushMessageReceiver extends AbstractPushMessageReceiver {
             LOGGER.warn("Received invalid push message. clientDeviceId is not a valid UUID");
             return;
         }
+        final String distributor;
+        if (distributorVerification instanceof PendingIntent pendingIntent) {
+            distributor = pendingIntent.getIntentSender().getCreatorPackage();
+        } else {
+            distributor = null;
+        }
         LOGGER.info("Received push message for {} ({} bytes)", clientDeviceId, byteMessage.length);
-        this.onReceiveMessage(context, clientDeviceId, byteMessage);
+        this.onReceiveMessage(context, clientDeviceId, distributor, byteMessage);
     }
 }

@@ -10,8 +10,10 @@ import com.google.common.util.concurrent.MoreExecutors;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import okhttp3.HttpUrl;
 import rs.ltt.android.entity.AccountWithCredentials;
+import rs.ltt.android.entity.PushSubscription;
 import rs.ltt.android.entity.PushSubscriptionEntity;
 import rs.ltt.android.push.WebPushMessageEncryption;
 
@@ -23,42 +25,91 @@ public abstract class PushSubscriptionDao {
 
     public void insert(
             final AccountWithCredentials.Credentials credentials,
-            final String distributor,
-            final String pushSubscriptionId,
-            final HttpUrl url,
-            final WebPushMessageEncryption.KeyMaterial keyMaterial,
-            final Instant expires) {
+            final UUID deviceClientId,
+            final String distributor) {
         final var entity = new PushSubscriptionEntity();
         entity.credentialsId = credentials.getId();
+        entity.deviceClientId = deviceClientId;
         entity.distributor = distributor;
-        entity.pushSubscriptionId = pushSubscriptionId;
-        entity.url = url;
-        entity.keyMaterial = keyMaterial;
-        entity.expires = expires;
         insert(entity);
     }
 
     @Query(
-            "UPDATE push_subscription SET verificationCode=:verificationCode WHERE"
-                + " credentialsId=(SELECT credentialsId FROM account WHERE id=:accountId LIMIT 1)"
-                + " AND pushSubscriptionId=:pushSubscriptionId")
-    public abstract void setVerificationCode(
-            long accountId, final String pushSubscriptionId, final String verificationCode);
+            "UPDATE push_subscription SET"
+                + " pushSubscriptionId=:pushSubscriptionId,url=:httpUrl,publicKey=:publicKey,privateKey=:privateKey,authenticationSecret=:authenticationSecret,expires=:expires"
+                + " WHERE credentialsId=:credentialsId AND deviceClientId=:deviceClientId")
+    protected abstract int update(
+            final long credentialsId,
+            final UUID deviceClientId,
+            String pushSubscriptionId,
+            HttpUrl httpUrl,
+            byte[] publicKey,
+            byte[] privateKey,
+            byte[] authenticationSecret,
+            Instant expires);
 
-    @Query("SELECT pushSubscriptionId FROM push_subscription WHERE credentialsId=:credentialsId")
+    public boolean update(
+            AccountWithCredentials.Credentials credentials,
+            UUID deviceClientId,
+            String pushSubscriptionId,
+            HttpUrl httpUrl,
+            WebPushMessageEncryption.KeyMaterial keyMaterial,
+            Instant expires) {
+        return update(
+                        credentials.getId(),
+                        deviceClientId,
+                        pushSubscriptionId,
+                        httpUrl,
+                        keyMaterial.publicKey,
+                        keyMaterial.privateKey,
+                        keyMaterial.authenticationSecret,
+                        expires)
+                >= 1;
+    }
+
+    @Query(
+            "UPDATE push_subscription SET verificationCode=:verificationCode WHERE"
+                    + " credentialsId=:credentialsId"
+                    + " AND pushSubscriptionId=:pushSubscriptionId")
+    public abstract void setVerificationCode(
+            long credentialsId, final String pushSubscriptionId, final String verificationCode);
+
+    @Query(
+            "SELECT pushSubscriptionId FROM push_subscription WHERE credentialsId=:credentialsId"
+                    + " AND pushSubscriptionId IS NOT NULL")
     public abstract ListenableFuture<List<String>> getExistingSubscriptionIds(
             final long credentialsId);
 
     @Query(
+            "SELECT id,credentialsId,deviceClientId,distributor FROM push_subscription WHERE"
+                    + " deviceClientId=:deviceClientId")
+    protected abstract ListenableFuture<PushSubscription> getPushSubscriptionInternal(
+            final UUID deviceClientId);
+
+    @Query(
+            "SELECT id,credentialsId,deviceClientId,distributor FROM push_subscription WHERE"
+                    + " deviceClientId=:deviceClientId AND distributor=:distributor")
+    protected abstract ListenableFuture<PushSubscription> getPushSubscriptionInternal(
+            final UUID deviceClientId, final String distributor);
+
+    public ListenableFuture<PushSubscription> getPushSubscription(
+            final UUID deviceClientId, final String distributor) {
+        if (distributor == null) {
+            return getPushSubscriptionInternal(deviceClientId);
+        } else {
+            return getPushSubscriptionInternal(deviceClientId, distributor);
+        }
+    }
+
+    @Query(
             "SELECT publicKey,privateKey,authenticationSecret FROM push_subscription WHERE"
-                    + " credentialsId=:credentialsId LIMIT 1")
-    abstract ListenableFuture<WebPushMessageEncryption.KeyMaterial> getKeyMaterial(
-            long credentialsId);
+                    + " id=:id LIMIT 1")
+    abstract ListenableFuture<WebPushMessageEncryption.KeyMaterial> getKeyMaterial(long id);
 
     public ListenableFuture<Optional<WebPushMessageEncryption.KeyMaterial>> getOptionalKeyMaterial(
-            long credentialsId) {
+            long id) {
         return Futures.transform(
-                getKeyMaterial(credentialsId),
+                getKeyMaterial(id),
                 km -> {
                     if (km != null
                             && km.privateKey != null

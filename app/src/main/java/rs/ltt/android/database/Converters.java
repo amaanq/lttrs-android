@@ -15,6 +15,7 @@
 
 package rs.ltt.android.database;
 
+import androidx.annotation.Nullable;
 import androidx.room.TypeConverter;
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -91,13 +92,13 @@ public class Converters {
     }
 
     @TypeConverter
-    public static Instant toInstant(long timestamp) {
-        return Instant.ofEpochMilli(timestamp);
+    public static Instant toInstant(Long timestamp) {
+        return timestamp == null ? null : Instant.ofEpochMilli(timestamp);
     }
 
     @TypeConverter
-    public static long toTimestamp(Instant instant) {
-        return instant.getEpochSecond() * 1000;
+    public static Long toTimestamp(@Nullable Instant instant) {
+        return instant == null ? null : instant.getEpochSecond() * 1000;
     }
 
     @TypeConverter

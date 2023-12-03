@@ -13,9 +13,7 @@ import com.google.common.base.Strings;
 import com.google.common.io.BaseEncoding;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
-import java.util.Optional;
 import java.util.UUID;
 import okhttp3.HttpUrl;
 import org.slf4j.Logger;
@@ -26,7 +24,7 @@ public class FirebasePushService implements PushService {
     private static final Logger LOGGER = LoggerFactory.getLogger(FirebasePushService.class);
 
     private static final String ACTION_REGISTRATION = "com.google.android.c2dm.intent.REGISTER";
-    private static final String PACKAGE_NAME_GMS = "com.google.android.gms";
+    public static final String PACKAGE_NAME_GMS = "com.google.android.gms";
 
     private static final String URI_WEB_PUSH_ENDPOINT = "https://fcm.googleapis.com/fcm/send/%s";
 
@@ -37,8 +35,7 @@ public class FirebasePushService implements PushService {
     }
 
     @Override
-    public ListenableFuture<Optional<Endpoint>> register(
-            final byte[] applicationServerKey, final UUID uuid) {
+    public ListenableFuture<Endpoint> register(final byte[] applicationServerKey, final UUID uuid) {
         if (applicationServerKey == null || applicationServerKey.length == 0) {
             return Futures.immediateFailedFuture(
                     new IllegalArgumentException("FirebasePush requires vapid key"));
@@ -63,8 +60,7 @@ public class FirebasePushService implements PushService {
         final var handler = new RegistrationMessageHandler(Looper.getMainLooper());
         intent.putExtra("google.messenger", new Messenger(handler));
         context.startService(intent);
-        return Futures.transform(
-                handler.endpointFuture, Optional::of, MoreExecutors.directExecutor());
+        return handler.endpointFuture;
     }
 
     private static class RegistrationMessageHandler extends Handler {

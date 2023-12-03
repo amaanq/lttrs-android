@@ -37,38 +37,39 @@ public abstract class AccountDao {
 
     @Query(
             "select account.id as"
-                + " id,credentialsId,username,password,sessionResource,accountId,name,deviceClientId"
-                + " from credentials join account on credentialsId = credentials.id where"
-                + " account.id=:id limit 1")
+                    + " id,credentialsId,username,password,sessionResource,accountId,name"
+                    + " from credentials join account on credentialsId = credentials.id where"
+                    + " account.id=:id limit 1")
     public abstract ListenableFuture<AccountWithCredentials> getAccountFuture(Long id);
 
     @Query(
             "select account.id as"
-                + " id,credentialsId,username,password,sessionResource,accountId,name,deviceClientId"
-                + " from credentials join account on credentialsId = credentials.id")
+                    + " id,credentialsId,username,password,sessionResource,accountId,name"
+                    + " from credentials join account on credentialsId = credentials.id where"
+                    + " account.credentialsId=:credentialsId limit 1")
+    public abstract ListenableFuture<AccountWithCredentials> getAnyAccountFuture(
+            Long credentialsId);
+
+    @Query(
+            "select account.id as"
+                    + " id,credentialsId,username,password,sessionResource,accountId,name"
+                    + " from credentials join account on credentialsId = credentials.id")
     public abstract ListenableFuture<List<AccountWithCredentials>> getAccounts();
 
     @Query(
             "select account.id as"
-                + " id,credentialsId,username,password,sessionResource,accountId,name,deviceClientId"
-                + " from credentials join account on credentialsId = credentials.id where"
-                + " account.id=:id limit 1")
+                    + " id,credentialsId,username,password,sessionResource,accountId,name"
+                    + " from credentials join account on credentialsId = credentials.id where"
+                    + " account.id=:id limit 1")
     public abstract AccountWithCredentials getAccount(Long id);
 
     @Query(
             "select account.id as"
-                + " id,credentialsId,username,password,sessionResource,accountId,name,deviceClientId"
-                + " from credentials join account on credentialsId = credentials.id where"
+                + " id,account.credentialsId,username,password,sessionResource,accountId,name FROM"
+                + " credentials JOIN account ON account.credentialsId = credentials.id JOIN"
+                + " push_subscription ON push_subscription.credentialsId = credentials.id WHERE"
                 + " account.accountId=:accountId and deviceClientId=:deviceClientId limit 1")
     public abstract AccountWithCredentials getAccount(UUID deviceClientId, String accountId);
-
-    @Query(
-            "select account.id as"
-                + " id,credentialsId,username,password,sessionResource,accountId,name,deviceClientId"
-                + " from credentials join account on credentialsId = credentials.id where"
-                + " deviceClientId=:deviceClientId limit 1")
-    public abstract ListenableFuture<AccountWithCredentials> getAnyAccount(
-            final UUID deviceClientId);
 
     @Query("select id,name from account where id=:id limit 1")
     public abstract LiveData<AccountName> getAccountNameLiveData(Long id);
@@ -116,9 +117,8 @@ public abstract class AccountDao {
             HttpUrl sessionResource,
             Map<String, Account> accounts) {
         final ImmutableList.Builder<AccountWithCredentials> builder = ImmutableList.builder();
-        final var clientDeviceId = UUID.randomUUID();
         final Long credentialId =
-                insert(new CredentialsEntity(username, password, sessionResource, clientDeviceId));
+                insert(new CredentialsEntity(username, password, sessionResource));
         for (final Map.Entry<String, Account> entry : accounts.entrySet()) {
             final String accountId = entry.getKey();
             final String name = entry.getValue().getName();
@@ -131,8 +131,7 @@ public abstract class AccountDao {
                             name,
                             username,
                             password,
-                            sessionResource,
-                            clientDeviceId));
+                            sessionResource));
         }
         return builder.build();
     }

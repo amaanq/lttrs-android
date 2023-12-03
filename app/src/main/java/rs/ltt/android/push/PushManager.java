@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import rs.ltt.android.MuaPool;
 import rs.ltt.android.database.AppDatabase;
 import rs.ltt.android.entity.AccountWithCredentials;
+import rs.ltt.android.entity.PushSubscription;
 import rs.ltt.android.worker.MainMailboxQueryRefreshWorker;
 import rs.ltt.android.worker.PushRegistrationWorker;
 import rs.ltt.android.worker.PushVerificationWorker;
@@ -55,11 +56,11 @@ public class PushManager {
     }
 
     public void onMessageReceived(
-            final AccountWithCredentials account, final PushMessage pushMessage) {
+            final PushSubscription pushSubscription, final PushMessage pushMessage) {
         if (pushMessage instanceof PushVerification pushVerification) {
-            onPushVerificationReceived(account, pushVerification);
+            onPushVerificationReceived(pushSubscription, pushVerification);
         } else if (pushMessage instanceof StateChange stateChange) {
-            onStateChangeReceived(account.getDeviceClientId(), stateChange);
+            onStateChangeReceived(pushSubscription.deviceClientId, stateChange);
         } else {
             throw new IllegalArgumentException(
                     String.format(
@@ -69,14 +70,16 @@ public class PushManager {
     }
 
     private void onPushVerificationReceived(
-            final AccountWithCredentials account, final PushVerification pushMessage) {
+            final PushSubscription pushSubscription, final PushVerification pushMessage) {
         final var pushSubscriptionId = pushMessage.getPushSubscriptionId();
         final var verificationCode = pushMessage.getVerificationCode();
         final OneTimeWorkRequest workRequest =
                 new OneTimeWorkRequest.Builder(PushVerificationWorker.class)
                         .setInputData(
                                 PushVerificationWorker.data(
-                                        account.getId(), pushSubscriptionId, verificationCode))
+                                        pushSubscription.credentialsId,
+                                        pushSubscriptionId,
+                                        verificationCode))
                         .build();
         final WorkManager workManager = WorkManager.getInstance(context.getApplicationContext());
         workManager.enqueue(workRequest);
@@ -242,31 +245,35 @@ public class PushManager {
             LOGGER.warn("No push service found on user device");
             return Futures.immediateFuture(false);
         }
-        final var clientDeviceId = account.getDeviceClientId();
-        if (clientDeviceId == null) {
-            return Futures.immediateFailedFuture(
-                    new IllegalStateException("Missing clientDeviceId on credentials"));
-        }
+        final var deviceClientId = UUID.randomUUID();
         final var endpointFuture =
-                pushService.register(applicationServerKey.orElse(null), clientDeviceId);
+                pushService.register(applicationServerKey.orElse(null), deviceClientId);
+        final var appDatabase = AppDatabase.getInstance(context.getApplicationContext());
         return Futures.transformAsync(
                 endpointFuture,
-                optionalEndpoint -> {
-                    if (optionalEndpoint.isPresent()) {
-                        final var endpoint = optionalEndpoint.get();
+                endpoint -> {
+                    final var optionalUrl = endpoint.getUrl();
+                    appDatabase
+                            .pushSubscriptionDao()
+                            .insert(account.getCredentials(), deviceClientId, endpoint.distributor);
+                    if (optionalUrl.isPresent()) {
+                        final var deviceIdEndpoint =
+                                new PushService.DeviceIdEndpoint(deviceClientId, endpoint);
                         LOGGER.info("WebPush endpoint: {}", endpoint);
-                        this.register(account, endpoint);
+                        this.register(account, deviceIdEndpoint);
                     }
                     return Futures.immediateFuture(Boolean.TRUE);
                 },
-                MoreExecutors.directExecutor());
+                appDatabase.getQueryExecutor());
     }
 
     public void register(
-            final AccountWithCredentials account, final PushService.Endpoint endpoint) {
+            final AccountWithCredentials account,
+            final PushService.DeviceIdEndpoint deviceIdEndpoint) {
         final OneTimeWorkRequest workRequest =
                 new OneTimeWorkRequest.Builder(PushRegistrationWorker.class)
-                        .setInputData(PushRegistrationWorker.data(account.getId(), endpoint))
+                        .setInputData(
+                                PushRegistrationWorker.data(account.getId(), deviceIdEndpoint))
                         .build();
         final WorkManager workManager = WorkManager.getInstance(context.getApplicationContext());
         workManager.enqueue(workRequest);

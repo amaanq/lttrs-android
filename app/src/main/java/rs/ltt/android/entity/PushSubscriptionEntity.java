@@ -7,6 +7,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import java.time.Instant;
+import java.util.UUID;
 import okhttp3.HttpUrl;
 import rs.ltt.android.push.WebPushMessageEncryption;
 
@@ -19,14 +20,20 @@ import rs.ltt.android.push.WebPushMessageEncryption;
                     childColumns = {"credentialsId"},
                     onDelete = ForeignKey.CASCADE)
         },
-        indices = {@Index(value = "credentialsId", unique = true)})
+        indices = {
+            @Index(
+                    value = {"credentialsId", "deviceClientId"},
+                    unique = true)
+        })
 public class PushSubscriptionEntity {
     @PrimaryKey(autoGenerate = true)
     public Long id;
 
     @NonNull public Long credentialsId;
 
-    public String distributor;
+    @NonNull public UUID deviceClientId;
+
+    @NonNull public String distributor;
     public String pushSubscriptionId;
 
     public HttpUrl url;
