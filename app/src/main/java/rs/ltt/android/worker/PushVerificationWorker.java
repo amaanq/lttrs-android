@@ -91,7 +91,17 @@ public class PushVerificationWorker extends ListenableWorker {
                             }
                         },
                         MoreExecutors.directExecutor());
-        return result;
+        return Futures.catching(
+                result,
+                Exception.class,
+                exception -> {
+                    if (AbstractMuaWorker.isNetworkIssue(exception)) {
+                        return Result.retry();
+                    } else {
+                        return Result.failure();
+                    }
+                },
+                MoreExecutors.directExecutor());
     }
 
     public static Data data(
