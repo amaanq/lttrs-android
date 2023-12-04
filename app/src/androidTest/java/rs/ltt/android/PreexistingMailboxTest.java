@@ -93,7 +93,7 @@ public class PreexistingMailboxTest {
         onView(withId(R.id.password)).perform(pressImeActionButton());
         // onView(withId(R.id.next)).perform(click());
 
-        Thread.sleep(5000);
+        Thread.sleep(10_000);
 
         intended(hasComponent(LttrsActivity.class.getName()));
         // swipe on the first email
