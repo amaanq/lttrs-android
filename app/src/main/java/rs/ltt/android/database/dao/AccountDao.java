@@ -155,4 +155,8 @@ public abstract class AccountDao {
         setSelected(id);
         setNotSelected(id);
     }
+
+    @Query("SELECT id,username,password,sessionResource FROM credentials WHERE id=:credentialsId")
+    public abstract ListenableFuture<AccountWithCredentials.Credentials> getCredentials(
+            Long credentialsId);
 }

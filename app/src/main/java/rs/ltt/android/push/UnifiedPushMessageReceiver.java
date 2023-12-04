@@ -3,7 +3,8 @@ package rs.ltt.android.push;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.common.base.Strings;
 import java.util.UUID;
 import okhttp3.HttpUrl;
@@ -16,33 +17,47 @@ public class UnifiedPushMessageReceiver extends AbstractPushMessageReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        switch (Strings.nullToEmpty(intent.getAction())) {
-            case UnifiedPushService.ACTION_MESSAGE -> onReceiveMessage(
-                    context,
-                    intent.getStringExtra(UnifiedPushService.EXTRA_TOKEN),
-                    intent.getByteArrayExtra(UnifiedPushService.EXTRA_BYTE_MESSAGE),
-                    intent.getParcelableExtra(UnifiedPushService.EXTRA_DISTRIBUTOR));
-            case UnifiedPushService.ACTION_NEW_ENDPOINT -> onReceiveNewEndpoint(
-                    context,
-                    intent.getStringExtra(UnifiedPushService.EXTRA_TOKEN),
-                    intent.getStringExtra(UnifiedPushService.EXTRA_ENDPOINT),
-                    intent.getParcelableExtra(UnifiedPushService.EXTRA_DISTRIBUTOR));
-        }
-    }
-
-    private void onReceiveNewEndpoint(
-            final Context context,
-            final String token,
-            final String endpoint,
-            final Parcelable distributorVerification) {
-        if (Strings.isNullOrEmpty(token) || Strings.isNullOrEmpty(endpoint)) {
+        final String token = intent.getStringExtra(UnifiedPushService.EXTRA_TOKEN);
+        if (Strings.isNullOrEmpty(token)) {
             return;
         }
         final UUID clientDeviceId;
         try {
             clientDeviceId = UUID.fromString(token);
         } catch (final IllegalArgumentException e) {
-            LOGGER.warn("Received new endpoint but clientDeviceId is not a valid UUID");
+            LOGGER.warn("clientDeviceId is not a valid UUID");
+            return;
+        }
+        final var distributorVerification =
+                intent.getParcelableExtra(UnifiedPushService.EXTRA_DISTRIBUTOR);
+        final String distributor;
+        if (distributorVerification instanceof PendingIntent pendingIntent) {
+            distributor = pendingIntent.getIntentSender().getCreatorPackage();
+        } else {
+            distributor = null;
+        }
+        switch (Strings.nullToEmpty(intent.getAction())) {
+            case UnifiedPushService.ACTION_MESSAGE -> onReceiveMessage(
+                    context,
+                    clientDeviceId,
+                    intent.getByteArrayExtra(UnifiedPushService.EXTRA_BYTE_MESSAGE),
+                    distributor);
+            case UnifiedPushService.ACTION_NEW_ENDPOINT -> onReceiveNewEndpoint(
+                    context,
+                    clientDeviceId,
+                    intent.getStringExtra(UnifiedPushService.EXTRA_ENDPOINT),
+                    distributor);
+            case UnifiedPushService.ACTION_REGISTRATION_FAILED -> onReceiveRegistrationFailed(
+                    context, clientDeviceId, distributor);
+        }
+    }
+
+    private void onReceiveNewEndpoint(
+            final Context context,
+            final UUID deviceClientId,
+            final String endpoint,
+            @Nullable final String distributor) {
+        if (Strings.isNullOrEmpty(endpoint)) {
             return;
         }
         final HttpUrl url;
@@ -52,38 +67,18 @@ public class UnifiedPushMessageReceiver extends AbstractPushMessageReceiver {
             LOGGER.warn("Received new endpoint but url is not a valid", e);
             return;
         }
-        final String distributor;
-        if (distributorVerification instanceof PendingIntent pendingIntent) {
-            distributor = pendingIntent.getIntentSender().getCreatorPackage();
-        } else {
-            distributor = null;
-        }
-
-        this.onReceiveNewEndpoint(context, clientDeviceId, url, distributor);
+        this.onReceiveNewEndpoint(context, deviceClientId, url, distributor);
     }
 
     private void onReceiveMessage(
             final Context context,
-            final String token,
-            final byte[] byteMessage,
-            final Parcelable distributorVerification) {
-        if (Strings.isNullOrEmpty(token) || byteMessage == null || byteMessage.length == 0) {
+            @NonNull final UUID deviceClientId,
+            @Nullable final byte[] byteMessage,
+            @Nullable final String distributor) {
+        if (byteMessage == null || byteMessage.length == 0) {
             return;
         }
-        final UUID clientDeviceId;
-        try {
-            clientDeviceId = UUID.fromString(token);
-        } catch (final IllegalArgumentException e) {
-            LOGGER.warn("Received invalid push message. clientDeviceId is not a valid UUID");
-            return;
-        }
-        final String distributor;
-        if (distributorVerification instanceof PendingIntent pendingIntent) {
-            distributor = pendingIntent.getIntentSender().getCreatorPackage();
-        } else {
-            distributor = null;
-        }
-        LOGGER.info("Received push message for {} ({} bytes)", clientDeviceId, byteMessage.length);
-        this.onReceiveMessage(context, clientDeviceId, distributor, byteMessage);
+        LOGGER.info("Received push message for {} ({} bytes)", deviceClientId, byteMessage.length);
+        this.onReceiveMessage(context, deviceClientId, distributor, byteMessage);
     }
 }

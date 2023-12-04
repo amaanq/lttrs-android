@@ -98,7 +98,7 @@ public class AccountWithCredentials {
         private final String password;
         private final HttpUrl sessionResource;
 
-        private Credentials(
+        public Credentials(
                 final Long id, String username, String password, HttpUrl sessionResource) {
             this.id = id;
             this.username = username;

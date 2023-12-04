@@ -171,4 +171,69 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
                 },
                 MoreExecutors.directExecutor());
     }
+
+    protected void onReceiveRegistrationFailed(
+            final Context context, final UUID deviceClientId, final String distributor) {
+        final var pushSubscriptionFuture =
+                AppDatabase.getInstance(context)
+                        .pushSubscriptionDao()
+                        .getPushSubscription(deviceClientId, distributor);
+        Futures.addCallback(
+                pushSubscriptionFuture,
+                new FutureCallback<>() {
+                    @Override
+                    public void onSuccess(@Nullable final PushSubscription pushSubscription) {
+                        if (pushSubscription == null) {
+                            LOGGER.warn(
+                                    "Registration failed with distributor but no push subscription"
+                                            + " found that use a deviceClientId of {}",
+                                    deviceClientId);
+                            return;
+                        }
+                        onReceiveRegistrationFailed(context, pushSubscription);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull final Throwable throwable) {
+                        LOGGER.error(
+                                "Could not retrieve push subscription from db to process failed"
+                                        + " registration",
+                                throwable);
+                    }
+                },
+                MoreExecutors.directExecutor());
+    }
+
+    private void onReceiveRegistrationFailed(
+            final Context context, final PushSubscription pushSubscription) {
+        final var credentialsFuture =
+                AppDatabase.getInstance(context)
+                        .accountDao()
+                        .getCredentials(pushSubscription.credentialsId);
+        Futures.addCallback(
+                credentialsFuture,
+                new FutureCallback<>() {
+                    @Override
+                    public void onSuccess(
+                            @Nullable AccountWithCredentials.Credentials credentials) {
+                        if (credentials == null) {
+                            LOGGER.error(
+                                    "no credentials found for id {}",
+                                    pushSubscription.credentialsId);
+                            return;
+                        }
+                        final var pushManager = new PushManager(context);
+                        pushManager.scheduleRecurringMainQueryWorkers(credentials);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Throwable throwable) {
+                        LOGGER.error(
+                                "Could not retrieve credentials for id {} from db",
+                                pushSubscription.credentialsId,
+                                throwable);
+                    }
+                },
+                MoreExecutors.directExecutor());
+    }
 }
