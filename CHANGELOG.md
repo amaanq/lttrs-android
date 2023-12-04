@@ -1,7 +1,8 @@
-## 0.4.0 · (tbd)
+## 0.4.0 · All Engines Running (2023-12-04)
 
 * Support Material U (Dynamic Colors)
 * Add support for UnifiedPush and Firebase Cloud Messaging in one, open source build flavor
+* Support per-app language settings
 
 ## 0.3.3 · Ignition (2022-01-30)
 
