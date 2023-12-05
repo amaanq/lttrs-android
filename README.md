@@ -36,10 +36,10 @@ If the above screenshots don’t do enough to convince you, you can watch this
 You can download Ltt.rs either from [F-Droid](https://f-droid.org/en/packages/rs.ltt.android), or
 for a small fee from [Google Play](https://play.google.com/store/apps/details?id=rs.ltt.android).
 
-If you want to use F-Droid you can also use our F-Droid repository instead of
+If you want to use F-Droid you can also use [our F-Droid repository](https://fdroid.link/#repo=https://ltt.rs/fdroid/repo?fingerprint=9c2e57c85c279e5e1a427f6e87927fc1e2278f62d61d7fcefde9346e568ccf86) instead of
 the official one:
 ```
-https://ltt.rs/fdroid/repo?fingerprint=9C2E57C85C279E5E1A427F6E87927FC1E2278F62D61D7FCEFDE9346E568CCF86
+https://ltt.rs/fdroid/repo?fingerprint=9c2e57c85c279e5e1a427f6e87927fc1e2278f62d61d7fcefde9346e568ccf86
 ```
 
 All three versions are signed with the same key, so it is possible to switch between them.
