@@ -17,6 +17,7 @@ public class UnifiedPushMessageReceiver extends AbstractPushMessageReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
+        LOGGER.info("Received {}", Strings.nullToEmpty(intent.getAction()));
         final String token = intent.getStringExtra(UnifiedPushService.EXTRA_TOKEN);
         if (Strings.isNullOrEmpty(token)) {
             return;
@@ -47,7 +48,9 @@ public class UnifiedPushMessageReceiver extends AbstractPushMessageReceiver {
                     clientDeviceId,
                     intent.getStringExtra(UnifiedPushService.EXTRA_ENDPOINT),
                     distributor);
-            case UnifiedPushService.ACTION_REGISTRATION_FAILED -> onReceiveRegistrationFailed(
+            case UnifiedPushService.ACTION_REGISTRATION_FAILED,
+                    UnifiedPushService
+                            .ACTION_UNREGISTERED -> onReceiveRegistrationFailedOrUnregistered(
                     context, clientDeviceId, distributor);
         }
     }

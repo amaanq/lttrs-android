@@ -36,18 +36,20 @@ public class UnifiedPushService implements PushService {
 
     public static final String ACTION_UNREGISTER = "org.unifiedpush.android.distributor.UNREGISTER";
 
-    public static final String ACTION_MESSAGE = "org.unifiedpush.android.connector.MESSAGE";
-
     public static final String ACTION_FEATURE_BYTES_MESSAGE =
             "org.unifiedpush.android.distributor.feature.BYTES_MESSAGE";
     public static final String ACTION_FEATURE_MESSENGER =
             "org.unifiedpush.android.distributor.feature.MESSENGER";
     public static final String ACTION_FEATURE_APP_VALIDATION =
             "org.unifiedpush.android.distributor.feature.APP_VALIDATION";
+
+    public static final String ACTION_MESSAGE = "org.unifiedpush.android.connector.MESSAGE";
     public static final String ACTION_NEW_ENDPOINT =
             "org.unifiedpush.android.connector.NEW_ENDPOINT";
     public static final String ACTION_REGISTRATION_FAILED =
             "org.unifiedpush.android.connector.REGISTRATION_FAILED";
+    public static final String ACTION_UNREGISTERED =
+            "org.unifiedpush.android.connector.UNREGISTERED";
 
     // this action is only used in 'messenger' communication to tell the app that a registration is
     // probably fine but can not be processed right now; for example due to spotty internet

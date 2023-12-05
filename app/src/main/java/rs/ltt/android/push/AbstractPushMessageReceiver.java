@@ -172,44 +172,28 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
                 MoreExecutors.directExecutor());
     }
 
-    protected void onReceiveRegistrationFailed(
+    protected void onReceiveRegistrationFailedOrUnregistered(
             final Context context, final UUID deviceClientId, final String distributor) {
+        final var database = AppDatabase.getInstance(context);
         final var pushSubscriptionFuture =
                 AppDatabase.getInstance(context)
                         .pushSubscriptionDao()
                         .getPushSubscription(deviceClientId, distributor);
-        Futures.addCallback(
-                pushSubscriptionFuture,
-                new FutureCallback<>() {
-                    @Override
-                    public void onSuccess(@Nullable final PushSubscription pushSubscription) {
-                        if (pushSubscription == null) {
-                            LOGGER.warn(
-                                    "Registration failed with distributor but no push subscription"
-                                            + " found that use a deviceClientId of {}",
-                                    deviceClientId);
-                            return;
-                        }
-                        onReceiveRegistrationFailed(context, pushSubscription);
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull final Throwable throwable) {
-                        LOGGER.error(
-                                "Could not retrieve push subscription from db to process failed"
-                                        + " registration",
-                                throwable);
-                    }
-                },
-                MoreExecutors.directExecutor());
-    }
-
-    private void onReceiveRegistrationFailed(
-            final Context context, final PushSubscription pushSubscription) {
         final var credentialsFuture =
-                AppDatabase.getInstance(context)
-                        .accountDao()
-                        .getCredentials(pushSubscription.credentialsId);
+                Futures.transformAsync(
+                        pushSubscriptionFuture,
+                        pushSubscription -> {
+                            if (pushSubscription == null) {
+                                throw new IllegalStateException(
+                                        String.format(
+                                                "No push subscription found that uses a"
+                                                        + " deviceClientId of %s",
+                                                deviceClientId));
+                            }
+                            return database.accountDao()
+                                    .getCredentials(pushSubscription.credentialsId);
+                        },
+                        MoreExecutors.directExecutor());
         Futures.addCallback(
                 credentialsFuture,
                 new FutureCallback<>() {
@@ -218,8 +202,7 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
                             @Nullable AccountWithCredentials.Credentials credentials) {
                         if (credentials == null) {
                             LOGGER.error(
-                                    "no credentials found for id {}",
-                                    pushSubscription.credentialsId);
+                                    "No credentials found for deviceClientId {}", deviceClientId);
                             return;
                         }
                         final var pushManager = new PushManager(context);
@@ -229,8 +212,8 @@ public abstract class AbstractPushMessageReceiver extends BroadcastReceiver {
                     @Override
                     public void onFailure(@NonNull Throwable throwable) {
                         LOGGER.error(
-                                "Could not retrieve credentials for id {} from db",
-                                pushSubscription.credentialsId,
+                                "unable to unregister deviceClientId {}",
+                                deviceClientId,
                                 throwable);
                     }
                 },
