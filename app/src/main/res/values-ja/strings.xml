@@ -1,2 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="deleted">削除しました</string>
+    <plurals name="n_removed_from_x">
+        <item quantity="other">%d 通が %s から削除されました</item>
+    </plurals>
+    <string name="unable_to_connect">メールサービスに接続できませんでした</string>
+    <string name="schedule_send">送信を予約</string>
+    <string name="unable_to_fetch_session">セッションを取得中: %s</string>
+    <string name="welcome">ようこそ</string>
+    <string name="the_address_x_is_invalid">アドレス &lt;%s&gt; には何らかの問題があります</string>
+    <string name="next">次へ</string>
+    <string name="enter_your_connection_url">接続 URL を入力してください</string>
+    <string name="compose_from">差出人</string>
+    <string name="mark_important">重要としてマーク</string>
+    <string name="enter_your_password">パスワードを入力してください</string>
+    <plurals name="n_moved_to_inbox">
+        <item quantity="other">%d 通を受信トレイに移動しました</item>
+    </plurals>
+    <string name="mark_not_important">重要でないとしてマーク</string>
+    <string name="search_hint">メールを検索</string>
+    <string name="enter_an_email_address">メールアドレスを入力してください</string>
+    <string name="enter_a_valid_email_address">有効なメールアドレスを入力してください</string>
+    <string name="remove_label">ラベルを外す</string>
+    <string name="to_x">宛先 %s</string>
+    <string name="delete">削除</string>
+    <string name="unable_to_establish_secure_connection">安全な接続を確立できませんでした</string>
+    <string name="ok">OK</string>
+    <string name="send">送信</string>
+    <string name="discard">破棄</string>
+    <plurals name="n_archived">
+        <item quantity="other">%d 通をアーカイブしました</item>
+    </plurals>
+    <string name="timeout_reached">接続を試みたメールサービスはタイムアウトしました</string>
+    <string name="wrong_password">パスワードが違います。もう一度お試しください。</string>
+    <string name="remove_label_x">ラベル %s を外す</string>
+    <string name="undo">元に戻す</string>
+    <string name="sign_in_instruction">メールアドレスを入力してください。</string>
+    <string name="invalid_session_resource">このアドレスでは、有効なメールサービスが提供されていません</string>
+    <string name="attach_file">ファイルを添付</string>
+    <string name="mark_read">既読にする</string>
+    <string name="mark_unread">未読にする</string>
+    <string name="unknown_host">ホスト %s を名前解決できませんでした</string>
+    <string name="compose_compose_email">メールを作成</string>
+    <plurals name="n_deleted">
+        <item quantity="other">%d 通を削除しました</item>
+    </plurals>
+    <string name="enter_a_valid_url">有効な接続 URL を入力してください</string>
+    <string name="information_required">情報が必要です</string>
+    <string name="endpoint_not_found">このアドレスでは、メールサービスが提供されていません</string>
+    <string name="search">検索</string>
+    <string name="compose_to">宛先</string>
+    <string name="enter_a_secure_url">安全な URL を入力してください</string>
+    <string name="compose">作成</string>
+    <string name="email_address">メールアドレス</string>
+    <string name="move_to_inbox">受信トレイに移動</string>
+    <string name="archive">アーカイブ</string>
+    <string name="add_at_least_one_recipient">最低 1 人の宛先を追加してください。</string>
+    <string name="no_network_connection">インターネットに接続してください</string>
+    <string name="compose_subject">件名</string>
+    <string name="enter_a_password">パスワードを入力してください</string>
+    <string name="sign_in">サインイン</string>
+</resources>
