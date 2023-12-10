@@ -1,0 +1,3 @@
+* Material U (Dynamische Farben) unterstützen
+* Support für UnifiedPush und Firebase Cloud Messaging in einem, Open Source Build Flavor
+* Unterstütze per-App Sprache
