@@ -201,4 +201,6 @@
     <string name="decrypt_email">E-Mail entschlüsseln</string>
     <string name="email_not_cached">Die E-Mail mit diesem Anhang ist nicht zwischengespeichert.</string>
     <string name="attachment_download_failed">Anhang konnte nicht heruntergeladen werden</string>
+    <string name="search_for_x_in_email">Nach \"%s\" in E-Mail suchen</string>
+    <string name="results_in_email">Ergebnisse in E-Mail</string>
 </resources>
