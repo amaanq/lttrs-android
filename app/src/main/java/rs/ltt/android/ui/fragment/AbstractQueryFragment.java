@@ -66,6 +66,7 @@ import rs.ltt.android.ui.adapter.ThreadOverviewAdapter;
 import rs.ltt.android.ui.model.AbstractQueryViewModel;
 import rs.ltt.android.ui.model.SearchQueryViewModel;
 import rs.ltt.android.util.CharSequences;
+import rs.ltt.android.util.PlaceholderLabel;
 import rs.ltt.jmap.mua.util.LabelWithCount;
 
 public abstract class AbstractQueryFragment extends AbstractLttrsFragment
@@ -354,7 +355,7 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
 
     private void onLabelOpened(final LabelWithCount label) {
         getLttrsViewModel().setSelectedLabel(label);
-        if (label instanceof SearchQueryViewModel.SearchLabel) {
+        if (label instanceof PlaceholderLabel.Search) {
             this.threadOverviewAdapter.setTitle(getString(R.string.results_in_email));
         } else {
             this.threadOverviewAdapter.setTitle(
