@@ -60,4 +60,35 @@
     <string name="compose_subject">件名</string>
     <string name="enter_a_password">パスワードを入力してください</string>
     <string name="sign_in">サインイン</string>
+    <string name="role_name_flagged">スター付き</string>
+    <string name="reassign_role">役割を割り当てなおす</string>
+    <string name="change_labels">ラベルを変更</string>
+    <plurals name="x_new_emails">
+        <item quantity="other">新着メール %d 通</item>
+    </plurals>
+    <string name="accounts">アカウント</string>
+    <string name="remove_account_dialog_title">アカウントを削除しますか？</string>
+    <string name="select_sender">差出人を選択してください。</string>
+    <string name="notification_channel_name_email">メール</string>
+    <string name="role_name_drafts">下書き</string>
+    <string name="create">キャンセル</string>
+    <string name="compose_cc">Cc</string>
+    <string name="manage_accounts">アカウントを管理</string>
+    <string name="role_name_junk">迷惑メール</string>
+    <string name="end_to_end_encryption">エンドツーエンド暗号化</string>
+    <string name="assign_role">役割を割り当てる</string>
+    <string name="account">アカウント</string>
+    <string name="role_name_sent">送信済み</string>
+    <string name="new_label">新しいラベル</string>
+    <string name="role_name_trash">ごみ箱</string>
+    <string name="remove_account">アカウントを削除</string>
+    <string name="role_name_all">すべてのメール</string>
+    <string name="role_name_inbox">受信トレイ</string>
+    <string name="draft">下書き</string>
+    <string name="role_name_important">重要</string>
+    <string name="cancel">キャンセル</string>
+    <string name="role_name_archive">アーカイブ</string>
+    <string name="confirm">確認</string>
+    <string name="could_not_store_account_credentials">アカウント認証情報を保存できませんでした</string>
+    <string name="add_another_account">別のアカウントを追加</string>
 </resources>
