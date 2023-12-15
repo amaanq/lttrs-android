@@ -64,7 +64,6 @@ import rs.ltt.android.ui.adapter.OnSelectionToggled;
 import rs.ltt.android.ui.adapter.SearchSuggestionAdapter;
 import rs.ltt.android.ui.adapter.ThreadOverviewAdapter;
 import rs.ltt.android.ui.model.AbstractQueryViewModel;
-import rs.ltt.android.ui.model.SearchQueryViewModel;
 import rs.ltt.android.util.CharSequences;
 import rs.ltt.android.util.PlaceholderLabel;
 import rs.ltt.jmap.mua.util.LabelWithCount;

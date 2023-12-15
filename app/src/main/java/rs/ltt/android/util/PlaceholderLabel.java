@@ -8,7 +8,6 @@ public class PlaceholderLabel {
     public static final Search SEARCH = new Search();
     public static final Unfiltered UNFILTERED = new Unfiltered();
 
-
     public static class Search implements LabelWithCount {
 
         private Search() {}
@@ -40,7 +39,8 @@ public class PlaceholderLabel {
 
         @Override
         public String getName() {
-            throw new IllegalStateException("This class is only used to identify an unfiltered query");
+            throw new IllegalStateException(
+                    "This class is only used to identify an unfiltered query");
         }
 
         @Override
@@ -48,5 +48,4 @@ public class PlaceholderLabel {
             return Role.ALL;
         }
     }
-
 }

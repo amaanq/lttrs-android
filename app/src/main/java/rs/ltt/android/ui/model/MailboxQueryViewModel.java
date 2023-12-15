@@ -21,10 +21,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import rs.ltt.android.entity.MailboxOverviewItem;
 import rs.ltt.android.entity.QueryInfo;
 import rs.ltt.android.ui.EmptyMailboxAction;
@@ -35,7 +33,7 @@ import rs.ltt.jmap.mua.util.StandardQueries;
 
 public class MailboxQueryViewModel extends AbstractQueryViewModel {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(MailboxQueryViewModel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MailboxQueryViewModel.class);
 
     private final LiveData<MailboxOverviewItem> mailbox;
     private final LiveData<EmptyMailboxAction> emptyMailboxAction;
@@ -99,13 +97,17 @@ public class MailboxQueryViewModel extends AbstractQueryViewModel {
 
     @Override
     public LiveData<LabelWithCount> getLabelWithCount() {
-        return Transformations.map(this.mailbox, m -> {
-            if (m == null) {
-                LOGGER.info("no mailbox selected (this usually means there is no 'Inbox'. Returning unfiltered placeholder");
-                return PlaceholderLabel.UNFILTERED;
-            }
-            return (LabelWithCount) m;
-        });
+        return Transformations.map(
+                this.mailbox,
+                m -> {
+                    if (m == null) {
+                        LOGGER.info(
+                                "no mailbox selected (this usually means there is no 'Inbox'."
+                                        + " Returning unfiltered placeholder");
+                        return PlaceholderLabel.UNFILTERED;
+                    }
+                    return (LabelWithCount) m;
+                });
     }
 
     public static class Factory implements ViewModelProvider.Factory {

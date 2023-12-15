@@ -3,17 +3,17 @@ buildscript {
     ext {
         appcompatVersion = "1.6.1"
         lifecycleVersion = "2.2.0"
-        navVersion = '2.7.5'
+        navVersion = '2.7.6'
         pagingVersion = "2.1.2"
         recyclerViewVersion = "1.3.2"
         swipeRefreshLayoutVersion = "1.1.0"
         roomVersion = "2.6.1"
         workVersion = "2.9.0"
-        exifInterfaceVersion = "1.3.6"
-        muaVersion = "0.8.15"
+        exifInterfaceVersion = "1.3.7"
+        muaVersion = "0.8.16"
         autocryptJmapVersion = "0.4.2"
         espressoVersion = "3.5.1"
-        material = "1.10.0"
+        material = "1.11.0"
         preferenceVersion = "1.2.1"
     }
 
@@ -22,7 +22,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.0-rc03'
+        classpath 'com.android.tools.build:gradle:8.2.0'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navVersion"
         classpath "com.diffplug.spotless:spotless-plugin-gradle:6.22.0"
     }

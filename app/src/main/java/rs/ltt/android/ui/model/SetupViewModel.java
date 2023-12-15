@@ -58,6 +58,7 @@ import rs.ltt.jmap.client.api.EndpointNotFoundException;
 import rs.ltt.jmap.client.api.InvalidSessionResourceException;
 import rs.ltt.jmap.client.api.UnauthorizedException;
 import rs.ltt.jmap.client.session.Session;
+import rs.ltt.jmap.client.util.WellKnownUtil;
 import rs.ltt.jmap.common.entity.Account;
 import rs.ltt.jmap.common.entity.capability.MailAccountCapability;
 import rs.ltt.jmap.mua.util.EmailAddressUtil;
@@ -126,6 +127,10 @@ public class SetupViewModel extends AndroidViewModel {
         return emailAddress;
     }
 
+    private String getEmailAddressedValue() {
+        return Strings.nullToEmpty(this.emailAddress.getValue()).trim();
+    }
+
     public MutableLiveData<String> getPassword() {
         return password;
     }
@@ -153,11 +158,10 @@ public class SetupViewModel extends AndroidViewModel {
     public boolean enterEmailAddress() {
         this.password.setValue(null);
         this.sessionResource.setValue(null);
-        final String emailAddress = Strings.nullToEmpty(this.emailAddress.getValue()).trim();
+        final String emailAddress = getEmailAddressedValue();
         if (EmailAddressUtil.isValid(emailAddress)) {
             this.loading.postValue(true);
             this.emailAddressError.postValue(null);
-            this.emailAddress.postValue(emailAddress);
             Futures.addCallback(
                     getSession(),
                     new FutureCallback<>() {
@@ -170,7 +174,12 @@ public class SetupViewModel extends AndroidViewModel {
                         @Override
                         public void onFailure(@NonNull Throwable cause) {
                             loading.postValue(false);
-                            if (cause instanceof UnauthorizedException) {
+                            if (cause instanceof WellKnownUtil.MalformedUsernameException) {
+                                LOGGER.error("e-mail address was malformed", cause);
+                                emailAddressError.postValue(
+                                        getApplication()
+                                                .getString(R.string.enter_a_valid_email_address));
+                            } else if (cause instanceof UnauthorizedException) {
                                 passwordError.postValue(null);
                                 redirection.postValue(new Event<>(Target.ENTER_PASSWORD));
                             } else if (cause instanceof UnknownHostException) {
@@ -370,7 +379,7 @@ public class SetupViewModel extends AndroidViewModel {
     private ListenableFuture<Session> getSession() {
         final JmapClient jmapClient =
                 new JmapClient(
-                        Strings.nullToEmpty(emailAddress.getValue()),
+                        getEmailAddressedValue(),
                         Strings.nullToEmpty(password.getValue()),
                         getHttpSessionResource());
         final ListenableFuture<Session> sessionFuture = jmapClient.getSession();
@@ -384,7 +393,7 @@ public class SetupViewModel extends AndroidViewModel {
         if (accounts.size() == 1) {
             final ListenableFuture<MainRepository.InsertOperation> insertFuture =
                     mainRepository.insertAccountDiscoverSetupMessage(
-                            Strings.nullToEmpty(emailAddress.getValue()),
+                            getEmailAddressedValue(),
                             Strings.nullToEmpty(password.getValue()),
                             getHttpSessionResource(),
                             session.getPrimaryAccount(MailAccountCapability.class),
