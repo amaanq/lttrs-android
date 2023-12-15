@@ -91,4 +91,9 @@
     <string name="confirm">確認</string>
     <string name="could_not_store_account_credentials">アカウント認証情報を保存できませんでした</string>
     <string name="add_another_account">別のアカウントを追加</string>
+    <string name="foreground_service_notification_text">Ltt.rs はメール受信について通知するために動作し続けます</string>
+    <string name="apply_changes">変更を適用</string>
+    <string name="remove_flag">フラグを削除</string>
+    <string name="foreground_service">フォアグラウンドサービス</string>
+    <string name="add_flag">フラグを追加</string>
 </resources>
