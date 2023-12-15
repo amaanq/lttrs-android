@@ -1,0 +1,1 @@
+* Fix crashes during initial account setup

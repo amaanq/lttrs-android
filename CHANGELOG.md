@@ -1,3 +1,7 @@
+## 0.4.1 · All Engines Running (2023-12-15)
+
+* Fix crashes during initial account setup
+
 ## 0.4.0 · All Engines Running (2023-12-04)
 
 * Support Material U (Dynamic Colors)
