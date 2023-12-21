@@ -19,6 +19,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import com.google.common.base.Objects;
 import okhttp3.HttpUrl;
+import rs.ltt.jmap.client.http.HttpAuthentication;
 
 @Entity(tableName = "credentials")
 public class CredentialsEntity {
@@ -26,12 +27,17 @@ public class CredentialsEntity {
     @PrimaryKey(autoGenerate = true)
     public Long id;
 
+    public HttpAuthentication.Scheme authenticationScheme;
     public String username;
     public String password;
     public HttpUrl sessionResource;
 
     public CredentialsEntity(
-            final String username, final String password, final HttpUrl sessionResource) {
+            final HttpAuthentication.Scheme authenticationScheme,
+            final String username,
+            final String password,
+            final HttpUrl sessionResource) {
+        this.authenticationScheme = authenticationScheme;
         this.username = username;
         this.password = password;
         this.sessionResource = sessionResource;
@@ -43,6 +49,7 @@ public class CredentialsEntity {
         if (o == null || getClass() != o.getClass()) return false;
         CredentialsEntity that = (CredentialsEntity) o;
         return Objects.equal(id, that.id)
+                && authenticationScheme == that.authenticationScheme
                 && Objects.equal(username, that.username)
                 && Objects.equal(password, that.password)
                 && Objects.equal(sessionResource, that.sessionResource);
@@ -50,6 +57,6 @@ public class CredentialsEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, username, password, sessionResource);
+        return Objects.hashCode(id, authenticationScheme, username, password, sessionResource);
     }
 }

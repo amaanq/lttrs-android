@@ -51,8 +51,7 @@ public final class MuaPool {
             final var credentials = account.getCredentials();
             final Mua mua =
                     Mua.builder()
-                            .username(credentials.getUsername())
-                            .password(credentials.getPassword())
+                            .httpAuthentication(credentials.asHttpAuthentication())
                             .accountId(account.getAccountId())
                             .sessionResource(credentials.getSessionResource())
                             .useWebSocket(true)

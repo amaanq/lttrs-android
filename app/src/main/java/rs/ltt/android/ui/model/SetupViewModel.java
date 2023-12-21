@@ -39,6 +39,7 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.CancellationException;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLPeerUnverifiedException;
@@ -57,6 +58,9 @@ import rs.ltt.jmap.client.JmapClient;
 import rs.ltt.jmap.client.api.EndpointNotFoundException;
 import rs.ltt.jmap.client.api.InvalidSessionResourceException;
 import rs.ltt.jmap.client.api.UnauthorizedException;
+import rs.ltt.jmap.client.http.BasicAuthHttpAuthentication;
+import rs.ltt.jmap.client.http.BearerAuthHttpAuthentication;
+import rs.ltt.jmap.client.http.HttpAuthentication;
 import rs.ltt.jmap.client.session.Session;
 import rs.ltt.jmap.client.util.WellKnownUtil;
 import rs.ltt.jmap.common.entity.Account;
@@ -70,6 +74,9 @@ public class SetupViewModel extends AndroidViewModel {
 
     private final MutableLiveData<String> emailAddress = new MutableLiveData<>();
     private final MutableLiveData<String> emailAddressError = new MutableLiveData<>();
+
+    private final MutableLiveData<HttpAuthentication.Scheme> authenticationScheme =
+            new MutableLiveData<>();
     private final MutableLiveData<String> password = new MutableLiveData<>();
     private final MutableLiveData<String> passwordError = new MutableLiveData<>();
     private final MutableLiveData<String> sessionResource = new MutableLiveData<>();
@@ -139,6 +146,10 @@ public class SetupViewModel extends AndroidViewModel {
         return Transformations.distinctUntilChanged(this.passwordError);
     }
 
+    public LiveData<HttpAuthentication.Scheme> getAuthenticationScheme() {
+        return this.authenticationScheme;
+    }
+
     public MutableLiveData<String> getSessionResource() {
         return sessionResource;
     }
@@ -179,8 +190,17 @@ public class SetupViewModel extends AndroidViewModel {
                                 emailAddressError.postValue(
                                         getApplication()
                                                 .getString(R.string.enter_a_valid_email_address));
-                            } else if (cause instanceof UnauthorizedException) {
+                            } else if (cause
+                                    instanceof UnauthorizedException unauthorizedException) {
+                                final HttpAuthentication.Scheme scheme;
+                                try {
+                                    scheme = pickAuthenticationScheme(unauthorizedException);
+                                } catch (final IllegalArgumentException e) {
+                                    // TODO show error
+                                    return;
+                                }
                                 passwordError.postValue(null);
+                                authenticationScheme.postValue(scheme);
                                 redirection.postValue(new Event<>(Target.ENTER_PASSWORD));
                             } else if (cause instanceof UnknownHostException) {
                                 if (isNetworkAvailable()) {
@@ -214,8 +234,14 @@ public class SetupViewModel extends AndroidViewModel {
 
     public boolean enterPassword() {
         final String password = Strings.nullToEmpty(this.password.getValue());
+        final HttpAuthentication.Scheme scheme = this.authenticationScheme.getValue();
         if (password.isEmpty()) {
-            this.passwordError.postValue(getApplication().getString(R.string.enter_a_password));
+            if (scheme == HttpAuthentication.Scheme.BEARER) {
+                this.passwordError.postValue(
+                        getApplication().getString(R.string.enter_a_bearer_token));
+            } else {
+                this.passwordError.postValue(getApplication().getString(R.string.enter_a_password));
+            }
         } else {
             this.loading.postValue(true);
             this.passwordError.postValue(null);
@@ -231,9 +257,23 @@ public class SetupViewModel extends AndroidViewModel {
                         @Override
                         public void onFailure(@NonNull Throwable cause) {
                             loading.postValue(false);
-                            if (cause instanceof UnauthorizedException) {
-                                passwordError.postValue(
-                                        getApplication().getString(R.string.wrong_password));
+                            if (cause instanceof UnauthorizedException unauthorizedException) {
+                                final HttpAuthentication.Scheme scheme;
+                                try {
+                                    scheme = pickAuthenticationScheme(unauthorizedException);
+                                } catch (final IllegalArgumentException e) {
+                                    // TODO show error
+                                    return;
+                                }
+                                authenticationScheme.postValue(scheme);
+                                if (scheme == HttpAuthentication.Scheme.BEARER) {
+                                    passwordError.postValue(
+                                            getApplication()
+                                                    .getString(R.string.wrong_bearer_token));
+                                } else {
+                                    passwordError.postValue(
+                                            getApplication().getString(R.string.wrong_password));
+                                }
                             } else if (cause instanceof UnknownHostException) {
                                 if (isNetworkAvailable()) {
                                     sessionResourceError.postValue(null);
@@ -290,7 +330,15 @@ public class SetupViewModel extends AndroidViewModel {
                     @Override
                     public void onFailure(@NonNull Throwable cause) {
                         loading.postValue(false);
-                        if (cause instanceof UnauthorizedException) {
+                        if (cause instanceof UnauthorizedException unauthorizedException) {
+                            final HttpAuthentication.Scheme scheme;
+                            try {
+                                scheme = pickAuthenticationScheme(unauthorizedException);
+                            } catch (final IllegalArgumentException e) {
+                                // TODO show error
+                                return;
+                            }
+                            authenticationScheme.postValue(scheme);
                             passwordError.postValue(null);
                             redirection.postValue(new Event<>(Target.ENTER_PASSWORD));
                         } else if (isEndpointProblem(cause)) {
@@ -377,24 +425,37 @@ public class SetupViewModel extends AndroidViewModel {
     }
 
     private ListenableFuture<Session> getSession() {
-        final JmapClient jmapClient =
-                new JmapClient(
-                        getEmailAddressedValue(),
-                        Strings.nullToEmpty(password.getValue()),
-                        getHttpSessionResource());
+        final var password = Strings.nullToEmpty(this.password.getValue());
+        final var emailAddress = getEmailAddressedValue();
+        final var authenticationScheme = this.authenticationScheme.getValue();
+        final HttpAuthentication httpAuthentication;
+        if (authenticationScheme == null
+                || authenticationScheme == HttpAuthentication.Scheme.BASIC) {
+            httpAuthentication = new BasicAuthHttpAuthentication(emailAddress, password);
+        } else if (authenticationScheme == HttpAuthentication.Scheme.BEARER) {
+            httpAuthentication = new BearerAuthHttpAuthentication(emailAddress, password);
+        } else {
+            throw new IllegalArgumentException(
+                    "Trying to setup JmapClient with unknown authentication scheme");
+        }
+        final JmapClient jmapClient = new JmapClient(httpAuthentication, getHttpSessionResource());
         final ListenableFuture<Session> sessionFuture = jmapClient.getSession();
         this.networkFuture = sessionFuture;
         return sessionFuture;
     }
 
     private void processAccounts(final Session session) {
+        final var password = Strings.nullToEmpty(this.password.getValue());
+        final var emailAddress = getEmailAddressedValue();
+        final var authenticationScheme = this.authenticationScheme.getValue();
         final Map<String, Account> accounts = session.getAccounts(MailAccountCapability.class);
         LOGGER.info("found {} accounts with mail capability", accounts.size());
         if (accounts.size() == 1) {
             final ListenableFuture<MainRepository.InsertOperation> insertFuture =
                     mainRepository.insertAccountDiscoverSetupMessage(
-                            getEmailAddressedValue(),
-                            Strings.nullToEmpty(password.getValue()),
+                            authenticationScheme,
+                            emailAddress,
+                            password,
                             getHttpSessionResource(),
                             session.getPrimaryAccount(MailAccountCapability.class),
                             accounts);
@@ -507,6 +568,22 @@ public class SetupViewModel extends AndroidViewModel {
                     "Trying to access accountId before Target.DONE event occured");
         }
         return accountId;
+    }
+
+    private static HttpAuthentication.Scheme pickAuthenticationScheme(
+            final UnauthorizedException unauthorizedException) {
+        return pickAuthenticationScheme(unauthorizedException.getAuthenticationSchemes());
+    }
+
+    private static HttpAuthentication.Scheme pickAuthenticationScheme(
+            final Set<HttpAuthentication.Scheme> available) {
+        if (available.isEmpty() || available.contains(HttpAuthentication.Scheme.BASIC)) {
+            return HttpAuthentication.Scheme.BASIC;
+        } else if (available.contains(HttpAuthentication.Scheme.BEARER)) {
+            return HttpAuthentication.Scheme.BEARER;
+        } else {
+            throw new IllegalArgumentException("Server offers no supported authentication schemes");
+        }
     }
 
     public enum Target {

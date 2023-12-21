@@ -30,6 +30,7 @@ import rs.ltt.android.entity.AccountEntity;
 import rs.ltt.android.entity.AccountName;
 import rs.ltt.android.entity.AccountWithCredentials;
 import rs.ltt.android.entity.CredentialsEntity;
+import rs.ltt.jmap.client.http.HttpAuthentication;
 import rs.ltt.jmap.common.entity.Account;
 
 @Dao
@@ -37,36 +38,36 @@ public abstract class AccountDao {
 
     @Query(
             "select account.id as"
-                    + " id,credentialsId,username,password,sessionResource,accountId,name"
-                    + " from credentials join account on credentialsId = credentials.id where"
-                    + " account.id=:id limit 1")
+                + " id,credentialsId,authenticationScheme,username,password,sessionResource,accountId,name"
+                + " from credentials join account on credentialsId = credentials.id where"
+                + " account.id=:id limit 1")
     public abstract ListenableFuture<AccountWithCredentials> getAccountFuture(Long id);
 
     @Query(
             "select account.id as"
-                    + " id,credentialsId,username,password,sessionResource,accountId,name"
-                    + " from credentials join account on credentialsId = credentials.id where"
-                    + " account.credentialsId=:credentialsId limit 1")
+                + " id,credentialsId,authenticationScheme,username,password,sessionResource,accountId,name"
+                + " from credentials join account on credentialsId = credentials.id where"
+                + " account.credentialsId=:credentialsId limit 1")
     public abstract ListenableFuture<AccountWithCredentials> getAnyAccountFuture(
             Long credentialsId);
 
     @Query(
             "select account.id as"
-                    + " id,credentialsId,username,password,sessionResource,accountId,name"
-                    + " from credentials join account on credentialsId = credentials.id")
+                + " id,credentialsId,authenticationScheme,username,password,sessionResource,accountId,name"
+                + " from credentials join account on credentialsId = credentials.id")
     public abstract ListenableFuture<List<AccountWithCredentials>> getAccounts();
 
     @Query(
             "select account.id as"
-                    + " id,credentialsId,username,password,sessionResource,accountId,name"
-                    + " from credentials join account on credentialsId = credentials.id where"
-                    + " account.id=:id limit 1")
+                + " id,credentialsId,authenticationScheme,username,password,sessionResource,accountId,name"
+                + " from credentials join account on credentialsId = credentials.id where"
+                + " account.id=:id limit 1")
     public abstract AccountWithCredentials getAccount(Long id);
 
     @Query(
             "select account.id as"
-                + " id,account.credentialsId,username,password,sessionResource,accountId,name FROM"
-                + " credentials JOIN account ON account.credentialsId = credentials.id JOIN"
+                + " id,account.credentialsId,authenticationScheme,username,password,sessionResource,accountId,name"
+                + " FROM credentials JOIN account ON account.credentialsId = credentials.id JOIN"
                 + " push_subscription ON push_subscription.credentialsId = credentials.id WHERE"
                 + " account.accountId=:accountId and deviceClientId=:deviceClientId limit 1")
     public abstract AccountWithCredentials getAccount(UUID deviceClientId, String accountId);
@@ -109,13 +110,16 @@ public abstract class AccountDao {
 
     @Transaction
     public List<AccountWithCredentials> insert(
-            String username,
-            String password,
-            HttpUrl sessionResource,
-            Map<String, Account> accounts) {
+            final HttpAuthentication.Scheme authenticationScheme,
+            final String username,
+            final String password,
+            final HttpUrl sessionResource,
+            final Map<String, Account> accounts) {
         final ImmutableList.Builder<AccountWithCredentials> builder = ImmutableList.builder();
         final Long credentialId =
-                insert(new CredentialsEntity(username, password, sessionResource));
+                insert(
+                        new CredentialsEntity(
+                                authenticationScheme, username, password, sessionResource));
         for (final Map.Entry<String, Account> entry : accounts.entrySet()) {
             final String accountId = entry.getKey();
             final String name = entry.getValue().getName();
@@ -126,6 +130,7 @@ public abstract class AccountDao {
                             id,
                             accountId,
                             name,
+                            authenticationScheme,
                             username,
                             password,
                             sessionResource));
@@ -156,7 +161,9 @@ public abstract class AccountDao {
         setNotSelected(id);
     }
 
-    @Query("SELECT id,username,password,sessionResource FROM credentials WHERE id=:credentialsId")
+    @Query(
+            "SELECT id,authenticationScheme,username,password,sessionResource FROM credentials"
+                    + " WHERE id=:credentialsId")
     public abstract ListenableFuture<AccountWithCredentials.Credentials> getCredentials(
             Long credentialsId);
 }

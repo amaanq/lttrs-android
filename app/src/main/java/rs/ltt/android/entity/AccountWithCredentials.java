@@ -17,6 +17,9 @@ package rs.ltt.android.entity;
 
 import com.google.common.base.Objects;
 import okhttp3.HttpUrl;
+import rs.ltt.jmap.client.http.BasicAuthHttpAuthentication;
+import rs.ltt.jmap.client.http.BearerAuthHttpAuthentication;
+import rs.ltt.jmap.client.http.HttpAuthentication;
 
 public class AccountWithCredentials {
 
@@ -24,6 +27,7 @@ public class AccountWithCredentials {
     private final Long credentialsId;
     private final String accountId;
     private final String name;
+    private final HttpAuthentication.Scheme authenticationScheme;
     private final String username;
     private final String password;
     private final HttpUrl sessionResource;
@@ -33,6 +37,7 @@ public class AccountWithCredentials {
             final Long credentialsId,
             final String accountId,
             final String name,
+            final HttpAuthentication.Scheme authenticationScheme,
             final String username,
             final String password,
             final HttpUrl sessionResource) {
@@ -40,6 +45,7 @@ public class AccountWithCredentials {
         this.id = id;
         this.accountId = accountId;
         this.name = name;
+        this.authenticationScheme = authenticationScheme;
         this.username = username;
         this.password = password;
         this.sessionResource = sessionResource;
@@ -68,7 +74,8 @@ public class AccountWithCredentials {
     }
 
     public Credentials getCredentials() {
-        return new Credentials(credentialsId, username, password, sessionResource);
+        return new Credentials(
+                credentialsId, authenticationScheme, username, password, sessionResource);
     }
 
     @Override
@@ -80,6 +87,7 @@ public class AccountWithCredentials {
                 && Objects.equal(credentialsId, that.credentialsId)
                 && Objects.equal(accountId, that.accountId)
                 && Objects.equal(name, that.name)
+                && authenticationScheme == that.authenticationScheme
                 && Objects.equal(username, that.username)
                 && Objects.equal(password, that.password)
                 && Objects.equal(sessionResource, that.sessionResource);
@@ -88,36 +96,48 @@ public class AccountWithCredentials {
     @Override
     public int hashCode() {
         return Objects.hashCode(
-                id, credentialsId, accountId, name, username, password, sessionResource);
+                id,
+                credentialsId,
+                accountId,
+                name,
+                authenticationScheme,
+                username,
+                password,
+                sessionResource);
     }
 
     public static class Credentials {
 
         private final Long id;
+
+        private final HttpAuthentication.Scheme authenticationScheme;
         private final String username;
         private final String password;
         private final HttpUrl sessionResource;
 
         public Credentials(
-                final Long id, String username, String password, HttpUrl sessionResource) {
+                final Long id,
+                HttpAuthentication.Scheme authenticationScheme,
+                String username,
+                String password,
+                HttpUrl sessionResource) {
             this.id = id;
+            this.authenticationScheme = authenticationScheme;
             this.username = username;
             this.password = password;
             this.sessionResource = sessionResource;
         }
 
-        /**
-         * @return The login username (credentials) used to authenticate
-         */
-        public String getUsername() {
-            return username;
-        }
-
-        /**
-         * @return The login password (credentials) used to authenticate
-         */
-        public String getPassword() {
-            return password;
+        public HttpAuthentication asHttpAuthentication() {
+            if (authenticationScheme == null
+                    || authenticationScheme == HttpAuthentication.Scheme.BASIC) {
+                return new BasicAuthHttpAuthentication(username, password);
+            } else if (authenticationScheme == HttpAuthentication.Scheme.BEARER) {
+                return new BearerAuthHttpAuthentication(username, password);
+            } else {
+                throw new IllegalStateException(
+                        "Could not create HttpAuthentication with supplied scheme");
+            }
         }
 
         /**
@@ -138,6 +158,7 @@ public class AccountWithCredentials {
             if (o == null || getClass() != o.getClass()) return false;
             Credentials that = (Credentials) o;
             return Objects.equal(id, that.id)
+                    && authenticationScheme == that.authenticationScheme
                     && Objects.equal(username, that.username)
                     && Objects.equal(password, that.password)
                     && Objects.equal(sessionResource, that.sessionResource);
@@ -145,7 +166,7 @@ public class AccountWithCredentials {
 
         @Override
         public int hashCode() {
-            return Objects.hashCode(id, username, password, sessionResource);
+            return Objects.hashCode(id, authenticationScheme, username, password, sessionResource);
         }
     }
 }

@@ -53,6 +53,7 @@ import rs.ltt.android.worker.AbstractMuaWorker;
 import rs.ltt.android.worker.MainMailboxQueryRefreshWorker;
 import rs.ltt.android.worker.QueryRefreshWorker;
 import rs.ltt.autocrypt.jmap.AutocryptPlugin;
+import rs.ltt.jmap.client.http.HttpAuthentication;
 import rs.ltt.jmap.common.entity.Account;
 import rs.ltt.jmap.mua.Mua;
 import rs.ltt.jmap.mua.Status;
@@ -99,13 +100,14 @@ public class MainRepository {
     }
 
     public ListenableFuture<InsertOperation> insertAccountDiscoverSetupMessage(
+            final HttpAuthentication.Scheme authenticationScheme,
             final String username,
             final String password,
             final HttpUrl sessionResource,
             final String primaryAccountId,
             final Map<String, Account> accounts) {
         return Futures.transformAsync(
-                insert(username, password, sessionResource, accounts),
+                insert(authenticationScheme, username, password, sessionResource, accounts),
                 credentials -> {
                     final Map<String, Long> accountIdMap =
                             credentials.stream()
@@ -167,6 +169,7 @@ public class MainRepository {
     }
 
     private ListenableFuture<List<AccountWithCredentials>> insert(
+            final HttpAuthentication.Scheme authenticationScheme,
             final String username,
             final String password,
             final HttpUrl sessionResource,
@@ -175,7 +178,12 @@ public class MainRepository {
                 () ->
                         appDatabase
                                 .accountDao()
-                                .insert(username, password, sessionResource, accounts));
+                                .insert(
+                                        authenticationScheme,
+                                        username,
+                                        password,
+                                        sessionResource,
+                                        accounts));
     }
 
     private ListenableFuture<Optional<AutocryptSetupMessage>> discoverSetupMessageCaught(

@@ -36,8 +36,8 @@ import rs.ltt.android.entity.SearchSuggestionEntity;
             SearchSuggestionEntity.class,
             PushSubscriptionEntity.class
         },
-        version = 2,
-        autoMigrations = {@AutoMigration(from = 1, to = 2)})
+        version = 3,
+        autoMigrations = {@AutoMigration(from = 1, to = 2), @AutoMigration(from = 2, to = 3)})
 @TypeConverters(Converters.class)
 public abstract class AppDatabase extends RoomDatabase {
 

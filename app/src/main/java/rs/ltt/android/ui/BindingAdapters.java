@@ -61,6 +61,7 @@ import rs.ltt.android.entity.SubjectWithImportance;
 import rs.ltt.android.util.ConsistentColorGeneration;
 import rs.ltt.android.util.MediaTypes;
 import rs.ltt.autocrypt.jmap.SetupMessage;
+import rs.ltt.jmap.client.http.HttpAuthentication;
 import rs.ltt.jmap.common.entity.Role;
 import rs.ltt.jmap.mua.util.EmailAddressUtil;
 import rs.ltt.jmap.mua.util.EmailBodyUtil;
@@ -533,6 +534,19 @@ public class BindingAdapters {
         button.jumpDrawablesToCurrentState();
         button.setTag(new InitialValueSet());
         button.setVisibility(View.VISIBLE);
+    }
+
+    @BindingAdapter("android:hint")
+    public static void setHint(
+            final TextInputLayout textInputLayout,
+            final HttpAuthentication.Scheme authenticationScheme) {
+        if (authenticationScheme == HttpAuthentication.Scheme.BASIC) {
+            textInputLayout.setHint(R.string.enter_your_password);
+        } else if (authenticationScheme == HttpAuthentication.Scheme.BEARER) {
+            textInputLayout.setHint(R.string.enter_the_bearer_token);
+        } else {
+            textInputLayout.setHint(null);
+        }
     }
 
     private static class InitialValueSet {}
