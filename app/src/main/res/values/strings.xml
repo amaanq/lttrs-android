@@ -59,6 +59,7 @@
     <string name="enter_a_bearer_token">Type in a Bearer Token</string>
     <string name="wrong_password">Wrong password. Try again.</string>
     <string name="wrong_bearer_token">Wrong Bearer Token. Try again.</string>
+    <string name="found_no_supported_authentication_methods">Found no supported authentication methods</string>
     <string name="information_required">Info required</string>
     <string name="enter_your_connection_url">Type in your connection URL</string>
     <string name="enter_a_valid_url">Type in a valid connection URL</string>

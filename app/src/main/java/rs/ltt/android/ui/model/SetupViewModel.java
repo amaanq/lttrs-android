@@ -196,7 +196,11 @@ public class SetupViewModel extends AndroidViewModel {
                                 try {
                                     scheme = pickAuthenticationScheme(unauthorizedException);
                                 } catch (final IllegalArgumentException e) {
-                                    // TODO show error
+                                    emailAddressError.postValue(
+                                            getApplication()
+                                                    .getString(
+                                                            R.string
+                                                                    .found_no_supported_authentication_methods));
                                     return;
                                 }
                                 passwordError.postValue(null);
@@ -262,7 +266,11 @@ public class SetupViewModel extends AndroidViewModel {
                                 try {
                                     scheme = pickAuthenticationScheme(unauthorizedException);
                                 } catch (final IllegalArgumentException e) {
-                                    // TODO show error
+                                    passwordError.postValue(
+                                            getApplication()
+                                                    .getString(
+                                                            R.string
+                                                                    .found_no_supported_authentication_methods));
                                     return;
                                 }
                                 authenticationScheme.postValue(scheme);
@@ -335,7 +343,11 @@ public class SetupViewModel extends AndroidViewModel {
                             try {
                                 scheme = pickAuthenticationScheme(unauthorizedException);
                             } catch (final IllegalArgumentException e) {
-                                // TODO show error
+                                sessionResourceError.postValue(
+                                        getApplication()
+                                                .getString(
+                                                        R.string
+                                                                .found_no_supported_authentication_methods));
                                 return;
                             }
                             authenticationScheme.postValue(scheme);
