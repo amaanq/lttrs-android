@@ -23,8 +23,12 @@ import com.google.android.material.color.MaterialColors;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import org.hsluv.HUSLColorConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ConsistentColorGeneration {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConsistentColorGeneration.class);
 
     private ConsistentColorGeneration() {
         throw new IllegalStateException("This is a Utility class");
@@ -49,7 +53,13 @@ public final class ConsistentColorGeneration {
 
     @ColorInt
     public static int harmonized(final Context context, final String input) {
-        return MaterialColors.harmonizeWithPrimary(context, rgb(input));
+        final var rgb = rgb(input);
+        try {
+            return MaterialColors.harmonizeWithPrimary(context, rgb(input));
+        } catch (final IllegalArgumentException e) {
+            LOGGER.warn("Could not harmonize color for {}", input);
+            return rgb;
+        }
     }
 
     @ColorInt

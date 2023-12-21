@@ -18,10 +18,12 @@ package rs.ltt.android.ui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import androidx.annotation.ColorInt;
 import com.google.android.material.color.MaterialColors;
 import com.google.common.base.Strings;
 import java.util.Locale;
@@ -63,12 +65,15 @@ public class AvatarDrawable extends ColorDrawable {
     }
 
     private static Paint getTextPaint(final Context context) {
+        @ColorInt
+        int fallbackColor =
+                context.getResources().getBoolean(R.bool.avatar_light_text_color)
+                        ? Color.WHITE
+                        : Color.BLACK;
         final Paint textPaint = new Paint();
         textPaint.setColor(
                 MaterialColors.getColor(
-                        context,
-                        com.google.android.material.R.attr.colorSurface,
-                        "This view has no colorOnPrimary"));
+                        context, com.google.android.material.R.attr.colorSurface, fallbackColor));
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setAntiAlias(true);
         textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));

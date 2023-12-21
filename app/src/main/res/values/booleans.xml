@@ -17,4 +17,5 @@
 <resources>
     <bool name="window_light_status_bar">true</bool>
     <bool name="window_light_navigation_bar">true</bool>
+    <bool name="avatar_light_text_color">true</bool>
 </resources>
