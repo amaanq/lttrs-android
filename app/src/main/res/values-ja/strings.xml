@@ -96,4 +96,21 @@
     <string name="remove_flag">フラグを削除</string>
     <string name="foreground_service">フォアグラウンドサービス</string>
     <string name="add_flag">フラグを追加</string>
+    <string name="empty_trash_dialog_title">ごみ箱を空にしますか？</string>
+    <string name="autocrypt_enable_description">エンドツーエンド暗号化の対応を有効にします。送信するメールに、あなたの公開鍵が添付されます。これにより、あなたの連絡先があなた宛てに暗号化されたメールを送れるようになります。</string>
+    <string name="no_application_to_open_x">%s を表示できるアプリがありませんでした。添付ファイルのダウンロードは可能です。</string>
+    <string name="attachments">添付ファイル</string>
+    <string name="remove_account_dialog_message">このアカウントを削除すると、端末からアカウントのすべてのメッセージと関連付けられたデータを削除します。</string>
+    <string name="transfer_secret_key">秘密鍵を転送</string>
+    <string name="could_not_cache_attachment">添付ファイルをキャッシュできませんでした</string>
+    <string name="empty_trash">ごみ箱を空にする</string>
+    <string name="send_as_cleartext">平文として送信</string>
+    <string name="encrypted">暗号化済み</string>
+    <string name="empty">空にする</string>
+    <string name="manage_labels">ラベルを管理</string>
+    <string name="encrypted_email">(暗号化されたメール)</string>
+    <string name="no_body">(本文なし)</string>
+    <string name="view_emails">メールを表示</string>
+    <string name="encryption_options">暗号化オプション</string>
+    <string name="cleartext">平文</string>
 </resources>
