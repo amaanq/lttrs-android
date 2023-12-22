@@ -87,7 +87,6 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:enabled="@{!setupViewModel.isLoading()}"
-                    android:onClick="@{(v) -> setupViewModel.enterEmailAddress()}"
                     android:text="@string/next" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -108,8 +107,7 @@
                         android:imeOptions="flagNoExtractUi|actionNext"
                         android:inputType="textEmailAddress|textNoSuggestions"
                         android:maxLines="1"
-                        android:text="@={setupViewModel.emailAddress}"
-                        app:editorAction="@{()->setupViewModel.enterEmailAddress()}" />
+                        android:text="@={setupViewModel.emailAddress}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </RelativeLayout>

@@ -1,2 +1,3 @@
-* Material 3 Redesign
-  * change all ImageButton to MaterialButtons
+* support multiple accounts per credential
+* manage identites
+* manage labels

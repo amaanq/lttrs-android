@@ -166,64 +166,13 @@ public class SetupViewModel extends AndroidViewModel {
         return this.warningMessage;
     }
 
-    public boolean enterEmailAddress() {
-        this.password.setValue(null);
-        this.sessionResource.setValue(null);
-        final String emailAddress = getEmailAddressedValue();
-        if (EmailAddressUtil.isValid(emailAddress)) {
-            this.loading.postValue(true);
-            this.emailAddressError.postValue(null);
-            Futures.addCallback(
-                    getSession(),
-                    new FutureCallback<>() {
-                        @Override
-                        public void onSuccess(@Nullable Session session) {
-                            Preconditions.checkNotNull(session);
-                            processAccounts(session);
-                        }
+    public boolean checkEmailAddress() {
+        return checkEmailAddress(getEmailAddressedValue());
+    }
 
-                        @Override
-                        public void onFailure(@NonNull Throwable cause) {
-                            loading.postValue(false);
-                            if (cause instanceof WellKnownUtil.MalformedUsernameException) {
-                                LOGGER.error("e-mail address was malformed", cause);
-                                emailAddressError.postValue(
-                                        getApplication()
-                                                .getString(R.string.enter_a_valid_email_address));
-                            } else if (cause
-                                    instanceof UnauthorizedException unauthorizedException) {
-                                final HttpAuthentication.Scheme scheme;
-                                try {
-                                    scheme = pickAuthenticationScheme(unauthorizedException);
-                                } catch (final IllegalArgumentException e) {
-                                    emailAddressError.postValue(
-                                            getApplication()
-                                                    .getString(
-                                                            R.string
-                                                                    .found_no_supported_authentication_methods));
-                                    return;
-                                }
-                                passwordError.postValue(null);
-                                authenticationScheme.postValue(scheme);
-                                redirection.postValue(new Event<>(Target.ENTER_PASSWORD));
-                            } else if (cause instanceof UnknownHostException) {
-                                if (isNetworkAvailable()) {
-                                    sessionResourceError.postValue(null);
-                                    redirection.postValue(new Event<>(Target.ENTER_URL));
-                                } else {
-                                    emailAddressError.postValue(
-                                            getApplication()
-                                                    .getString(R.string.no_network_connection));
-                                }
-                            } else if (isEndpointProblem(cause)) {
-                                sessionResourceError.postValue(null);
-                                redirection.postValue(new Event<>(Target.ENTER_URL));
-                            } else {
-                                reportUnableToFetchSession(cause);
-                            }
-                        }
-                    },
-                    MoreExecutors.directExecutor());
+    public boolean checkEmailAddress(final String emailAddress) {
+        if (EmailAddressUtil.isValid(emailAddress)) {
+            return true;
         } else {
             if (emailAddress.isEmpty()) {
                 emailAddressError.postValue(
@@ -232,8 +181,68 @@ public class SetupViewModel extends AndroidViewModel {
                 emailAddressError.postValue(
                         getApplication().getString(R.string.enter_a_valid_email_address));
             }
+            return false;
         }
-        return true;
+    }
+
+    public void enterEmailAddress() {
+        this.password.setValue(null);
+        this.sessionResource.setValue(null);
+        final String emailAddress = getEmailAddressedValue();
+        if (!checkEmailAddress(emailAddress)) {
+            return;
+        }
+        this.loading.postValue(true);
+        this.emailAddressError.postValue(null);
+        Futures.addCallback(
+                getSession(),
+                new FutureCallback<>() {
+                    @Override
+                    public void onSuccess(@Nullable Session session) {
+                        Preconditions.checkNotNull(session);
+                        processAccounts(session);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Throwable cause) {
+                        loading.postValue(false);
+                        if (cause instanceof WellKnownUtil.MalformedUsernameException) {
+                            LOGGER.error("e-mail address was malformed", cause);
+                            emailAddressError.postValue(
+                                    getApplication()
+                                            .getString(R.string.enter_a_valid_email_address));
+                        } else if (cause instanceof UnauthorizedException unauthorizedException) {
+                            final HttpAuthentication.Scheme scheme;
+                            try {
+                                scheme = pickAuthenticationScheme(unauthorizedException);
+                            } catch (final IllegalArgumentException e) {
+                                emailAddressError.postValue(
+                                        getApplication()
+                                                .getString(
+                                                        R.string
+                                                                .found_no_supported_authentication_methods));
+                                return;
+                            }
+                            passwordError.postValue(null);
+                            authenticationScheme.postValue(scheme);
+                            redirection.postValue(new Event<>(Target.ENTER_PASSWORD));
+                        } else if (cause instanceof UnknownHostException) {
+                            if (isNetworkAvailable()) {
+                                sessionResourceError.postValue(null);
+                                redirection.postValue(new Event<>(Target.ENTER_URL));
+                            } else {
+                                emailAddressError.postValue(
+                                        getApplication().getString(R.string.no_network_connection));
+                            }
+                        } else if (isEndpointProblem(cause)) {
+                            sessionResourceError.postValue(null);
+                            redirection.postValue(new Event<>(Target.ENTER_URL));
+                        } else {
+                            reportUnableToFetchSession(cause);
+                        }
+                    }
+                },
+                MoreExecutors.directExecutor());
     }
 
     public boolean enterPassword() {
