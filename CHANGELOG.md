@@ -1,3 +1,8 @@
+## 0.4.2 · All Engines Running (2023-12-22)
+
+* Restore access to fastmail.com
+* Fix issue with notifications not showing
+
 ## 0.4.1 · All Engines Running (2023-12-15)
 
 * Fix crashes during initial account setup

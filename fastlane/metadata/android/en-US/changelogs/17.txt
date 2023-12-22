@@ -1,0 +1,2 @@
+* Restore access to fastmail.com
+* Fix issue with notifications not showing
