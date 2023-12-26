@@ -22,6 +22,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.paging.PagedList;
+import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,15 +33,19 @@ import rs.ltt.android.entity.MailboxWithRoleAndName;
 import rs.ltt.android.entity.QueryInfo;
 import rs.ltt.android.entity.SearchSuggestion;
 import rs.ltt.android.entity.ThreadOverviewItem;
+import rs.ltt.android.repository.ContactRepository;
 import rs.ltt.android.repository.MainRepository;
 import rs.ltt.android.repository.QueryRepository;
 import rs.ltt.android.ui.EmptyMailboxAction;
+import rs.ltt.android.util.MergedListsLiveData;
 import rs.ltt.jmap.common.entity.query.EmailQuery;
 import rs.ltt.jmap.mua.util.LabelWithCount;
 
 public abstract class AbstractQueryViewModel extends AndroidViewModel {
 
     final QueryRepository queryRepository;
+    private final MainRepository mainRepository;
+    private final ContactRepository contactRepository;
     private final ListenableFuture<MailboxWithRoleAndName> important;
     private final HashSet<String> selectedThreads = new HashSet<>();
     private LiveData<PagedList<ThreadOverviewItem>> threads;
@@ -54,8 +59,9 @@ public abstract class AbstractQueryViewModel extends AndroidViewModel {
 
     AbstractQueryViewModel(@NonNull Application application, final long accountId) {
         super(application);
-        final MainRepository mainRepository = new MainRepository(application);
+        this.mainRepository = new MainRepository(application);
         this.queryRepository = new QueryRepository(application, accountId);
+        this.contactRepository = new ContactRepository(application, accountId);
         this.important = this.queryRepository.getImportant();
         this.searchSuggestion =
                 Transformations.switchMap(
@@ -63,11 +69,22 @@ public abstract class AbstractQueryViewModel extends AndroidViewModel {
                         enabled -> {
                             if (Boolean.TRUE.equals(enabled)) {
                                 return Transformations.switchMap(
-                                        searchQueryLiveData, mainRepository::getSearchSuggestions);
+                                        searchQueryLiveData, this::getSearchSuggestion);
                             } else {
                                 return new MutableLiveData<>(Collections.emptyList());
                             }
                         });
+    }
+
+    private LiveData<List<SearchSuggestion>> getSearchSuggestion(final String term) {
+        final LiveData<List<SearchSuggestion>> termSuggestions =
+                this.mainRepository.getSearchSuggestions(term);
+        if (term.length() < 3) {
+            return termSuggestions;
+        }
+        final LiveData<List<SearchSuggestion>> contactSuggestions =
+                this.contactRepository.getContactSuggestions(term);
+        return new MergedListsLiveData<>(ImmutableList.of(termSuggestions, contactSuggestions));
     }
 
     void init() {

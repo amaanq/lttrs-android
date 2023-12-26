@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rs.ltt.android.entity.QueryInfo;
+import rs.ltt.android.entity.SearchSuggestion;
 import rs.ltt.jmap.common.entity.query.EmailQuery;
 
 public abstract class QueryRefreshWorker extends AbstractMuaWorker {
@@ -46,35 +47,39 @@ public abstract class QueryRefreshWorker extends AbstractMuaWorker {
     }
 
     public static OneTimeWorkRequest of(final QueryInfo queryInfo, final boolean skipOverEmpty) {
-        switch (queryInfo.type) {
-            case MAIN:
-                return new OneTimeWorkRequest.Builder(MainMailboxQueryRefreshWorker.class)
-                        .setInputData(
-                                MainMailboxQueryRefreshWorker.data(
-                                        queryInfo.accountId, skipOverEmpty))
-                        .build();
-            case MAILBOX:
-                return new OneTimeWorkRequest.Builder(MailboxQueryRefreshWorker.class)
-                        .setInputData(
-                                MailboxQueryRefreshWorker.data(
-                                        queryInfo.accountId, skipOverEmpty, queryInfo.value))
-                        .build();
-            case KEYWORD:
-                return new OneTimeWorkRequest.Builder(KeywordQueryRefreshWorker.class)
-                        .setInputData(
-                                KeywordQueryRefreshWorker.data(
-                                        queryInfo.accountId, skipOverEmpty, queryInfo.value))
-                        .build();
-            case SEARCH:
-                return new OneTimeWorkRequest.Builder(SearchQueryRefreshWorker.class)
-                        .setInputData(
-                                SearchQueryRefreshWorker.data(
-                                        queryInfo.accountId, skipOverEmpty, queryInfo.value))
-                        .build();
-            default:
-                throw new IllegalArgumentException(
-                        String.format("%s is an unknown Query Type", queryInfo.type));
-        }
+        return switch (queryInfo.type) {
+            case MAIN -> new OneTimeWorkRequest.Builder(MainMailboxQueryRefreshWorker.class)
+                    .setInputData(
+                            MainMailboxQueryRefreshWorker.data(
+                                    queryInfo.accountId, skipOverEmpty))
+                    .build();
+            case MAILBOX -> new OneTimeWorkRequest.Builder(MailboxQueryRefreshWorker.class)
+                    .setInputData(
+                            MailboxQueryRefreshWorker.data(
+                                    queryInfo.accountId, skipOverEmpty, queryInfo.value))
+                    .build();
+            case KEYWORD -> new OneTimeWorkRequest.Builder(KeywordQueryRefreshWorker.class)
+                    .setInputData(
+                            KeywordQueryRefreshWorker.data(
+                                    queryInfo.accountId, skipOverEmpty, queryInfo.value))
+                    .build();
+            case SEARCH_IN_EMAIL -> new OneTimeWorkRequest.Builder(SearchQueryRefreshWorker.class)
+                    .setInputData(
+                            SearchQueryRefreshWorker.data(
+                                    queryInfo.accountId,
+                                    skipOverEmpty,
+                                    queryInfo.value,
+                                    SearchSuggestion.Type.IN_EMAIL))
+                    .build();
+            case SEARCH_BY_CONTACT -> new OneTimeWorkRequest.Builder(SearchQueryRefreshWorker.class)
+                    .setInputData(
+                            SearchQueryRefreshWorker.data(
+                                    queryInfo.accountId,
+                                    skipOverEmpty,
+                                    queryInfo.value,
+                                    SearchSuggestion.Type.BY_CONTACT))
+                    .build();
+        };
     }
 
     public static String uniqueName(final Long accountId) {

@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.common.base.Preconditions;
 import java.util.Collection;
+import rs.ltt.android.entity.SearchSuggestion;
 import rs.ltt.android.entity.ThreadOverviewItem;
 import rs.ltt.android.ui.ActionModeMenuConfiguration;
 import rs.ltt.android.ui.QueryItemTouchHelper;
@@ -38,16 +39,15 @@ public class SearchQueryFragment extends AbstractQueryFragment {
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final Bundle bundle = getArguments();
-        final String term =
-                SearchQueryFragmentArgs.fromBundle(bundle == null ? new Bundle() : bundle)
-                        .getText();
+        final var args = SearchQueryFragmentArgs.fromBundle(bundle == null ? new Bundle() : bundle);
+        final var search = new SearchSuggestion(args.getType(), args.getText());
         final ViewModelProvider viewModelProvider =
                 new ViewModelProvider(
                         getViewModelStore(),
                         new SearchQueryViewModel.Factory(
                                 requireActivity().getApplication(),
                                 getLttrsViewModel().getAccountId(),
-                                term));
+                                search));
         this.searchQueryViewModel = viewModelProvider.get(SearchQueryViewModel.class);
         return super.onCreateView(inflater, container, savedInstanceState);
     }

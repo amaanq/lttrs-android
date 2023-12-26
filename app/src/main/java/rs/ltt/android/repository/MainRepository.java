@@ -89,7 +89,7 @@ public class MainRepository {
                                     suggestions,
                                     query ->
                                             new SearchSuggestion(
-                                                    SearchSuggestion.Type.SEARCH_IN_EMAIL, query));
+                                                    SearchSuggestion.Type.IN_EMAIL, query));
 
                     if (previousSearches.size() >= 1 || term.trim().isEmpty()) {
                         return ImmutableList.copyOf(previousSearches);

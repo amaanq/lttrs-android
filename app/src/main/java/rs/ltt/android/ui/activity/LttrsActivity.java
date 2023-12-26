@@ -53,6 +53,7 @@ import rs.ltt.android.R;
 import rs.ltt.android.databinding.ActivityLttrsBinding;
 import rs.ltt.android.entity.MailboxOverviewItem;
 import rs.ltt.android.entity.MailboxWithRoleAndName;
+import rs.ltt.android.entity.SearchSuggestion;
 import rs.ltt.android.ui.EmptyMailboxAction;
 import rs.ltt.android.ui.ItemAnimators;
 import rs.ltt.android.ui.ThreadModifier;
@@ -371,7 +372,10 @@ public class LttrsActivity extends AppCompatActivity
         final String query = Strings.nullToEmpty(intent.getStringExtra(SearchManager.QUERY));
         binding.navigation.requestFocus();
         lttrsViewModel.insertSearchSuggestion(query);
-        getNavController().navigate(LttrsNavigationDirections.actionSearch(query));
+        getNavController()
+                .navigate(
+                        LttrsNavigationDirections.actionSearch(
+                                query, SearchSuggestion.Type.IN_EMAIL));
     }
 
     private void showSnackbar(final Snackbar snackbar) {

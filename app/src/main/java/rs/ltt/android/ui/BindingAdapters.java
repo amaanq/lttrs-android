@@ -197,10 +197,10 @@ public class BindingAdapters {
             return;
         }
         switch (suggestion.type) {
-            case SEARCH_IN_EMAIL -> textView.setText(
+            case IN_EMAIL -> textView.setText(
                     textView.getContext()
                             .getString(R.string.search_for_x_in_email, suggestion.value));
-            case CONTACT -> textView.setText(suggestion.value);
+            case BY_CONTACT -> textView.setText(suggestion.value);
             default -> throw new IllegalStateException(
                     String.format("No implementation for %s", suggestion.type));
         }
@@ -212,8 +212,8 @@ public class BindingAdapters {
             return;
         }
         switch (suggestion.type) {
-            case SEARCH_IN_EMAIL -> imageView.setImageResource(R.drawable.ic_manage_search_24dp);
-            case CONTACT -> imageView.setImageResource(R.drawable.ic_person_24dp);
+            case IN_EMAIL -> imageView.setImageResource(R.drawable.ic_manage_search_24dp);
+            case BY_CONTACT -> imageView.setImageResource(R.drawable.ic_person_24dp);
             default -> throw new IllegalStateException(
                     String.format("No implementation for %s", suggestion.type));
         }

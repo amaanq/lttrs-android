@@ -23,9 +23,11 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.common.util.concurrent.ListenableFuture;
+import java.util.Objects;
 import rs.ltt.android.entity.MailboxOverwriteEntity;
 import rs.ltt.android.entity.MailboxWithRoleAndName;
 import rs.ltt.android.entity.QueryInfo;
+import rs.ltt.android.entity.SearchSuggestion;
 import rs.ltt.android.entity.ThreadOverviewItem;
 import rs.ltt.android.util.PlaceholderLabel;
 import rs.ltt.jmap.common.entity.Role;
@@ -36,24 +38,30 @@ import rs.ltt.jmap.mua.util.StandardQueries;
 
 public class SearchQueryViewModel extends AbstractQueryViewModel {
 
-    private final String searchTerm;
+    private final SearchSuggestion search;
     private final LiveData<EmailQuery> searchQueryLiveData;
     private final ListenableFuture<MailboxWithRoleAndName> inbox;
 
     SearchQueryViewModel(
-            final Application application, final long accountId, final String searchTerm) {
+            final Application application, final long accountId, final SearchSuggestion search) {
         super(application, accountId);
-        this.searchTerm = searchTerm;
+        this.search = search;
         this.inbox = queryRepository.getInbox();
         this.searchQueryLiveData =
                 Transformations.map(
                         queryRepository.getTrashAndJunk(),
-                        trashAndJunk -> StandardQueries.search(searchTerm, trashAndJunk));
+                        trashAndJunk ->
+                                switch (search.type) {
+                                    case IN_EMAIL -> StandardQueries.search(
+                                            search.value, trashAndJunk);
+                                    case BY_CONTACT -> StandardQueries.contact(
+                                            search.value, trashAndJunk);
+                                });
         init();
     }
 
     public LiveData<String> getSearchTerm() {
-        return new MutableLiveData<>(searchTerm);
+        return new MutableLiveData<>(search.value);
     }
 
     @Override
@@ -63,8 +71,16 @@ public class SearchQueryViewModel extends AbstractQueryViewModel {
 
     @Override
     public QueryInfo getQueryInfo() {
-        return new QueryInfo(
-                queryRepository.getAccountId(), QueryInfo.Type.SEARCH, this.searchTerm);
+        return switch (this.search.type) {
+            case IN_EMAIL -> new QueryInfo(
+                    queryRepository.getAccountId(),
+                    QueryInfo.Type.SEARCH_IN_EMAIL,
+                    this.search.value);
+            case BY_CONTACT -> new QueryInfo(
+                    queryRepository.getAccountId(),
+                    QueryInfo.Type.SEARCH_BY_CONTACT,
+                    this.search.value);
+        };
     }
 
     @Override
@@ -98,18 +114,20 @@ public class SearchQueryViewModel extends AbstractQueryViewModel {
 
         private final Application application;
         private final long accountId;
-        private final String query;
+        private final SearchSuggestion search;
 
-        public Factory(Application application, final long accountId, String query) {
+        public Factory(
+                Application application, final long accountId, final SearchSuggestion search) {
             this.application = application;
             this.accountId = accountId;
-            this.query = query;
+            this.search = search;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return modelClass.cast(new SearchQueryViewModel(application, accountId, query));
+            return Objects.requireNonNull(
+                    modelClass.cast(new SearchQueryViewModel(application, accountId, search)));
         }
     }
 }

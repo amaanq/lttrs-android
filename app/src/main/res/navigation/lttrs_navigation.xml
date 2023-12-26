@@ -113,6 +113,9 @@
             android:name="text"
             app:argType="string"
             app:nullable="false" />
+        <argument android:name="type"
+            app:argType="rs.ltt.android.entity.SearchSuggestion$Type"
+            app:nullable="false"/>
     </fragment>
 
     <fragment

@@ -2,6 +2,7 @@ package rs.ltt.android.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import androidx.annotation.NonNull;
 import com.google.common.base.MoreObjects;
 
 public class QueryInfo implements Parcelable {
@@ -45,6 +46,7 @@ public class QueryInfo implements Parcelable {
         return 0;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -58,6 +60,7 @@ public class QueryInfo implements Parcelable {
         MAIN,
         MAILBOX,
         KEYWORD,
-        SEARCH
+        SEARCH_IN_EMAIL,
+        SEARCH_BY_CONTACT
     }
 }

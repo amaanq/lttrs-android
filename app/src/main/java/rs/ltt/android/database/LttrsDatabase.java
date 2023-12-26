@@ -30,6 +30,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rs.ltt.android.database.dao.AutocryptDao;
+import rs.ltt.android.database.dao.ContactDao;
 import rs.ltt.android.database.dao.IdentityDao;
 import rs.ltt.android.database.dao.MailboxDao;
 import rs.ltt.android.database.dao.OverwriteDao;
@@ -136,6 +137,8 @@ public abstract class LttrsDatabase extends RoomDatabase {
             return lttrsDatabase;
         }
     }
+
+    public abstract ContactDao contactDao();
 
     public abstract ThreadAndEmailDao threadAndEmailDao();
 

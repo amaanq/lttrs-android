@@ -46,6 +46,7 @@ import org.slf4j.LoggerFactory;
 import rs.ltt.android.LttrsNavigationDirections;
 import rs.ltt.android.R;
 import rs.ltt.android.databinding.FragmentThreadListBinding;
+import rs.ltt.android.entity.SearchSuggestion;
 import rs.ltt.android.entity.ThreadOverviewItem;
 import rs.ltt.android.service.EventMonitorService;
 import rs.ltt.android.ui.ActionModeMenuConfiguration;
@@ -182,11 +183,10 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                 .setOnEditorActionListener(
                         (textView, actionId, event) -> {
                             final String query = CharSequences.nullToEmpty(textView.getText());
-                            return executeSearch(query);
+                            return executeSearch(SearchSuggestion.userInput(query));
                         });
         this.searchSuggestionAdapter = new SearchSuggestionAdapter();
-        this.searchSuggestionAdapter.setOnSearchSuggestionClicked(
-                suggestion -> executeSearch(suggestion.value));
+        this.searchSuggestionAdapter.setOnSearchSuggestionClicked(this::executeSearch);
         this.binding.searchSuggestionList.setAdapter(this.searchSuggestionAdapter);
         viewModel
                 .getSearchSuggestions()
@@ -236,17 +236,22 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
         }
     }
 
-    private boolean executeSearch(final String query) {
+    private boolean executeSearch(final SearchSuggestion searchSuggestion) {
         binding.searchView.clearFocusAndHideKeyboard();
         binding.searchView.setVisible(false);
-        if (Strings.isNullOrEmpty(query)) {
+        if (Strings.isNullOrEmpty(searchSuggestion.value)) {
             final var destination = getNavController().getCurrentDestination();
             if (destination != null && destination.getId() == R.id.search) {
                 getNavController().popBackStack();
             }
         } else {
-            getLttrsViewModel().insertSearchSuggestion(query);
-            getNavController().navigate(LttrsNavigationDirections.actionSearch(query));
+            if (searchSuggestion.type == SearchSuggestion.Type.IN_EMAIL) {
+                getLttrsViewModel().insertSearchSuggestion(searchSuggestion.value);
+            }
+            getNavController()
+                    .navigate(
+                            LttrsNavigationDirections.actionSearch(
+                                    searchSuggestion.value, searchSuggestion.type));
         }
         return false;
     }

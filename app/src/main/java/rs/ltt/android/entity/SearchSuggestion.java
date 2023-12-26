@@ -26,8 +26,8 @@ public class SearchSuggestion {
     }
 
     public enum Type {
-        SEARCH_IN_EMAIL,
-        CONTACT
+        IN_EMAIL,
+        BY_CONTACT
     }
 
     public static SearchSuggestion userInput(final String userInput) {
@@ -37,7 +37,7 @@ public class SearchSuggestion {
     public static class UserInput extends SearchSuggestion {
 
         private UserInput(final String value) {
-            super(Type.SEARCH_IN_EMAIL, value);
+            super(Type.IN_EMAIL, value);
         }
     }
 }
