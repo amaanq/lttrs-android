@@ -44,6 +44,7 @@ import java.util.concurrent.CancellationException;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import okhttp3.HttpUrl;
+import okhttp3.internal.http2.StreamResetException;
 import org.pgpainless.exception.MissingDecryptionMethodException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,13 +101,14 @@ public class SetupViewModel extends AndroidViewModel {
                 .observeForever(s -> passwordError.postValue(null));
     }
 
-    private static boolean isEndpointProblem(Throwable t) {
+    private static boolean isEndpointProblem(final Throwable t) {
         return t instanceof InvalidSessionResourceException
                 || t instanceof EndpointNotFoundException
                 || t instanceof ConnectException
                 || t instanceof SocketTimeoutException
                 || t instanceof SSLHandshakeException
-                || t instanceof SSLPeerUnverifiedException;
+                || t instanceof SSLPeerUnverifiedException
+                || t instanceof StreamResetException;
     }
 
     private static boolean secure(final HttpUrl url) {

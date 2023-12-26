@@ -50,8 +50,7 @@ public abstract class QueryRefreshWorker extends AbstractMuaWorker {
         return switch (queryInfo.type) {
             case MAIN -> new OneTimeWorkRequest.Builder(MainMailboxQueryRefreshWorker.class)
                     .setInputData(
-                            MainMailboxQueryRefreshWorker.data(
-                                    queryInfo.accountId, skipOverEmpty))
+                            MainMailboxQueryRefreshWorker.data(queryInfo.accountId, skipOverEmpty))
                     .build();
             case MAILBOX -> new OneTimeWorkRequest.Builder(MailboxQueryRefreshWorker.class)
                     .setInputData(
