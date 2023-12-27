@@ -369,9 +369,9 @@ public class LttrsActivity extends AppCompatActivity
     }
 
     private void handleSearchIntent(@NonNull final Intent intent) {
-        final String query = Strings.nullToEmpty(intent.getStringExtra(SearchManager.QUERY));
+        final String query = Strings.nullToEmpty(intent.getStringExtra(SearchManager.QUERY)).trim();
         binding.navigation.requestFocus();
-        lttrsViewModel.insertSearchSuggestion(query);
+        lttrsViewModel.insertSearchSuggestion(SearchSuggestion.userInput(query));
         getNavController()
                 .navigate(
                         LttrsNavigationDirections.actionSearch(

@@ -15,24 +15,27 @@
 
 package rs.ltt.android.database.dao;
 
-import static androidx.room.OnConflictStrategy.REPLACE;
+import static androidx.room.OnConflictStrategy.IGNORE;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import java.util.List;
+import rs.ltt.android.entity.SearchSuggestion;
 import rs.ltt.android.entity.SearchSuggestionEntity;
 
 @Dao
 public abstract class SearchSuggestionDao {
 
-    @Insert(onConflict = REPLACE)
-    public abstract void insert(SearchSuggestionEntity entity);
+    @Insert(onConflict = IGNORE)
+    public abstract void insert(final SearchSuggestionEntity entity);
 
     @Query("select `query` from search_suggestion")
     public abstract List<String> getSearchQueries();
 
-    @Query("select `query` from search_suggestion WHERE `query` LIKE :term")
-    public abstract LiveData<List<String>> getSearchSuggestions(final String term);
+    @Query(
+            "select type,`query` as value from search_suggestion WHERE type IS NOT NULL AND `query`"
+                    + " IS NOT NULL AND `query` LIKE :term")
+    public abstract LiveData<List<SearchSuggestion>> getSearchSuggestions(final String term);
 }

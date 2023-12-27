@@ -23,6 +23,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.paging.PagedList;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Ordering;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Collections;
 import java.util.HashSet;
@@ -76,15 +78,21 @@ public abstract class AbstractQueryViewModel extends AndroidViewModel {
                         });
     }
 
-    private LiveData<List<SearchSuggestion>> getSearchSuggestion(final String term) {
-        final LiveData<List<SearchSuggestion>> termSuggestions =
-                this.mainRepository.getSearchSuggestions(term);
+    private LiveData<List<SearchSuggestion>> getRawSearchSuggestion(final String term) {
+        final LiveData<List<SearchSuggestion>> previousSearches =
+                this.mainRepository.getPreviousSearches(term);
         if (term.length() < 3) {
-            return termSuggestions;
+            return previousSearches;
         }
         final LiveData<List<SearchSuggestion>> contactSuggestions =
                 this.contactRepository.getContactSuggestions(term);
-        return new MergedListsLiveData<>(ImmutableList.of(termSuggestions, contactSuggestions));
+        return new MergedListsLiveData<>(ImmutableList.of(previousSearches, contactSuggestions));
+    }
+
+    private LiveData<List<SearchSuggestion>> getSearchSuggestion(final String term) {
+        return Transformations.map(
+                getRawSearchSuggestion(term),
+                s -> Ordering.natural().sortedCopy(ImmutableSet.copyOf(s)));
     }
 
     void init() {

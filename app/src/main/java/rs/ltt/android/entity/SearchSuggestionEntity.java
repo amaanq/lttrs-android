@@ -23,7 +23,7 @@ import androidx.room.PrimaryKey;
         tableName = "search_suggestion",
         indices = {
             @Index(
-                    value = {"query"},
+                    value = {"query", "type"},
                     unique = true)
         })
 public class SearchSuggestionEntity {
@@ -31,10 +31,12 @@ public class SearchSuggestionEntity {
     @PrimaryKey public Long id;
 
     public String query;
+    public SearchSuggestion.Type type;
 
-    public static SearchSuggestionEntity of(String query) {
-        SearchSuggestionEntity entity = new SearchSuggestionEntity();
-        entity.query = query;
+    public static SearchSuggestionEntity of(final SearchSuggestion searchSuggestion) {
+        final SearchSuggestionEntity entity = new SearchSuggestionEntity();
+        entity.query = searchSuggestion.value;
+        entity.type = searchSuggestion.type;
         return entity;
     }
 }

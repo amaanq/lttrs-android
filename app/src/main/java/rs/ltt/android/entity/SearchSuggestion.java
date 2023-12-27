@@ -1,8 +1,9 @@
 package rs.ltt.android.entity;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ComparisonChain;
 
-public class SearchSuggestion {
+public class SearchSuggestion implements Comparable<SearchSuggestion> {
 
     public final Type type;
     public final String value;
@@ -23,6 +24,15 @@ public class SearchSuggestion {
     public SearchSuggestion(Type type, String value) {
         this.type = type;
         this.value = value;
+    }
+
+    @Override
+    public int compareTo(final SearchSuggestion o) {
+        return ComparisonChain.start()
+                .compareTrueFirst(this instanceof UserInput, o instanceof UserInput)
+                .compareTrueFirst(this.type == Type.IN_EMAIL, o.type == Type.IN_EMAIL)
+                .compare(this.value, o.value)
+                .result();
     }
 
     public enum Type {

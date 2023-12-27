@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rs.ltt.android.LttrsApplication;
 import rs.ltt.android.entity.AccountName;
+import rs.ltt.android.entity.SearchSuggestion;
 import rs.ltt.android.repository.LttrsRepository;
 import rs.ltt.android.repository.MainRepository;
 import rs.ltt.android.ui.AdditionalNavigationItem;
@@ -127,8 +128,8 @@ public class LttrsViewModel extends AndroidViewModel {
         return this.navigableItems;
     }
 
-    public void insertSearchSuggestion(final String term) {
-        this.mainRepository.insertSearchSuggestion(term);
+    public void insertSearchSuggestion(final SearchSuggestion suggestion) {
+        this.mainRepository.insertSearchSuggestion(suggestion);
     }
 
     public ListenableFuture<LiveData<WorkInfo>> moveToTrash(final Collection<String> threadIds) {

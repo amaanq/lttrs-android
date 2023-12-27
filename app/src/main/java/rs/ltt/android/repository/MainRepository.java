@@ -23,7 +23,6 @@ import androidx.work.WorkManager;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
@@ -75,27 +74,25 @@ public class MainRepository {
         this.appDatabase = AppDatabase.getInstance(application);
     }
 
-    public void insertSearchSuggestion(final String term) {
+    public void insertSearchSuggestion(final SearchSuggestion suggestion) {
         IO_EXECUTOR.execute(
-                () -> appDatabase.searchSuggestionDao().insert(SearchSuggestionEntity.of(term)));
+                () ->
+                        appDatabase
+                                .searchSuggestionDao()
+                                .insert(SearchSuggestionEntity.of(suggestion)));
     }
 
-    public LiveData<List<SearchSuggestion>> getSearchSuggestions(final String term) {
+    public LiveData<List<SearchSuggestion>> getPreviousSearches(final String term) {
         return Transformations.map(
                 appDatabase.searchSuggestionDao().getSearchSuggestions(String.format("%s%%", term)),
-                suggestions -> {
-                    final var previousSearches =
-                            Lists.transform(
-                                    suggestions,
-                                    query ->
-                                            new SearchSuggestion(
-                                                    SearchSuggestion.Type.IN_EMAIL, query));
-
-                    if (previousSearches.size() >= 1 || term.trim().isEmpty()) {
-                        return ImmutableList.copyOf(previousSearches);
-                    } else {
-                        return ImmutableList.of(SearchSuggestion.userInput(term.trim()));
+                previousSearches -> {
+                    final var userInput = SearchSuggestion.userInput(term.trim());
+                    if (previousSearches.contains(userInput) || term.trim().isEmpty()) {
+                        return previousSearches;
                     }
+                    final ImmutableList.Builder<SearchSuggestion> builder =
+                            new ImmutableList.Builder<>();
+                    return builder.add(userInput).addAll(previousSearches).build();
                 });
     }
 

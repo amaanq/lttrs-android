@@ -182,7 +182,8 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                 .getEditText()
                 .setOnEditorActionListener(
                         (textView, actionId, event) -> {
-                            final String query = CharSequences.nullToEmpty(textView.getText());
+                            final String query =
+                                    CharSequences.nullToEmpty(textView.getText()).trim();
                             return executeSearch(SearchSuggestion.userInput(query));
                         });
         this.searchSuggestionAdapter = new SearchSuggestionAdapter();
@@ -245,9 +246,7 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                 getNavController().popBackStack();
             }
         } else {
-            if (searchSuggestion.type == SearchSuggestion.Type.IN_EMAIL) {
-                getLttrsViewModel().insertSearchSuggestion(searchSuggestion.value);
-            }
+            getLttrsViewModel().insertSearchSuggestion(searchSuggestion);
             getNavController()
                     .navigate(
                             LttrsNavigationDirections.actionSearch(
