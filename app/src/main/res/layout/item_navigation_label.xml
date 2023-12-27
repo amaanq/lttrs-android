@@ -28,7 +28,7 @@
         android:id="@+id/item"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginEnd="8dp"
+        tools:backgroundTint="?colorPrimaryContainer"
         android:background="@drawable/background_navigation_label_selected">
 
         <ImageView
@@ -61,7 +61,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="24dp"
             android:textAppearance="?textAppearanceBodyLarge"
             app:count="@{label.getCount()}"
             tools:text="23" />

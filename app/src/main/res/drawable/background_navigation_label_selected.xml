@@ -16,7 +16,8 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:bottom="2dp"
-        android:top="2dp">
+        android:top="2dp"
+        android:end="8dp">
         <shape>
             <solid android:color="@android:color/white" />
             <corners
