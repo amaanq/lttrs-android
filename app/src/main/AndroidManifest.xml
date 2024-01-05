@@ -31,18 +31,11 @@
         </intent>
     </queries>
 
-    <!-- setting `enableOnBackInvokedCallback` to true has the benefit that closing
-         the search view, the navigation drawer or exiting from the app can provide
-         preview animations on Android 14. However it also means that the material
-         components library handles back presses for use which means that the custom
-         back press that closes the account select doesn't work. For now we prefer to
-         handle all back presses ourselves but maybe material components will allow
-         for some customizations in the future. -->
     <application
         android:name=".LttrsApplication"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        android:enableOnBackInvokedCallback="false"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_content"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

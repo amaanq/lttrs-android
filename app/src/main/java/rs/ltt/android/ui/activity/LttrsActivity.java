@@ -18,9 +18,11 @@ package rs.ltt.android.ui.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
+import android.window.OnBackInvokedCallback;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -54,6 +56,7 @@ import rs.ltt.android.databinding.ActivityLttrsBinding;
 import rs.ltt.android.entity.MailboxOverviewItem;
 import rs.ltt.android.entity.MailboxWithRoleAndName;
 import rs.ltt.android.entity.SearchSuggestion;
+import rs.ltt.android.ui.BackInvokedDispatchers;
 import rs.ltt.android.ui.EmptyMailboxAction;
 import rs.ltt.android.ui.ItemAnimators;
 import rs.ltt.android.ui.ThreadModifier;
@@ -97,6 +100,8 @@ public class LttrsActivity extends AppCompatActivity
                     lttrsViewModel.setAccountSelectionVisibility(false);
                 }
             };
+    private final OnBackInvokedCallback accountSelectorBackInvokedCallback =
+            BackInvokedDispatchers.of(accountSelectorBackPressedCallback);
 
     public static void launch(final FragmentActivity activity, final long accountId) {
         launch(activity, accountId, true);
@@ -239,8 +244,15 @@ public class LttrsActivity extends AppCompatActivity
                 .observe(
                         this,
                         visible -> {
-                            accountSelectorBackPressedCallback.setEnabled(
-                                    Boolean.TRUE.equals(visible));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                BackInvokedDispatchers.setEnabled(
+                                        this,
+                                        accountSelectorBackInvokedCallback,
+                                        Boolean.TRUE.equals(visible));
+                            } else {
+                                accountSelectorBackPressedCallback.setEnabled(
+                                        Boolean.TRUE.equals(visible));
+                            }
                             navigationAdapter.setAccountSelectionVisible(
                                     Boolean.TRUE.equals(visible));
                         });
