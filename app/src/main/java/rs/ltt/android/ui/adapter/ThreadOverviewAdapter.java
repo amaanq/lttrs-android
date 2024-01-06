@@ -17,6 +17,7 @@ package rs.ltt.android.ui.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rs.ltt.android.R;
@@ -164,6 +166,17 @@ public class ThreadOverviewAdapter
         }
         final boolean selected = this.selectedThreads.contains(item.threadId);
         final Context context = threadOverviewHolder.binding.getRoot().getContext();
+        threadOverviewHolder.setOnWidthChanged(
+                width -> {
+                    final int maxWidth =
+                            calculateMaxFromWidth(
+                                    width,
+                                    item.getCount(),
+                                    context.getResources().getDisplayMetrics());
+                    if (threadOverviewHolder.binding.froms.getMaxWidth() != maxWidth) {
+                        threadOverviewHolder.binding.froms.setMaxWidth(maxWidth);
+                    }
+                });
         threadOverviewHolder.binding.getRoot().setActivated(selected);
         threadOverviewHolder.setThread(item, isImportant(item));
         threadOverviewHolder.binding.starToggle.setOnClickListener(
@@ -219,6 +232,19 @@ public class ThreadOverviewAdapter
                     MaterialBackgrounds.getBackgroundResource(
                             context, android.R.attr.selectableItemBackground));
         }
+    }
+
+    private static int calculateMaxFromWidth(
+            final int totalAvailableWidth, Integer count, final DisplayMetrics displayMetrics) {
+        final int avatarAndPadding = 40 + 16 + 16 + 16;
+        final int dateWidth = 64;
+        final int countWidth = count == null || count <= 1 ? 0 : (int) Math.log10(count) + 1;
+        return totalAvailableWidth
+                - Math.round(
+                        (displayMetrics.density * avatarAndPadding)
+                                + (displayMetrics.scaledDensity * dateWidth)
+                                + (displayMetrics.scaledDensity * (countWidth * 12)
+                                        + (countWidth == 0 ? 0 : 8)));
     }
 
     public void notifyItemChanged(final String threadId) {
@@ -407,14 +433,31 @@ public class ThreadOverviewAdapter
 
         public final ItemThreadOverviewBinding binding;
 
+        private Consumer<Integer> onWidthChanged;
+
         ThreadOverviewViewHolder(@NonNull ItemThreadOverviewBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            final var view = this.binding.getRoot();
+            view.getViewTreeObserver()
+                    .addOnGlobalLayoutListener(
+                            () -> {
+                                final var consumer = onWidthChanged;
+                                if (consumer == null) {
+                                    return;
+                                }
+                                final int width = view.getWidth();
+                                consumer.accept(width);
+                            });
         }
 
         public void setThread(final ThreadOverviewItem thread, final boolean isImportant) {
             this.binding.setThread(thread);
             this.binding.setIsImportant(isImportant);
+        }
+
+        public void setOnWidthChanged(final Consumer<Integer> consumer) {
+            this.onWidthChanged = consumer;
         }
     }
 

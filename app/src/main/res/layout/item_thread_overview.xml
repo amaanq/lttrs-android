@@ -108,6 +108,7 @@
                     android:textAppearance="?textAppearanceBodyLarge"
                     app:firstBaselineToTopHeight="28dp"
                     app:from="@{thread.getFromValues()}"
+                    android:ellipsize="end"
                     tools:text="Juliet, Mercutio, Benvolio" />
 
                 <TextView
