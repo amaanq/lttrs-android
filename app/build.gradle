@@ -73,6 +73,11 @@ dependencies {
     //AndroidX
     implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompatVersion"
 
+    implementation "androidx.transition:transition:$rootProject.ext.transitionVersion"
+    implementation "androidx.fragment:fragment:$rootProject.ext.fragmentVersion"
+
+
+
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.ext.lifecycleVersion"
 
     implementation "androidx.navigation:navigation-fragment:$rootProject.ext.navVersion"

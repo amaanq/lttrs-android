@@ -2,6 +2,8 @@ buildscript {
 
     ext {
         appcompatVersion = "1.6.1"
+        fragmentVersion = "1.7.0-alpha07"
+        transitionVersion = "1.5.0-alpha05"
         lifecycleVersion = "2.2.0"
         navVersion = '2.7.6'
         pagingVersion = "2.1.2"
@@ -22,7 +24,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.0'
+        classpath 'com.android.tools.build:gradle:8.2.1'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navVersion"
         classpath "com.diffplug.spotless:spotless-plugin-gradle:6.22.0"
     }
