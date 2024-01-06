@@ -8,8 +8,8 @@ android {
         applicationId "rs.ltt.android"
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 17
-        versionName "0.4.2"
+        versionCode 18
+        versionName "0.4.3"
 
         setProperty("archivesBaseName", "Ltt.rs-$versionName")
 

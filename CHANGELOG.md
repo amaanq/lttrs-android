@@ -1,3 +1,7 @@
+## 0.4.3 · All Engines Running (2024-01-05)
+
+* Enable predictive back gestures
+
 ## 0.4.2 · All Engines Running (2023-12-22)
 
 * Restore access to fastmail.com
