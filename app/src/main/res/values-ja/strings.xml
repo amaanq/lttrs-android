@@ -32,7 +32,7 @@
         <item quantity="other">%d 通をアーカイブしました</item>
     </plurals>
     <string name="timeout_reached">接続を試みたメールサービスはタイムアウトしました</string>
-    <string name="wrong_password">パスワードが違います。もう一度お試しください。</string>
+    <string name="wrong_password">パスワードが間違っています。もう一度お試しください。</string>
     <string name="remove_label_x">ラベル %s を外す</string>
     <string name="undo">元に戻す</string>
     <string name="sign_in_instruction">メールアドレスを入力してください。</string>
@@ -104,7 +104,7 @@
     <string name="transfer_secret_key">秘密鍵を転送</string>
     <string name="could_not_cache_attachment">添付ファイルをキャッシュできませんでした</string>
     <string name="empty_trash">ごみ箱を空にする</string>
-    <string name="send_as_cleartext">平文として送信</string>
+    <string name="send_as_cleartext">平文で送信</string>
     <string name="encrypted">暗号化済み</string>
     <string name="empty">空にする</string>
     <string name="manage_labels">ラベルを管理</string>
@@ -113,4 +113,32 @@
     <string name="view_emails">メールを表示</string>
     <string name="encryption_options">暗号化オプション</string>
     <string name="cleartext">平文</string>
+    <string name="hide_account_selector">アカウント選択画面を非表示</string>
+    <string name="attachment_download_failed">添付ファイルをダウンロードできませんでした</string>
+    <string name="wrong_bearer_token">Bearer トークンが間違っています。もう一度お試しください。</string>
+    <string name="no_subject">(件名なし)</string>
+    <string name="autocrypt_encryption_preference">暗号化設定</string>
+    <string name="encryption_provider_can_not_create_secret_key">この端末の暗号化プロバイダーは、あなたの秘密鍵を作成できません。</string>
+    <string name="view_email">メールを表示</string>
+    <string name="import_secret_key">秘密鍵をインポート</string>
+    <string name="skip">スキップ</string>
+    <string name="wrong_setup_code">セットアップコードが間違っています。もう一度お試しください！</string>
+    <string name="reply_all">全員に返信</string>
+    <string name="forward_email">メールを転送</string>
+    <string name="more_options">さらにオプションを表示</string>
+    <string name="edit_draft">下書きを編集</string>
+    <string name="show_helper_dialog">ヘルプダイアログを表示</string>
+    <string name="download_attachment">添付ファイルをダウンロード</string>
+    <string name="reply">返信</string>
+    <string name="decrypt_email">メールを復号</string>
+    <string name="enter_the_bearer_token">Bearer トークンを入力してください</string>
+    <string name="remove_attachment">添付ファイルを削除</string>
+    <string name="enter_a_bearer_token">Bearer トークンを入力してください</string>
+    <string name="unable_to_verify_service_identity">ユーザー ID を検証できませんでした</string>
+    <string name="search_for_x_in_email">「%s」</string>
+    <string name="could_not_configure_autocrypt">Autocrypt を設定できませんでした</string>
+    <string name="done">完了</string>
+    <string name="could_not_store_setup_message">セットアップメッセージを保存できません</string>
+    <string name="show_account_selector">アカウント選択画面を表示</string>
+    <string name="import_private_key_help_dialog_title">Autocrypt セットアップメッセージが検出されました</string>
 </resources>
