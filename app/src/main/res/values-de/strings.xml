@@ -203,4 +203,8 @@
     <string name="attachment_download_failed">Anhang konnte nicht heruntergeladen werden</string>
     <string name="search_for_x_in_email">Nach \"%s\" in E-Mail suchen</string>
     <string name="results_in_email">Ergebnisse in E-Mail</string>
+    <string name="found_no_supported_authentication_methods">Keine unterstützten Authentifizierungsmethoden gefunden</string>
+    <string name="wrong_bearer_token">Falscher Bearer-Token. Erneut versuchen.</string>
+    <string name="enter_the_bearer_token">Den Bearer-Token eingeben</string>
+    <string name="enter_a_bearer_token">Einen Bearer-Token eingeben</string>
 </resources>
