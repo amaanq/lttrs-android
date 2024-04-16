@@ -22,7 +22,7 @@
     <plurals name="x_emails_in_trash">
         <item quantity="other">目前垃圾箱中有 %d 封电子邮件。</item>
     </plurals>
-    <string name="could_not_store_setup_message">无法存储“设置消息”</string>
+    <string name="could_not_store_setup_message">无法存储设置邮件</string>
     <string name="welcome">欢迎</string>
     <string name="encryption_is_not_available_for_those_recipients">这些收件人无法使用发送加密电子邮件的选项。</string>
     <string name="the_address_x_is_invalid">地址 &lt;%s&gt; 有问题</string>
@@ -54,13 +54,13 @@
     <string name="enter_your_password">输入您的密码</string>
     <string name="download_complete">下载完成</string>
     <string name="no_application_to_open_x">没有应用可以显示 %s。请尝试下载附件。</string>
-    <string name="autocrypt_export_explained_hint_three">在下一步中，Ltt.rs 将创建一个安全的“设置代码”。您必须写下该代码并将其保存在安全的地方。</string>
+    <string name="autocrypt_export_explained_hint_three">在下一步中，Ltt.rs 将创建一个安全的设置代码。您必须写下该代码并将其保存在安全的地方。</string>
     <string name="show_helper_dialog">显示帮助对话框</string>
     <plurals name="n_moved_to_inbox">
         <item quantity="other">%d 已移至收件箱</item>
     </plurals>
     <string name="upload_complete">上传完成</string>
-    <string name="enter_your_setup_code">输入“设置代码”以导入您的密钥，或者如果您希望 Ltt.rs 在此设备上生成新的密钥，请跳过此步骤。</string>
+    <string name="enter_your_setup_code">输入设置代码以导入您的密钥，或者如果您希望 Ltt.rs 在此设备上生成新的密钥，请跳过此步骤。</string>
     <string name="mark_not_important">标记为不重要</string>
     <string name="search_hint">在电子邮件中搜索</string>
     <string name="assign_role_question">您已经有一个名为 %1$s 的标签。您想为其分配 %2$s 的角色吗？</string>
@@ -72,14 +72,14 @@
     <string name="remove_label">移除标签</string>
     <string name="lttrs_lacks_permissions_to_add_attachment">Ltt.rs 没有添加此附件所需的权限。</string>
     <string name="to_x">至 %s</string>
-    <string name="assign_role_detailed_explanation">Ltt.rs 需要一个角色为 %1$s 的标签（邮箱）才能正常工作。如果您不想为此目的使用名为 %2$s 的标签，您可以点击“取消”并使用桌面或 Web 客户端创建具有 %1$s 角色的不同标签。</string>
-    <string name="remove_account_dialog_message">移除此账号会从设备中删除其所有消息和其他相关数据。</string>
+    <string name="assign_role_detailed_explanation">Ltt.rs 需要一个角色为 %1$s 的标签（邮箱）才能正常工作。如果您不想为此目的使用名为 %2$s 的标签，您可以点击取消并使用桌面或 Web 客户端创建具有 %1$s 角色的不同标签。</string>
+    <string name="remove_account_dialog_message">移除此账号会从设备中删除其所有邮件和其他相关数据。</string>
     <string name="delete">删除</string>
     <string name="transfer_secret_key">传输密钥</string>
     <string name="could_not_cache_attachment">无法缓存附件</string>
     <string name="unable_to_establish_secure_connection">无法建立安全连接</string>
     <string name="empty_trash">清空垃圾箱</string>
-    <string name="autocrypt_export_explained_hint_one">要将您的密钥传输到另一台设备，Ltt.rs 将创建一条“设置消息”。它包含受“设置代码”保护的密钥。</string>
+    <string name="autocrypt_export_explained_hint_one">要将您的密钥传输到另一台设备，Ltt.rs 将创建一条设置邮件。它包含受设置代码保护的密钥。</string>
     <string name="role_name_junk">垃圾邮件</string>
     <string name="ok">确定</string>
     <string name="apply_changes">应用更改</string>
@@ -87,7 +87,7 @@
     <string name="send">发送</string>
     <string name="discard">丢弃</string>
     <string name="assign_role">分配角色</string>
-    <string name="wrong_setup_code">错误的“设置代码”。再试一次！</string>
+    <string name="wrong_setup_code">错误的设置代码。再试一次！</string>
     <string name="account">账号</string>
     <string name="role_name_sent">已发送</string>
     <string name="new_label">新标签</string>
@@ -101,7 +101,7 @@
     <string name="wrong_password">密码错误。再试一次。</string>
     <string name="skip">跳过</string>
     <string name="remove_account">移除账号</string>
-    <string name="import_private_key_help_dialog_title">检测到自动加密“设置消息”</string>
+    <string name="import_private_key_help_dialog_title">检测到 Autocrypt 设置邮件</string>
     <string name="remove_label_x">移除标签 %s</string>
     <string name="found_no_supported_authentication_methods">未找到支持的验证方法</string>
     <string name="send_as_cleartext">以明文形式发送</string>
@@ -112,11 +112,11 @@
     <string name="decrypt_email">解密电子邮件</string>
     <string name="sign_in_instruction">使用您的电子邮件账号。</string>
     <string name="search_for_x_in_email">在电子邮件中搜索“%s”</string>
-    <string name="import_private_key_help_dialog_message">Ltt.rs 检测到由您使用的其他应用之一创建的自动加密“设置消息”。通过从此消息中导入密钥，您也可以开始在 Ltt.rs 中使用自动加密！
+    <string name="import_private_key_help_dialog_message">Ltt.rs 检测到由您使用的其他应用之一创建的 Autocrypt 设置邮件。通过从此邮件中导入密钥，您也可以开始在 Ltt.rs 中使用 Autocrypt！
 \n
-\n请输入您的“设置代码”。
+\n请输入您的设置代码。
 \n
-\n如果您不记得您的“设置代码”，您可以跳过此步骤，Ltt.rs 将在此设备上生成一个新的密钥。</string>
+\n如果您不记得您的设置代码，您可以跳过此步骤，Ltt.rs 将在此设备上生成一个新的密钥。</string>
     <string name="combined_size_of_attachments_exceeds_the_limit_of_x">所有附件的总大小超出了 %s 的限制</string>
     <string name="invalid_session_resource">此地址没有有效的电子邮件服务</string>
     <string name="attach_file">附加文件</string>
@@ -127,9 +127,9 @@
     <string name="mark_unread">标记为未读</string>
     <string name="role_name_important">重要</string>
     <string name="unknown_host">无法解析 %s</string>
-    <string name="autocrypt_export_explained_hint_four">您需要在其他设备上使用此“设置代码”来导入您的密钥。将此“设置代码”保存在安全的地方。</string>
+    <string name="autocrypt_export_explained_hint_four">您需要在其他设备上使用此设置代码来导入您的密钥。将此设置代码保存在安全的地方。</string>
     <string name="download_attachment">下载附件</string>
-    <string name="could_not_configure_autocrypt">无法配置自动加密</string>
+    <string name="could_not_configure_autocrypt">无法配置 Autocrypt</string>
     <string name="encrypted">加密的</string>
     <string name="vacation_response">假期答复</string>
     <string name="cancel">取消</string>
@@ -151,8 +151,8 @@
     <string name="attachment_is_not_cached">附件未缓存</string>
     <string name="remove_attachment">移除附件</string>
     <string name="search">搜索</string>
-    <string name="autocrypt_export_explained_hint_done">已创建“设置消息”。您现在可以在其他设备上开始导入过程。</string>
-    <string name="autocrypt_export_explained_hint_two">“设置消息”是一封标记为“已发送”的常规电子邮件。其他应用将能够从那里提取并导入您的密钥。</string>
+    <string name="autocrypt_export_explained_hint_done">已创建设置邮件。您现在可以在其他设备上开始导入过程。</string>
+    <string name="autocrypt_export_explained_hint_two">设置邮件是一封标记为已发送的常规电子邮件。其他应用将能够从那里提取并导入您的密钥。</string>
     <string name="compose_to">至</string>
     <string name="enter_a_secure_url">输入安全 URL</string>
     <string name="compose">撰写</string>
