@@ -1,0 +1,12 @@
+Codename: Configured for Flight
+
+* Beimigration von 0.1.x bitte zuerst die Daten löschen oder die App deinstallieren
+* Support für mehrere Konten
+* Benachrichtige bei eingehenden E-Mails
+* Benutze Firebase-Messaging oder periodischen Hintergrund-Jobs um regelmäßig auf Mails zu prüfen
+* Zeige Label in der Thread-Ansicht
+* Dialog zum Verändern von Thread-Labeln hinzugefügt
+* Papierkorb-leeren-Button zur Papierkorbansicht hinzugefügt
+* Hilfe-Button (?) zur Abfrage der Verbindungs-URL hinzugefügt
+
+Dieses Projekt wurde aus dem Forschungs- und Innovationsprogramm Horizon 2020 der Europäischen Union im Rahmen des NGI-POINTER-Projekts gefördert, das unter der Fördervereinbarung Nr. 871528 finanziert wird.

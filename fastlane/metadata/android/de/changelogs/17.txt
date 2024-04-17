@@ -1,0 +1,2 @@
+* Zugriff zu fastmail.com wieder hergestellt
+* Fehler mit nicht angezeigten Benachrichtigungen behoben
