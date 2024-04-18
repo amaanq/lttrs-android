@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="role_name_flagged">星标</string>
+    <string name="role_name_flagged">星标邮件</string>
     <string name="label_as">标签为</string>
     <string name="reassign_role">重新分配角色</string>
     <string name="deleted">已删除</string>
     <string name="reserved_mailbox_name">选择一个未保留的名称。</string>
     <string name="reply">回复</string>
-    <string name="forward_email">转发电子邮件</string>
+    <string name="forward_email">转发邮件</string>
     <string name="change_labels">更改标签</string>
     <plurals name="n_removed_from_x">
         <item quantity="other">%d 已从 %s 中移除</item>
     </plurals>
     <plurals name="x_new_emails">
-        <item quantity="other">%d 封新电子邮件</item>
+        <item quantity="other">%d 封新邮件</item>
     </plurals>
     <string name="the_file_exceeds_the_limit_of_x">文件超出了 %s 的限制</string>
-    <string name="autocrypt_mutual_description">您希望接收加密的电子邮件。默认情况下，所有希望接收加密电子邮件的联系人都会使用端到端加密。</string>
+    <string name="autocrypt_mutual_description">您希望接收加密邮件。默认情况下，所有希望接收加密邮件的联系人都会使用端到端加密。</string>
     <string name="unable_to_connect">无法连接到电子邮件服务</string>
     <string name="schedule_send">定时发送</string>
     <string name="unable_to_fetch_session">无法获取会话：%s</string>
     <plurals name="x_emails_in_trash">
-        <item quantity="other">目前垃圾箱中有 %d 封电子邮件。</item>
+        <item quantity="other">目前在已删除邮件中有 %d 封邮件。</item>
     </plurals>
     <string name="could_not_store_setup_message">无法存储设置邮件</string>
     <string name="welcome">欢迎</string>
-    <string name="encryption_is_not_available_for_those_recipients">这些收件人无法使用发送加密电子邮件的选项。</string>
+    <string name="encryption_is_not_available_for_those_recipients">这些收件人无法使用发送加密邮件的选项。</string>
     <string name="the_address_x_is_invalid">地址 &lt;%s&gt; 有问题</string>
-    <string name="empty_trash_dialog_title">清空垃圾箱？</string>
+    <string name="empty_trash_dialog_title">是否清空已删除邮件？</string>
     <string name="unable_to_verify_service_identity">无法验证身份</string>
     <string name="accounts">账号</string>
-    <string name="remove_account_dialog_title">移除账号？</string>
+    <string name="remove_account_dialog_title">是否移除账号？</string>
     <string name="attachment_download_failed">无法下载附件</string>
     <string name="select_sender">选择发件人。</string>
     <string name="session_resource_help_dialog_title">什么是连接 URL？</string>
@@ -37,19 +37,19 @@
     <string name="next">下一步</string>
     <string name="notification_channel_name_email">电子邮件</string>
     <string name="role_name_drafts">草稿</string>
-    <string name="autocrypt_enable_description">启用对端到端加密的支持。您的公钥将附加到外发电子邮件中。这允许您的联系人向您发送加密的电子邮件。</string>
+    <string name="autocrypt_enable_description">启用对端到端加密的支持。您的公钥将附加到外发邮件中。这允许您的联系人向您发送加密邮件。</string>
     <string name="enter_your_connection_url">输入您的连接 URL</string>
     <string name="import_secret_key">导入密钥</string>
     <string name="create">创建</string>
     <string name="compose_cc">抄送</string>
     <string name="reply_all">回复全部</string>
-    <string name="compose_from">自</string>
-    <string name="attachment_download_failed_status_code_x">无法下载附件。(HTTP 状态代码 %d)</string>
+    <string name="compose_from">发件人</string>
+    <string name="attachment_download_failed_status_code_x">无法下载附件。（HTTP 状态代码 %d）</string>
     <string name="manage_accounts">管理账号</string>
     <string name="encryption_provider_can_not_create_secret_key">此设备上的加密提供程序无法创建您的密钥。</string>
     <string name="mark_important">标记为重要</string>
     <plurals name="x_emails_will_permanently_deleted">
-        <item quantity="other">%d 封电子邮件将被永久删除。</item>
+        <item quantity="other">%d 封邮件将被永久删除。</item>
     </plurals>
     <string name="enter_your_password">输入您的密码</string>
     <string name="download_complete">下载完成</string>
@@ -62,9 +62,9 @@
     <string name="upload_complete">上传完成</string>
     <string name="enter_your_setup_code">输入设置代码以导入您的密钥，或者如果您希望 Ltt.rs 在此设备上生成新的密钥，请跳过此步骤。</string>
     <string name="mark_not_important">标记为不重要</string>
-    <string name="search_hint">在电子邮件中搜索</string>
+    <string name="search_hint">在邮件中搜索</string>
     <string name="assign_role_question">您已经有一个名为 %1$s 的标签。您想为其分配 %2$s 的角色吗？</string>
-    <string name="foreground_service_notification_text">Ltt.rs 持续运行以通知收到的电子邮件</string>
+    <string name="foreground_service_notification_text">Ltt.rs 持续运行以通知收到的邮件</string>
     <string name="enter_an_email_address">输入电子邮件地址</string>
     <string name="enter_a_valid_email_address">输入有效的电子邮件地址</string>
     <string name="attachments">附件</string>
@@ -72,13 +72,13 @@
     <string name="remove_label">移除标签</string>
     <string name="lttrs_lacks_permissions_to_add_attachment">Ltt.rs 没有添加此附件所需的权限。</string>
     <string name="to_x">至 %s</string>
-    <string name="assign_role_detailed_explanation">Ltt.rs 需要一个角色为 %1$s 的标签（邮箱）才能正常工作。如果您不想为此目的使用名为 %2$s 的标签，您可以点击取消并使用桌面或 Web 客户端创建具有 %1$s 角色的不同标签。</string>
+    <string name="assign_role_detailed_explanation">Ltt.rs 需要一个角色为 %1$s 的标签（邮箱）才能正常工作。如果您不想为此目的使用名为 %2$s 的标签，您可以轻击取消并使用桌面或 Web 客户端创建一个角色为 %1$s 的不同标签。</string>
     <string name="remove_account_dialog_message">移除此账号会从设备中删除其所有邮件和其他相关数据。</string>
     <string name="delete">删除</string>
     <string name="transfer_secret_key">传输密钥</string>
     <string name="could_not_cache_attachment">无法缓存附件</string>
     <string name="unable_to_establish_secure_connection">无法建立安全连接</string>
-    <string name="empty_trash">清空垃圾箱</string>
+    <string name="empty_trash">清空已删除邮件</string>
     <string name="autocrypt_export_explained_hint_one">要将您的密钥传输到另一台设备，Ltt.rs 将创建一条设置邮件。它包含受设置代码保护的密钥。</string>
     <string name="role_name_junk">垃圾邮件</string>
     <string name="ok">确定</string>
@@ -89,7 +89,7 @@
     <string name="assign_role">分配角色</string>
     <string name="wrong_setup_code">错误的设置代码。再试一次！</string>
     <string name="account">账号</string>
-    <string name="role_name_sent">已发送</string>
+    <string name="role_name_sent">已发送邮件</string>
     <string name="new_label">新标签</string>
     <plurals name="n_archived">
         <item quantity="other">%d 已存档</item>
@@ -97,7 +97,7 @@
     <string name="role_name_subscribed">已订阅</string>
     <string name="wrong_bearer_token">Bearer 令牌错误。再试一次。</string>
     <string name="timeout_reached">尝试连接到电子邮件服务时超时</string>
-    <string name="role_name_trash">垃圾箱</string>
+    <string name="role_name_trash">已删除邮件</string>
     <string name="wrong_password">密码错误。再试一次。</string>
     <string name="skip">跳过</string>
     <string name="remove_account">移除账号</string>
@@ -106,12 +106,12 @@
     <string name="found_no_supported_authentication_methods">未找到支持的验证方法</string>
     <string name="send_as_cleartext">以明文形式发送</string>
     <string name="undo">撤销</string>
-    <string name="role_name_all">全部电子邮件</string>
+    <string name="role_name_all">全部邮件</string>
     <string name="enter_the_bearer_token">输入 Bearer 令牌</string>
-    <string name="remove_flag">移除标志</string>
-    <string name="decrypt_email">解密电子邮件</string>
+    <string name="remove_flag">移除星标</string>
+    <string name="decrypt_email">解密邮件</string>
     <string name="sign_in_instruction">使用您的电子邮件账号。</string>
-    <string name="search_for_x_in_email">在电子邮件中搜索“%s”</string>
+    <string name="search_for_x_in_email">在邮件中搜索“%s”</string>
     <string name="import_private_key_help_dialog_message">Ltt.rs 检测到由您使用的其他应用之一创建的 Autocrypt 设置邮件。通过从此邮件中导入密钥，您也可以开始在 Ltt.rs 中使用 Autocrypt！
 \n
 \n请输入您的设置代码。
@@ -125,7 +125,7 @@
     <string name="mark_read">标记为已读</string>
     <string name="draft">草稿</string>
     <string name="mark_unread">标记为未读</string>
-    <string name="role_name_important">重要</string>
+    <string name="role_name_important">重要邮件</string>
     <string name="unknown_host">无法解析 %s</string>
     <string name="autocrypt_export_explained_hint_four">您需要在其他设备上使用此设置代码来导入您的密钥。将此设置代码保存在安全的地方。</string>
     <string name="download_attachment">下载附件</string>
@@ -134,9 +134,9 @@
     <string name="vacation_response">假期答复</string>
     <string name="cancel">取消</string>
     <plurals name="incorrect_secret_key">
-        <item quantity="other">您没有正确的密钥来解密 %d 封电子邮件。</item>
+        <item quantity="other">您没有正确的密钥来解密 %d 封邮件。</item>
     </plurals>
-    <string name="compose_compose_email">撰写电子邮件</string>
+    <string name="compose_compose_email">撰写邮件</string>
     <plurals name="n_deleted">
         <item quantity="other">%d 已删除</item>
     </plurals>
@@ -145,56 +145,56 @@
     <string name="role_name_archive">存档</string>
     <string name="information_required">所需信息</string>
     <string name="endpoint_not_found">此地址没有电子邮件服务</string>
-    <string name="no_subject">(无主题)</string>
+    <string name="no_subject">（无主题）</string>
     <string name="confirm">确认</string>
     <string name="show_account_selector">显示账号选择器</string>
     <string name="attachment_is_not_cached">附件未缓存</string>
     <string name="remove_attachment">移除附件</string>
     <string name="search">搜索</string>
     <string name="autocrypt_export_explained_hint_done">已创建设置邮件。您现在可以在其他设备上开始导入过程。</string>
-    <string name="autocrypt_export_explained_hint_two">设置邮件是一封标记为已发送的常规电子邮件。其他应用将能够从那里提取并导入您的密钥。</string>
-    <string name="compose_to">至</string>
+    <string name="autocrypt_export_explained_hint_two">设置邮件是一封标记为已发送的常规邮件。其他应用将能够从那里提取并导入您的密钥。</string>
+    <string name="compose_to">收件人</string>
     <string name="enter_a_secure_url">输入安全 URL</string>
     <string name="compose">撰写</string>
     <string name="reassign_role_question">您已经有一个名为 %1$s 且角色为 %2$s 的标签。您想为其重新分配 %3$s 的角色吗？</string>
     <string name="empty">清空</string>
     <string name="manage_labels">管理标签</string>
     <plurals name="could_not_decrypt_x_emails">
-        <item quantity="other">无法解密 %d 封电子邮件</item>
+        <item quantity="other">无法解密 %d 封邮件</item>
     </plurals>
-    <string name="autocrypt_no_preference_description">按需加密。您和您的联系人将能明确启用对单个电子邮件的加密。</string>
-    <string name="encrypted_email">(加密的电子邮件)</string>
+    <string name="autocrypt_no_preference_description">按需加密。您和您的联系人将能明确启用个人邮件的加密。</string>
+    <string name="encrypted_email">（加密邮件）</string>
     <string name="enter_a_label_name">输入新标签名称</string>
     <string name="enter_a_bearer_token">输入 Bearer 令牌</string>
-    <string name="session_resource_help_dialog_message">Ltt.rs 使用相对较新的 JMAP 协议来同步电子邮件，但您的电子邮件提供商可能还不支持它。
+    <string name="session_resource_help_dialog_message">Ltt.rs 使用相对较新的 JMAP 协议来同步邮件，但您的邮件服务提供者可能尚未支持。
 \n
-\n请联系您的提供商并询问有关 JMAP 和 JMAP 连接 URL 的信息。
+\n请联系您的提供者并询问 JMAP 和 JMAP 连接 URL。
 \n
-\n在正确配置的服务器上，Ltt.rs 将自动发现连接 URL。</string>
+\nLtt.rs 在正确配置的服务器上将自动发现连接 URL。</string>
     <string name="email_address">电子邮件地址</string>
     <plurals name="could_not_download_x_encrypted_emails">
-        <item quantity="other">无法下载 %d 封加密电子邮件</item>
+        <item quantity="other">无法下载 %d 封加密邮件</item>
     </plurals>
     <string name="more_options">更多选项</string>
     <string name="identities">身份</string>
     <string name="could_not_store_account_credentials">无法存储账号凭据</string>
     <string name="no_name_specified">未指定名称。再试一次。</string>
-    <string name="no_body">(无正文)</string>
+    <string name="no_body">（无正文）</string>
     <string name="move_to_inbox">移至收件箱</string>
     <string name="archive">存档</string>
-    <string name="view_emails">查看电子邮件</string>
+    <string name="view_emails">查看邮件</string>
     <string name="encryption_options">加密选项</string>
-    <string name="view_email">查看电子邮件</string>
+    <string name="view_email">查看邮件</string>
     <string name="add_another_account">添加另一个账号</string>
     <string name="add_at_least_one_recipient">添加收件人。</string>
     <string name="no_network_connection">连接到网络</string>
-    <string name="add_flag">添加标志</string>
-    <string name="email_not_cached">包含此附件的电子邮件未缓存。</string>
+    <string name="add_flag">添加星标</string>
+    <string name="email_not_cached">包含此附件的邮件未缓存。</string>
     <string name="compose_subject">主题</string>
     <string name="enter_a_password">输入密码</string>
     <string name="hide_account_selector">隐藏账号选择器</string>
     <string name="done">完成</string>
-    <string name="results_in_email">电子邮件中的结果</string>
+    <string name="results_in_email">邮件中的结果</string>
     <string name="sign_in">登录</string>
     <string name="cleartext">明文</string>
 </resources>
