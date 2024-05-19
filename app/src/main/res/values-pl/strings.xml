@@ -221,4 +221,8 @@
         <item quantity="other">%d e-maili zostanie trwale usuniętych.</item>
     </plurals>
     <string name="attachment_is_not_cached">Załącznik nie znajduje się w pamięci podręcznej</string>
+    <string name="results_in_email">Wyniki w e-mailu</string>
+    <string name="search_for_x_in_email">Wyszukaj \"%s\" w e-mailu</string>
+    <string name="found_no_supported_authentication_methods">Nie znaleziono żadnej dostępnej metody uwierzytelniania</string>
+    <string name="wrong_bearer_token">Zły token Bearer. Spróbuj ponownie.</string>
 </resources>
