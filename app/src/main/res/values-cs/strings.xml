@@ -179,4 +179,34 @@
     <string name="transfer_secret_key">Tajný klíč přenosu</string>
     <string name="autocrypt_export_explained_hint_one">Pro přenesení vašeho tajného klíče na jiné zařízení vytvoří Ltt.rs nastavovací zprávu. Obsahuje váš tajný klíč chráněný nastavovacím klíčem.</string>
     <string name="enter_your_setup_code">Zadejte nastavovací kód pro importování vašeho tajného klíče nebo tento krok přeskočte, pokud chcete, aby Ltt.rs vygeneroval nový tajný klíč na tomto zařízení.</string>
+    <string name="enter_the_bearer_token">Zadejte Bearer Token</string>
+    <string name="enter_a_bearer_token">Zadejte Bearer Token</string>
+    <string name="wrong_bearer_token">Nesprávný Bearer Token. Zkuste to znovu.</string>
+    <string name="import_private_key_help_dialog_message">Ltt.rs detekoval nastavovací zprávu Autocrypt vytvořenou jednou z dalších aplikací, které používáte. Importem tajného klíče z této zprávy můžete začít používat Autocrypt i zde v Ltt.rs!\n\nZadejte prosím svůj nastavovací kód.\n\nPokud si svůj nastavovací kód nepamatujete, můžete tento krok přeskočit a Ltt.rs vygeneruje nový tajný klíč v tomto zařízení.</string>
+    <plurals name="x_emails_in_trash">
+        <item quantity="one">V koši je %d položka.</item>
+        <item quantity="few">V koši jsou %d položky.</item>
+        <item quantity="other">V koši je %d položek.</item>
+    </plurals>
+    <plurals name="x_emails_will_permanently_deleted">
+        <item quantity="one">%d e-mail bude nevratně smazán.</item>
+        <item quantity="few">%d e-maily budou nevratně smazány.</item>
+        <item quantity="other">%d e-mailů bude nevratně smazáno.</item>
+    </plurals>
+    <string name="assign_role_detailed_explanation">Ltt.rs potřebuje ke správné funkci štítek (poštovní schránku) s rolí %1$s. Pokud nechcete štítek s názvem %2$s pro tento účel používat, můžete klepnout na tlačítko Zrušit a pomocí počítačového nebo webového klienta vytvořit jiný štítek s rolí %1$s.</string>
+    <plurals name="incorrect_secret_key">
+        <item quantity="one">Nemáte správný tajný klíč pro dešifrování %d e-mailu.</item>
+        <item quantity="few">Nemáte správný tajný klíč pro dešifrování %d e-mailů.</item>
+        <item quantity="other">Nemáte správný tajný klíč pro dešifrování %d e-mailů.</item>
+    </plurals>
+    <plurals name="could_not_decrypt_x_emails">
+        <item quantity="one">Nepodařilo se dešifrovat %d e-mail</item>
+        <item quantity="few">Nepodařilo se dešifrovat %d e-maily</item>
+        <item quantity="other">Nepodařilo se dešifrovat %d e-mailů</item>
+    </plurals>
+    <plurals name="could_not_download_x_encrypted_emails">
+        <item quantity="one">Nepodařilo se stáhnout %d šifrovaný e-mail</item>
+        <item quantity="few">Nepodařilo se stáhnout %d šifrované e-maily</item>
+        <item quantity="other">Nepodařilo se stáhnout %d šifrovaných e-mailů</item>
+    </plurals>
 </resources>
