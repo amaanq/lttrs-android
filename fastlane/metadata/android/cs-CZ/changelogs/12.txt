@@ -1,0 +1,2 @@
+* Náhled příloh
+* Přidání podpory pro Autocrypt-Gossip

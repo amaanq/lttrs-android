@@ -1,0 +1,2 @@
+* Vyladění barev
+* Opraveny úniky paměti

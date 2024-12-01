@@ -1,0 +1,2 @@
+* Obnovení přístupu na fastmail.com
+* Oprava problému se zobrazováním oznámení

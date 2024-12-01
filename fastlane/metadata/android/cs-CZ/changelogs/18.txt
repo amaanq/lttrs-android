@@ -1,0 +1,1 @@
+* Povolení prediktivních zpětných gest

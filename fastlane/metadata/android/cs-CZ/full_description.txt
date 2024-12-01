@@ -1,0 +1,10 @@
+Proof-of-concept e-mailový klient (JMAP) (vyslovuje se „Letters“). Ve velké míře využívá Android Jetpack, aby byl lépe udržovatelný než někteří jiní e-mailoví klienti pro Android.
+
+Funkce a úvahy o designu:
+
+* Hodně ukládá do mezipaměti, ale není plně offline. Ltt.rs využívá skvělé možnosti ukládání do mezipaměti JMAP. Označení vlákna jako přečteného však provádí okružní cestu na server, aby se aktualizovaly věci, jako je počet přečtených. Samotná akce se neztratí, ani když je provedena offline.
+* Nastavení účtu a máte hotovo. Nastavení vybízí k rozšiřování funkcí a tím pádem i k neudržovatelnosti. Existuje jeden specifický pracovní tok. Pro ostatní je vhodnější K-9 Mail nebo FairEmail.
+* Minimální závislosti. Pouze všeobecně známé, vysoce testované knihovny od renomovaných dodavatelů. Knihovny třetích stran jsou často nekvalitní a končí bez údržby.
+* Prvotřídní Autocrypt. Ltt.rs přesně zapadá do jeho přísných zásad UX.
+* Založeno na jmap-mua, „headless“ e-mailovém klientu neboli knihovně, která kromě ukládání dat a uživatelského rozhraní zvládá vše, co e-mailový klient. Existuje také lttrs-cli, který používá stejnou knihovnu.
+* V případě nejistoty hledá inspiraci v Gmailu.

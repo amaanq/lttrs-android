@@ -1,0 +1,2 @@
+* Přepracování pro snadnější tvorbu témat
+* Použití prvků designu Material 3

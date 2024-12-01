@@ -1,0 +1,1 @@
+* Oprava pádu při použití softwarové klávesnice pro přechod na další obrazovku v dialogu nastavení

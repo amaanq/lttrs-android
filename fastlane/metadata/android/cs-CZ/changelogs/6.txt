@@ -1,0 +1,12 @@
+Kódový název: Configured for Flight
+
+* Při přechodu z verze 0.1.x nejprve vyčistěte data nebo odinstalujte aplikaci.
+* Podpora více účtů
+* Upozorňovat na příchozí e-maily
+* Pravidelná kontrola e-mailů pomocí Firebase Messaging nebo naplánované úlohy na pozadí.
+* Zobrazení štítků v zobrazení vlákna
+* Přidání obrazovky pro úpravu štítků pro vlákna
+* Přidání tlačítka „Vyprázdnit koš“ do zobrazení koše
+* Přidání tlačítka nápovědy (?) při výzvě k zadání adresy URL připojení
+
+Projekt financovala EU.

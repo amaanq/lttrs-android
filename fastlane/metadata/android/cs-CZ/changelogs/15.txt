@@ -1,0 +1,3 @@
+* Podpora Material You (dynamické barvy)
+* Přidání podpory pro UnifiedPush a Firebase Cloud Messaging do jednoho sestavení s otevřeným zdrojovým kódem
+* Podpora nastavení jazyka pro jednotlivé aplikace

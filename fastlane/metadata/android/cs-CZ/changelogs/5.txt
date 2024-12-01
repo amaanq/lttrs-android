@@ -1,0 +1,1 @@
+* Opravena další chyba, která znemožňovala obnovení e-mailů

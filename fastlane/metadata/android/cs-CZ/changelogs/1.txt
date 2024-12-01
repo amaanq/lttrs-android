@@ -1,0 +1,3 @@
+* Velmi základní možnosti čtení e-mailů (pouze prostý text, bez příloh)
+* Archivace, označování, označování jako přečtené a nepřečtené
+* vytváření návrhů e-mailů (bez citování)

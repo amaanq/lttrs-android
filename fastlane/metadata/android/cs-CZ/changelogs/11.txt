@@ -1,0 +1,6 @@
+Kód: Ignition
+
+* Přidání podpory funkce Autocrypt (šifrované e-maily)
+* Přidání podpory sdílení souborů pomocí Ltt.rs (otevře obrazovku návrhu)
+
+Tento projekt byl financován z programu Evropské unie pro výzkum a inovace Horizont 2020 v rámci projektu NGI-POINTER financovaného na základě grantové dohody č. 871528.
