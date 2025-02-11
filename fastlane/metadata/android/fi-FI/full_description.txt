@@ -1,0 +1,10 @@
+Todiste konseptista -sähköpostiasiakasohjelma (JMAP) (lausutaan \"Letters\"). Käyttää paljon Android Jetpackia ollakseen ylläpidettävämpi kuin jotkin muut Android-sähköpostiasiakasohjelmat.
+
+Ominaisuudet ja suunnittelunäkökohdat:
+
+* Voimakkaasti välimuistissa, mutta ei täysin ei-verkkotilassa. Ltt.rs hyödyntää JMAP:n loistavia välimuistiominaisuuksia. Kuitenkin säikeen merkitseminen luetuksi tekee edestakaisen matkan palvelimelle päivittämään asioita, kuten lukumäärä. Itse toiminto ei katoa, vaikka se suoritettaisiin ei-verkkotilassa.
+* Tilin luominen ja valmis. Asetukset kutsuvat ominaisuuden hiipimään ja sen ystävän ylläpitoon. On yksi erityinen työnkulku. K-9 Mail tai FairEmail sopii paremmin muille.
+* Minimaalinen riippuvuus. Vain laajalti tunnetut, erittäin testatut kirjastot hyvämaineisilta toimittajilta. Kolmannen osapuolen kirjastot ovat usein huonolaatuisia, ja ne jäävät yllättämättä.
+* Ensiluokkainen Autocrypt. Ltt.rs sopii tiukkoihin UX-ohjeisiinsa.
+* Perustuu jmap-muaan, päättömään sähköpostiasiakasohjelmaan tai kirjastoon, joka hoitaa kaiken, mitä sähköpostiasiakasohjelma käsittelee, lukuun ottamatta tietojen tallennusta ja käyttöliittymää. On myös lttrs-cli, joka käyttää samaa kirjastoa.
+* Etsii Gmailista inspiraatiota epävarmuustilanteissa.

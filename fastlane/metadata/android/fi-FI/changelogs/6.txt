@@ -1,0 +1,12 @@
+Koodinimi: määritetty _Flightille
+
+* Puhdista tiedot tai poista sovellus ensin, kun siirryt versiosta 0.1.x
+* Tukee useita tilejä
+* Ilmoita saapuvasta sähköpostista
+* Käytä Firebase Messaging -palvelua tai ajoitettua taustatyötä sähköpostin ajoittain tarkistamiseen
+* Näytä tarrat lankanäkymässä
+* Lisää näyttö muuttaaksesi ketjujen tarroja
+* Lisää "Tyhjennä roskakori" -painike roskakorinäkymään
+* Lisää ohjepainike (?), kun kysytään yhteyden URL-osoitetta
+
+Tämä hanke on saanut rahoitusta Euroopan unionin Horisontti 2020 -tutkimus- ja innovaatioohjelmasta NGI-POINTER-hankkeen puitteissa, jota rahoitetaan avustussopimuksella nro 871528.
