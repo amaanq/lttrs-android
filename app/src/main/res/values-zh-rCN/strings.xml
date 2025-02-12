@@ -87,18 +87,18 @@
     <string name="send">发送</string>
     <string name="discard">丢弃</string>
     <string name="assign_role">分配角色</string>
-    <string name="wrong_setup_code">错误的设置代码。再试一次！</string>
+    <string name="wrong_setup_code">设置代码错误，请重试！</string>
     <string name="account">账号</string>
     <string name="role_name_sent">已发送邮件</string>
     <string name="new_label">新标签</string>
     <plurals name="n_archived">
-        <item quantity="other">%d 已存档</item>
+        <item quantity="other">%d 已归档</item>
     </plurals>
     <string name="role_name_subscribed">已订阅</string>
     <string name="wrong_bearer_token">Bearer 令牌错误。再试一次。</string>
     <string name="timeout_reached">尝试连接到电子邮件服务时超时</string>
     <string name="role_name_trash">已删除邮件</string>
-    <string name="wrong_password">密码错误。再试一次。</string>
+    <string name="wrong_password">密码错误，请重试。</string>
     <string name="skip">跳过</string>
     <string name="remove_account">移除账号</string>
     <string name="import_private_key_help_dialog_title">检测到 Autocrypt 设置邮件</string>
@@ -142,7 +142,7 @@
     </plurals>
     <string name="enter_a_valid_url">输入有效的连接 URL</string>
     <string name="foreground_service">前台服务</string>
-    <string name="role_name_archive">存档</string>
+    <string name="role_name_archive">归档</string>
     <string name="information_required">所需信息</string>
     <string name="endpoint_not_found">此地址没有电子邮件服务</string>
     <string name="no_subject">（无主题）</string>
@@ -178,16 +178,16 @@
     <string name="more_options">更多选项</string>
     <string name="identities">身份</string>
     <string name="could_not_store_account_credentials">无法存储账号凭据</string>
-    <string name="no_name_specified">未指定名称。再试一次。</string>
+    <string name="no_name_specified">未指定名称，请重试。</string>
     <string name="no_body">（无正文）</string>
     <string name="move_to_inbox">移至收件箱</string>
-    <string name="archive">存档</string>
+    <string name="archive">归档</string>
     <string name="view_emails">查看邮件</string>
     <string name="encryption_options">加密选项</string>
     <string name="view_email">查看邮件</string>
     <string name="add_another_account">添加另一个账号</string>
     <string name="add_at_least_one_recipient">添加收件人。</string>
-    <string name="no_network_connection">连接到网络</string>
+    <string name="no_network_connection">请连接到互联网</string>
     <string name="add_flag">添加星标</string>
     <string name="email_not_cached">包含此附件的邮件未缓存。</string>
     <string name="compose_subject">主题</string>
