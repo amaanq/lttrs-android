@@ -38,20 +38,21 @@ public class UnifiedPushMessageReceiver extends AbstractPushMessageReceiver {
             distributor = null;
         }
         switch (Strings.nullToEmpty(intent.getAction())) {
-            case UnifiedPushService.ACTION_MESSAGE -> onReceiveMessage(
-                    context,
-                    clientDeviceId,
-                    intent.getByteArrayExtra(UnifiedPushService.EXTRA_BYTE_MESSAGE),
-                    distributor);
-            case UnifiedPushService.ACTION_NEW_ENDPOINT -> onReceiveNewEndpoint(
-                    context,
-                    clientDeviceId,
-                    intent.getStringExtra(UnifiedPushService.EXTRA_ENDPOINT),
-                    distributor);
+            case UnifiedPushService.ACTION_MESSAGE ->
+                    onReceiveMessage(
+                            context,
+                            clientDeviceId,
+                            intent.getByteArrayExtra(UnifiedPushService.EXTRA_BYTE_MESSAGE),
+                            distributor);
+            case UnifiedPushService.ACTION_NEW_ENDPOINT ->
+                    onReceiveNewEndpoint(
+                            context,
+                            clientDeviceId,
+                            intent.getStringExtra(UnifiedPushService.EXTRA_ENDPOINT),
+                            distributor);
             case UnifiedPushService.ACTION_REGISTRATION_FAILED,
-                    UnifiedPushService
-                            .ACTION_UNREGISTERED -> onReceiveRegistrationFailedOrUnregistered(
-                    context, clientDeviceId, distributor);
+                            UnifiedPushService.ACTION_UNREGISTERED ->
+                    onReceiveRegistrationFailedOrUnregistered(context, clientDeviceId, distributor);
         }
     }
 

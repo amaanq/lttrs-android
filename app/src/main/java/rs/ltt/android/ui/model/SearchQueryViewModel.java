@@ -52,10 +52,10 @@ public class SearchQueryViewModel extends AbstractQueryViewModel {
                         queryRepository.getTrashAndJunk(),
                         trashAndJunk ->
                                 switch (search.type) {
-                                    case IN_EMAIL -> StandardQueries.search(
-                                            search.value, trashAndJunk);
-                                    case BY_CONTACT -> StandardQueries.contact(
-                                            search.value, trashAndJunk);
+                                    case IN_EMAIL ->
+                                            StandardQueries.search(search.value, trashAndJunk);
+                                    case BY_CONTACT ->
+                                            StandardQueries.contact(search.value, trashAndJunk);
                                 });
         init();
     }
@@ -72,14 +72,16 @@ public class SearchQueryViewModel extends AbstractQueryViewModel {
     @Override
     public QueryInfo getQueryInfo() {
         return switch (this.search.type) {
-            case IN_EMAIL -> new QueryInfo(
-                    queryRepository.getAccountId(),
-                    QueryInfo.Type.SEARCH_IN_EMAIL,
-                    this.search.value);
-            case BY_CONTACT -> new QueryInfo(
-                    queryRepository.getAccountId(),
-                    QueryInfo.Type.SEARCH_BY_CONTACT,
-                    this.search.value);
+            case IN_EMAIL ->
+                    new QueryInfo(
+                            queryRepository.getAccountId(),
+                            QueryInfo.Type.SEARCH_IN_EMAIL,
+                            this.search.value);
+            case BY_CONTACT ->
+                    new QueryInfo(
+                            queryRepository.getAccountId(),
+                            QueryInfo.Type.SEARCH_BY_CONTACT,
+                            this.search.value);
         };
     }
 

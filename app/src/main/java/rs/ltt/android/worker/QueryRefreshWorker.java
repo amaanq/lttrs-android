@@ -48,36 +48,42 @@ public abstract class QueryRefreshWorker extends AbstractMuaWorker {
 
     public static OneTimeWorkRequest of(final QueryInfo queryInfo, final boolean skipOverEmpty) {
         return switch (queryInfo.type) {
-            case MAIN -> new OneTimeWorkRequest.Builder(MainMailboxQueryRefreshWorker.class)
-                    .setInputData(
-                            MainMailboxQueryRefreshWorker.data(queryInfo.accountId, skipOverEmpty))
-                    .build();
-            case MAILBOX -> new OneTimeWorkRequest.Builder(MailboxQueryRefreshWorker.class)
-                    .setInputData(
-                            MailboxQueryRefreshWorker.data(
-                                    queryInfo.accountId, skipOverEmpty, queryInfo.value))
-                    .build();
-            case KEYWORD -> new OneTimeWorkRequest.Builder(KeywordQueryRefreshWorker.class)
-                    .setInputData(
-                            KeywordQueryRefreshWorker.data(
-                                    queryInfo.accountId, skipOverEmpty, queryInfo.value))
-                    .build();
-            case SEARCH_IN_EMAIL -> new OneTimeWorkRequest.Builder(SearchQueryRefreshWorker.class)
-                    .setInputData(
-                            SearchQueryRefreshWorker.data(
-                                    queryInfo.accountId,
-                                    skipOverEmpty,
-                                    queryInfo.value,
-                                    SearchSuggestion.Type.IN_EMAIL))
-                    .build();
-            case SEARCH_BY_CONTACT -> new OneTimeWorkRequest.Builder(SearchQueryRefreshWorker.class)
-                    .setInputData(
-                            SearchQueryRefreshWorker.data(
-                                    queryInfo.accountId,
-                                    skipOverEmpty,
-                                    queryInfo.value,
-                                    SearchSuggestion.Type.BY_CONTACT))
-                    .build();
+            case MAIN ->
+                    new OneTimeWorkRequest.Builder(MainMailboxQueryRefreshWorker.class)
+                            .setInputData(
+                                    MainMailboxQueryRefreshWorker.data(
+                                            queryInfo.accountId, skipOverEmpty))
+                            .build();
+            case MAILBOX ->
+                    new OneTimeWorkRequest.Builder(MailboxQueryRefreshWorker.class)
+                            .setInputData(
+                                    MailboxQueryRefreshWorker.data(
+                                            queryInfo.accountId, skipOverEmpty, queryInfo.value))
+                            .build();
+            case KEYWORD ->
+                    new OneTimeWorkRequest.Builder(KeywordQueryRefreshWorker.class)
+                            .setInputData(
+                                    KeywordQueryRefreshWorker.data(
+                                            queryInfo.accountId, skipOverEmpty, queryInfo.value))
+                            .build();
+            case SEARCH_IN_EMAIL ->
+                    new OneTimeWorkRequest.Builder(SearchQueryRefreshWorker.class)
+                            .setInputData(
+                                    SearchQueryRefreshWorker.data(
+                                            queryInfo.accountId,
+                                            skipOverEmpty,
+                                            queryInfo.value,
+                                            SearchSuggestion.Type.IN_EMAIL))
+                            .build();
+            case SEARCH_BY_CONTACT ->
+                    new OneTimeWorkRequest.Builder(SearchQueryRefreshWorker.class)
+                            .setInputData(
+                                    SearchQueryRefreshWorker.data(
+                                            queryInfo.accountId,
+                                            skipOverEmpty,
+                                            queryInfo.value,
+                                            SearchSuggestion.Type.BY_CONTACT))
+                            .build();
         };
     }
 

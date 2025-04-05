@@ -232,8 +232,9 @@ public abstract class AbstractQueryFragment extends AbstractLttrsFragment
                         .getToolbar()
                         .setNavigationIcon(R.drawable.ic_arrow_back_24dp);
             }
-            default -> throw new IllegalStateException(
-                    String.format("%s is not a valid navigation action", navigationAction));
+            default ->
+                    throw new IllegalStateException(
+                            String.format("%s is not a valid navigation action", navigationAction));
         }
     }
 

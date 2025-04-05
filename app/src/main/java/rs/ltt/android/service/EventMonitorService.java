@@ -232,10 +232,12 @@ public class EventMonitorService extends LifecycleService {
                         Objects.requireNonNull(intent).getParcelableExtra(EXTRA_QUERY_INFO);
                 watchQuery(queryInfo);
             }
-            case ACTION_START_MONITORING -> startMonitoring(
-                    Objects.requireNonNull(intent).getLongExtra(EXTRA_ACCOUNT_ID, -1));
-            case ACTION_STOP_MONITORING -> stopMonitoring(
-                    Objects.requireNonNull(intent).getLongExtra(EXTRA_ACCOUNT_ID, -1));
+            case ACTION_START_MONITORING ->
+                    startMonitoring(
+                            Objects.requireNonNull(intent).getLongExtra(EXTRA_ACCOUNT_ID, -1));
+            case ACTION_STOP_MONITORING ->
+                    stopMonitoring(
+                            Objects.requireNonNull(intent).getLongExtra(EXTRA_ACCOUNT_ID, -1));
             default -> LOGGER.warn("Unknown action {}", action);
         }
         return START_STICKY;

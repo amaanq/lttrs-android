@@ -181,8 +181,8 @@ public class NavigationAdapter
                 string = R.string.add_another_account;
                 icon = R.drawable.ic_add_account_24dp;
             }
-            default -> throw new IllegalStateException(
-                    String.format("Unable to draw %s", item.type));
+            default ->
+                    throw new IllegalStateException(String.format("Unable to draw %s", item.type));
         }
         viewHolder.binding.icon.setImageResource(icon);
         viewHolder.binding.label.setText(string);

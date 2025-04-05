@@ -41,10 +41,14 @@ public class SearchQueryRefreshWorker extends QueryRefreshWorker {
     @Override
     EmailQuery getEmailQuery() {
         return switch (searchType) {
-            case IN_EMAIL -> StandardQueries.search(
-                    searchTerm, getDatabase().mailboxDao().getMailboxes(Role.TRASH, Role.JUNK));
-            case BY_CONTACT -> StandardQueries.contact(
-                    searchTerm, getDatabase().mailboxDao().getMailboxes(Role.TRASH, Role.JUNK));
+            case IN_EMAIL ->
+                    StandardQueries.search(
+                            searchTerm,
+                            getDatabase().mailboxDao().getMailboxes(Role.TRASH, Role.JUNK));
+            case BY_CONTACT ->
+                    StandardQueries.contact(
+                            searchTerm,
+                            getDatabase().mailboxDao().getMailboxes(Role.TRASH, Role.JUNK));
         };
     }
 }

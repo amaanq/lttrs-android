@@ -86,15 +86,16 @@ public class SetupActivity extends AppCompatActivity {
             final NavController navController = getNavController();
             final SetupViewModel.Target target = targetEvent.consume();
             switch (target) {
-                case ENTER_PASSWORD -> navController.navigate(
-                        SetupNavigationDirections.enterPassword());
-                case ENTER_URL -> navController.navigate(
-                        SetupNavigationDirections.enterSessionResource());
+                case ENTER_PASSWORD ->
+                        navController.navigate(SetupNavigationDirections.enterPassword());
+                case ENTER_URL ->
+                        navController.navigate(SetupNavigationDirections.enterSessionResource());
                 case DONE -> redirectToLttrs(this.setupViewModel.getPrimaryAccountId());
-                case IMPORT_PRIVATE_KEY -> navController.navigate(
-                        SetupNavigationDirections.importPrivateKey());
-                default -> throw new IllegalStateException(
-                        String.format("Unable to navigate to target %s", target));
+                case IMPORT_PRIVATE_KEY ->
+                        navController.navigate(SetupNavigationDirections.importPrivateKey());
+                default ->
+                        throw new IllegalStateException(
+                                String.format("Unable to navigate to target %s", target));
             }
         }
     }

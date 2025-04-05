@@ -230,8 +230,9 @@ public class LttrsActivity extends AppCompatActivity
                             closeDrawer(false);
                             AccountManagerActivity.launch(this);
                         }
-                        default -> throw new IllegalStateException(
-                                String.format("Not set up to handle %s", type));
+                        default ->
+                                throw new IllegalStateException(
+                                        String.format("Not set up to handle %s", type));
                     }
                 }));
         binding.navigation.setAdapter(navigationAdapter);

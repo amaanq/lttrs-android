@@ -24,8 +24,8 @@ public class WebPushMessageEncryptionTest {
                 CharMatcher.whitespace()
                         .removeFrom(
                                 """
-                BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx
-                aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4""");
+                                BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcx
+                                aOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4""");
         final var ciphertext =
                 BaseEncoding.base64Url().decode(CharMatcher.whitespace().removeFrom(body));
 

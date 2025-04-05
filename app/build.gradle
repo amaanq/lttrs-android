@@ -3,11 +3,11 @@ apply plugin: "androidx.navigation.safeargs"
 apply plugin: "com.diffplug.spotless"
 
 android {
-    compileSdk 34
+    compileSdk 35
     defaultConfig {
         applicationId "rs.ltt.android"
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 18
         versionName "0.4.3"
 
@@ -107,11 +107,6 @@ dependencies {
 
     implementation 'com.google.crypto.tink:apps-webpush:1.10.0'
 
-
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10") {
-        because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
-    }
-
     //Third party
     implementation 'org.hsluv:hsluv:0.2'
 
@@ -139,13 +134,13 @@ dependencies {
 
     //Testing
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.ext.espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.ext.espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.ext.espressoVersion"
     androidTestImplementation("rs.ltt.jmap:jmap-mock-server:$rootProject.ext.muaVersion") {
         changing = true
     }
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestUtil 'androidx.test:orchestrator:1.4.2'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestUtil 'androidx.test:orchestrator:1.5.1'
 }
