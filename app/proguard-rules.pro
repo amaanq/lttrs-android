@@ -94,3 +94,4 @@
 -dontwarn org.joda.convert.ToString
 -dontwarn org.immutables.value.**
 -dontwarn lombok.NonNull
+-dontwarn lombok.Generated

@@ -1,3 +1,7 @@
+## 0.4.4 · All Engines Running (2025-04-08)
+
+* Bundle Letsencrypt for older Android versions
+
 ## 0.4.3 · All Engines Running (2024-01-05)
 
 * Enable predictive back gestures
