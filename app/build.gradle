@@ -48,7 +48,7 @@ android {
     }
     packagingOptions {
         resources {
-            excludes += ['META-INF/DEPENDENCIES']
+            excludes += ['META-INF/DEPENDENCIES', 'META-INF/versions/9/OSGI-INF/MANIFEST.MF']
         }
     }
     lint {
@@ -68,7 +68,7 @@ spotless {
 
 dependencies {
 
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 
     //AndroidX
     implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompatVersion"
@@ -105,14 +105,14 @@ dependencies {
     //Google
     implementation "com.google.android.material:material:$rootProject.ext.material"
 
-    implementation 'com.google.crypto.tink:apps-webpush:1.10.0'
+    implementation 'com.google.crypto.tink:apps-webpush:1.12.1'
 
     //Third party
     implementation 'org.hsluv:hsluv:0.2'
 
     implementation 'com.github.tony19:logback-android:3.0.0'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 
 
     //Own libraries (libraries we wrote and can commit to)
@@ -124,12 +124,7 @@ dependencies {
         changing = true
     }
 
-    // when we bump this to anything higher (or even to the -android flavor) the app starts crashing
-    // on Android 6 and 7.1 (and possibly others) with errors such as: `java.lang.NoSuchMethodError:
-    // No virtual method splitToStream(Ljava/lang/CharSequence;)Lj$/util/stream/Stream;
-    // in class Lcom/google/common/base/Splitter; or its super classes (declaration of
-    // 'com.google.common.base.Splitter' appears in /data/app/rs.ltt.android-2/base.apk)`
-    implementation 'com.google.guava:guava:31.0.1-jre'
+    implementation 'com.google.guava:guava:33.4.6-android'
 
 
     //Testing

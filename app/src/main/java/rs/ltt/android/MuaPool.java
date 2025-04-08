@@ -4,9 +4,14 @@ import android.content.Context;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import de.gultsch.common.TrustManagers;
+import java.io.IOException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import javax.net.ssl.X509TrustManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rs.ltt.android.cache.AutocryptDatabaseStorage;
@@ -44,7 +49,7 @@ public final class MuaPool {
                 return existing;
             }
             LOGGER.info("Building Mua for account id {}", account.getId());
-            final Context application = context.getApplicationContext();
+            final var application = context.getApplicationContext();
             final var database = LttrsDatabase.getInstance(context, account.getId());
             final var storage = new AutocryptDatabaseStorage(database);
             final var autocryptPlugin = new AutocryptPlugin(account.getName(), storage);
@@ -54,7 +59,7 @@ public final class MuaPool {
                             .httpAuthentication(credentials.asHttpAuthentication())
                             .accountId(account.getAccountId())
                             .sessionResource(credentials.getSessionResource())
-                            .useWebSocket(true)
+                            .trustManager(getTrustManagerOrNull(context))
                             .cache(new DatabaseCache(database))
                             .sessionCache(new FileSessionCache(application.getCacheDir()))
                             .plugin(AutocryptPlugin.class, autocryptPlugin)
@@ -66,13 +71,24 @@ public final class MuaPool {
         }
     }
 
-    public static void evict(long id) {
+    private static X509TrustManager getTrustManagerOrNull(final Context context) {
+        try {
+            return TrustManagers.createForAndroidVersion(context);
+        } catch (final NoSuchAlgorithmException
+                | KeyStoreException
+                | CertificateException
+                | IOException e) {
+            LOGGER.error("Could not create TrustManager", e);
+            return null;
+        }
+    }
+
+    public static void evict(final long id) {
         synchronized (MuaPool.class) {
-            final Iterator<Map.Entry<AccountWithCredentials, Mua>> iterator =
-                    INSTANCES.entrySet().iterator();
+            final var iterator = INSTANCES.entrySet().iterator();
             while (iterator.hasNext()) {
-                final Map.Entry<AccountWithCredentials, Mua> entry = iterator.next();
-                final AccountWithCredentials account = entry.getKey();
+                final var entry = iterator.next();
+                final var account = entry.getKey();
                 if (account.getId().equals(id)) {
                     final Mua mua = entry.getValue();
                     mua.close();

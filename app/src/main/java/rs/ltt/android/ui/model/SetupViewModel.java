@@ -33,6 +33,7 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import de.gultsch.common.TrustManagers;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -55,6 +56,7 @@ import rs.ltt.android.entity.AutocryptSetupMessage;
 import rs.ltt.android.repository.MainRepository;
 import rs.ltt.android.util.Event;
 import rs.ltt.autocrypt.client.SetupCode;
+import rs.ltt.jmap.client.ConnectionConfig;
 import rs.ltt.jmap.client.JmapClient;
 import rs.ltt.jmap.client.api.EndpointNotFoundException;
 import rs.ltt.jmap.client.api.InvalidSessionResourceException;
@@ -461,7 +463,12 @@ public class SetupViewModel extends AndroidViewModel {
             throw new IllegalArgumentException(
                     "Trying to setup JmapClient with unknown authentication scheme");
         }
-        final JmapClient jmapClient = new JmapClient(httpAuthentication, getHttpSessionResource());
+        final var connectionConfig =
+                new ConnectionConfig(
+                        httpAuthentication,
+                        getHttpSessionResource(),
+                        TrustManagers.createForAndroidVersionOrNull(getApplication()));
+        final JmapClient jmapClient = new JmapClient(connectionConfig);
         final ListenableFuture<Session> sessionFuture = jmapClient.getSession();
         this.networkFuture = sessionFuture;
         return sessionFuture;
