@@ -1,7 +1,4 @@
 # Ltt.rs for Android
-[![Apache 2.0 License](https://img.shields.io/github/license/inputmice/lttrs-android?color=informational)](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))
-[![Weblate project translated](https://translate.codeberg.org/widget/ltt-rs/svg-badge.svg)](https://translate.codeberg.org/engage/ltt-rs/)
-[![Liberapay patrons](https://img.shields.io/liberapay/patrons/inputmice?logo=liberapay&style=flat&color=informational)](https://liberapay.com/iNPUTmice)
 
 Proof of concept e-mail (JMAP) client (pronounced \"Letters\").
 Makes heavy use of Android Jetpack to be more maintainable than some of the other Android e-mail clients.
@@ -13,10 +10,6 @@ Makes heavy use of Android Jetpack to be more maintainable than some of the othe
 <img src="https://codeberg.org/iNPUTmice/lttrs-android/raw/branch/master/fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width="216"/>
 <img src="https://codeberg.org/iNPUTmice/lttrs-android/raw/branch/master/fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" width="216"/>
 </p>
-
-
-If the above screenshots don’t do enough to convince you, you can watch this
-[short video on YouTube](https://www.youtube.com/watch?v=ArCuudFwJX4).
 
 ### Features, and design considerations:
 
