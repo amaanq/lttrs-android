@@ -33,8 +33,7 @@ If the above screenshots don’t do enough to convince you, you can watch this
 
 ### Try it
 
-You can download Ltt.rs either from [F-Droid](https://f-droid.org/en/packages/rs.ltt.android), or
-for a small fee from [Google Play](https://play.google.com/store/apps/details?id=rs.ltt.android).
+You can download Ltt.rs either from [F-Droid](https://f-droid.org/en/packages/rs.ltt.android), or [Google Play](https://play.google.com/store/apps/details?id=rs.ltt.android).
 
 If you want to use F-Droid you can also use [our F-Droid repository](https://fdroid.link/#https://ltt.rs/fdroid/repo?fingerprint=9C2E57C85C279E5E1A427F6E87927FC1E2278F62D61D7FCEFDE9346E568CCF86) instead of
 the official one:
