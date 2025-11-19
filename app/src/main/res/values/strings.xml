@@ -48,6 +48,7 @@
     <string name="deleted">Deleted</string>
     <string name="sign_in">Sign in</string>
     <string name="email_address">E-mail address</string>
+    <string name="username_optional">Username (optional, defaults to email)</string>
     <string name="sign_in_instruction">with your e-mail account.</string>
     <string name="next">Next</string>
     <string name="enter_an_email_address">Type in an e-mail address</string>

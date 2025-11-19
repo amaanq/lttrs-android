@@ -77,6 +77,7 @@ public class SetupViewModel extends AndroidViewModel {
 
     private final MutableLiveData<String> emailAddress = new MutableLiveData<>();
     private final MutableLiveData<String> emailAddressError = new MutableLiveData<>();
+    private final MutableLiveData<String> username = new MutableLiveData<>();
 
     private final MutableLiveData<HttpAuthentication.Scheme> authenticationScheme =
             new MutableLiveData<>();
@@ -138,8 +139,17 @@ public class SetupViewModel extends AndroidViewModel {
         return emailAddress;
     }
 
+    public MutableLiveData<String> getUsername() {
+        return username;
+    }
+
     private String getEmailAddressedValue() {
         return Strings.nullToEmpty(this.emailAddress.getValue()).trim();
+    }
+
+    private String getUsernameValue() {
+        final String customUsername = Strings.nullToEmpty(this.username.getValue()).trim();
+        return customUsername.isEmpty() ? getEmailAddressedValue() : customUsername;
     }
 
     public MutableLiveData<String> getPassword() {
@@ -452,13 +462,14 @@ public class SetupViewModel extends AndroidViewModel {
     private ListenableFuture<Session> getSession() {
         final var password = Strings.nullToEmpty(this.password.getValue());
         final var emailAddress = getEmailAddressedValue();
+        final var usernameForAuth = getUsernameValue();
         final var authenticationScheme = this.authenticationScheme.getValue();
         final HttpAuthentication httpAuthentication;
         if (authenticationScheme == null
                 || authenticationScheme == HttpAuthentication.Scheme.BASIC) {
-            httpAuthentication = new BasicAuthHttpAuthentication(emailAddress, password);
+            httpAuthentication = new BasicAuthHttpAuthentication(usernameForAuth, password);
         } else if (authenticationScheme == HttpAuthentication.Scheme.BEARER) {
-            httpAuthentication = new BearerAuthHttpAuthentication(emailAddress, password);
+            httpAuthentication = new BearerAuthHttpAuthentication(usernameForAuth, password);
         } else {
             throw new IllegalArgumentException(
                     "Trying to setup JmapClient with unknown authentication scheme");
