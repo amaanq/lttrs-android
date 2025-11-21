@@ -1,0 +1,88 @@
+name: Build and Publish
+
+on:
+  push:
+    tags:
+      - "*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Prepare signing keystore
+        run: |
+          mkdir -p signing
+          echo "${{ secrets.ANDROID_SIGNING_KEY }}" | base64 -d > signing/lttrs-release.jks
+
+      - name: Build and sign release APK
+        env:
+          SIGNING_STORE_FILE: ../signing/lttrs-release.jks
+          SIGNING_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew assembleRelease
+
+      - name: Cleanup keystore
+        if: always()
+        run: rm -f signing/lttrs-release.jks
+
+      - name: Get version from tag
+        id: version
+        run: |
+          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lttrs-android-release
+          path: app/build/outputs/apk/release/Ltt.rs-*.apk
+          retention-days: 7
+
+  github-release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Download APK
+        uses: actions/download-artifact@v4
+        with:
+          name: lttrs-android-release
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Ltt.rs-*.apk
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+
+  fdroid-publish:
+    needs: github-release
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Notify F-Droid to download from release
+        run: |
+          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/Ltt.rs-${{ github.ref_name }}.apk"
+
+          curl -f -X POST \
+            -H "Authorization: Bearer ${{ secrets.FDROID_UPLOAD_TOKEN }}" \
+            -H "X-Package-ID: rs.ltt.android" \
+            -H "X-Download-URL: $DOWNLOAD_URL" \
+            https://fdroid.amaanq.com/download
