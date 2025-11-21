@@ -4,20 +4,20 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: set up JDK 11
-      uses: actions/setup-java@v1
-      with:
-        java-version: 11
-    - name: Build with Gradle
-      run: sudo ./gradlew build
-    - name: Calculate hashes
-      run: find . -name '*.apk' | xargs sha256sum
-    - uses: actions/upload-artifact@v2
-      with:
-        name: Ltt.rs all-flavors (debug)
-        path: ./app/build/outputs/apk/**/debug/Ltt.rs-*.apk
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build with Gradle
+        run: sudo ./gradlew build
