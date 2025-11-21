@@ -40,10 +40,11 @@ jobs:
         if: always()
         run: rm -f signing/lttrs-release.jks
 
-      - name: Get version from tag
-        id: version
+      - name: Rename APK to include tag version
         run: |
-          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          cd app/build/outputs/apk/release
+          mv Ltt.rs-*.apk Ltt.rs-${TAG_NAME}.apk
 
       - name: Upload APK as artifact
         uses: actions/upload-artifact@v4
