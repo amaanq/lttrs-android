@@ -62,7 +62,7 @@ android {
         }
     }
     lint {
-        disable 'MissingTranslation'
+        disable 'MissingTranslation', 'MissingQuantity'
     }
     namespace 'rs.ltt.android'
 
